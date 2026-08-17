@@ -1,0 +1,24 @@
+# Obsidian per-machine UI state -- churns constantly, conflicts on every sync.
+# The rest of .obsidian/ IS tracked, so settings and enabled plugins follow you.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+
+# Community plugin binaries and their local state. Plugins are re-installed
+# per machine; only the fact that you use them is worth tracking.
+.obsidian/plugins/*/data.json
+.obsidian/plugins/*/main.js
+.obsidian/plugins/*/styles.css
+
+# R session junk
+.Rhistory
+.RData
+.Rproj.user/
+Rplots.pdf
+*.Rproj
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini

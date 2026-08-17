@@ -1,0 +1,65 @@
+# time-series-vault
+
+An Obsidian vault for learning **seasonal adjustment** — X-11 and SEATS — from ARIMA
+foundations up to implementing the SEATS canonical decomposition by hand.
+
+Every concept note is paired with a runnable R script. The target is not "can run
+`seas()`" but "can derive and code the decomposition that `seas()` performs".
+
+## Using it
+
+Clone, then open the cloned folder as a vault in [Obsidian](https://obsidian.md)
+(*Open folder as vault*). Start at [`00-Start-Here.md`](00-Start-Here.md).
+
+```bash
+git clone https://github.com/kerr14333/time-series-vault.git
+```
+
+Math, callouts and wikilinks render with no plugins. For the flashcards in `_quiz/`,
+install the community plugin **Spaced Repetition** — it reads the `Q ::: A` format directly.
+
+## Running the code
+
+```r
+setwd("path/to/time-series-vault")   # the vault root, not R/
+source("R/10-01-lag-operator.R")
+```
+
+Requires R and, for the notes that call the real X-13 binary, the `seasonal` and
+`x13binary` packages:
+
+```r
+install.packages(c("seasonal", "x13binary"))
+```
+
+Everything else uses base `stats` on purpose — the point is to write the algebra rather
+than call a black box.
+
+## Layout
+
+| Path | Contents |
+|---|---|
+| `00-Start-Here.md` | curriculum map and how to use the vault |
+| `10-arima-foundations/` | Module 1 — lag operator through forecasting (14 notes) |
+| `20-x11/` | Module 2 — X-11 filters |
+| `30-spectral/` | Module 3 — spectra and Wiener–Kolmogorov signal extraction |
+| `40-seats/` | Module 4 — the SEATS canonical decomposition |
+| `50-diagnostics/` | Module 5 — diagnostics, revisions, turning points |
+| `R/` | one script per note; `_setup.R` holds shared helpers |
+| `_meta/` | progress tracker, glossary |
+| `_quiz/` | spaced-repetition flashcards |
+
+Module 1 is complete. Modules 2–5 currently hold their maps — the note list, the
+algorithm in outline, and the checkpoint for each.
+
+## Conventions
+
+- **Census / Box–Jenkins MA sign** throughout: `theta(B) = 1 - th1 B - ...`, which is the
+  *opposite* of `stats::arima()`. `theta_census = -theta_R`. `R/_setup.R` has the converter,
+  and `10-11-sign-conventions` explains why this matters when implementing SEATS.
+- Running example is `log(AirPassengers)` in every module, so the modules stack.
+
+## References
+
+Hillmer & Bell (1982); Bell & Hillmer (1984); Burman (1980); Gómez & Maravall (TRAMO/SEATS);
+US Census Bureau, *X-13ARIMA-SEATS Reference Manual*.
