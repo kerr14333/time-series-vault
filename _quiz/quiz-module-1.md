@@ -9,11 +9,8 @@ tags: [quiz, module-1]
 
 Two ways to use this:
 
-- **Offline drill.** Install the Obsidian **Spaced Repetition** plugin. It reads `Q ::: A` as a
-  card (`:::` = reversed off, one-directional) and schedules reviews. Nothing else to configure.
-- **Live.** Say *"quiz me on module 1"* (or on a single note, or "quiz me hard") and I will run
-  an adaptive session in chat — I ask, you answer, I push on whatever you get shaky on. That
-  version is better, because I can follow up.
+- **Offline drill.** Install the Obsidian **Spaced Repetition** plugin. It reads `Q ::: A` as a card (`:::` = reversed off, one-directional) and schedules reviews. Nothing else to configure.
+- **Live.** Say *"quiz me on module 1"* (or on a single note, or "quiz me hard") and I will run an adaptive session in chat — I ask, you answer, I push on whatever you get shaky on. That version is better, because I can follow up.
 
 ---
 

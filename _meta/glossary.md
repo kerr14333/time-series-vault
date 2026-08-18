@@ -7,20 +7,20 @@ tags: [meta]
 
 Symbols first, because most confusion in this field is notation collisions between authors.
 
-| Symbol | Means | Note |
-|---|---|---|
+| Symbol | Means | Note | Where |
+|---|---|---|---|
 | $B$ | backshift / lag operator, $Bx_t = x_{t-1}$ | some authors write $L$ | [[10-01-lag-operator]] |
 | $F$ | forward operator, $Fx_t = x_{t+1}$, $F = B^{-1}$ | appears in two-sided filters | [[30-00-spectral-map]] |
-| $\nabla$ | $1-B$, first difference | $\nabla_s = 1-B^s$ | [[10-06-differencing]] |
-| $\phi(B)$ | regular AR polynomial, order $p$ | [[10-03-ar-processes]] |
-| $\theta(B)$ | regular MA polynomial, order $q$ | [[10-04-ma-processes]] |
-| $\Phi(B^s), \Theta(B^s)$ | seasonal AR/MA polynomials, orders $P, Q$ | [[10-09-seasonal-arima]] |
-| $d, D$ | regular and seasonal differencing orders | [[10-06-differencing]] |
-| $s$ | seasonal period: 12 monthly, 4 quarterly | |
-| $a_t$ | the innovation / white-noise shock, variance $\sigma_a^2$ | Census calls it $a_t$, many texts $\varepsilon_t$ |
-| $z_t$ | the observed series (often already logged) | |
-| $\psi_j$ | MA($\infty$) weights, $z_t = \psi(B)a_t$ | [[10-14-forecasting]] |
-| $\pi_j$ | AR($\infty$) weights, $\pi(B)z_t = a_t$ | [[10-05-invertibility]] |
+| $\nabla$ | $1-B$, first difference | $\nabla_s = 1-B^s$ is the seasonal one | [[10-06-differencing]] |
+| $\phi(B)$ | regular AR polynomial, order $p$ | $1 - \phi_1 B - \cdots$ | [[10-03-ar-processes]] |
+| $\theta(B)$ | regular MA polynomial, order $q$ | $1 - \theta_1 B - \cdots$ (Census sign) | [[10-04-ma-processes]] |
+| $\Phi(B^s), \Theta(B^s)$ | seasonal AR/MA polynomials, orders $P, Q$ | same shape, in $B^s$ | [[10-09-seasonal-arima]] |
+| $d, D$ | regular and seasonal differencing orders | the "I" in ARIMA | [[10-06-differencing]] |
+| $s$ | seasonal period | 12 monthly, 4 quarterly | |
+| $a_t$ | the innovation / white-noise shock, variance $\sigma_a^2$ | Census calls it $a_t$, many texts $\varepsilon_t$ | |
+| $z_t$ | the observed series | often already logged | |
+| $\psi_j$ | MA($\infty$) weights, $z_t = \psi(B)a_t$ | what a shock does to the future | [[10-14-forecasting]] |
+| $\pi_j$ | AR($\infty$) weights, $\pi(B)z_t = a_t$ | what the past says about today's shock | [[10-05-invertibility]] |
 
 ## Words
 

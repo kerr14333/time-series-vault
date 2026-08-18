@@ -11,23 +11,17 @@ Code: `R/10-07-acf-and-pacf.R`
 
 $$\rho_k = \frac{\gamma_k}{\gamma_0} = \frac{\mathrm{Cov}(z_t, z_{t-k})}{\mathrm{Var}(z_t)}$$
 
-Correlation between the series and itself $k$ periods back. Sample version $\hat\rho_k$;
-under white noise, $\hat\rho_k \approx N(0, 1/n)$, hence the $\pm 1.96/\sqrt{n}$ bands R draws.
+Correlation between the series and itself $k$ periods back. Sample version $\hat\rho_k$; under white noise, $\hat\rho_k \approx N(0, 1/n)$, hence the $\pm 1.96/\sqrt{n}$ bands R draws.
 
-Those bands are **pointwise**. With 40 lags plotted, expect ~2 to poke out by chance. Do not
-model an isolated spike at lag 17.
+Those bands are **pointwise**. With 40 lags plotted, expect ~2 to poke out by chance. Do not model an isolated spike at lag 17.
 
 ## PACF
 
-$\phi_{kk}$ = correlation between $z_t$ and $z_{t-k}$ **after removing the linear effect of the
-intervening lags** $z_{t-1},\dots,z_{t-k+1}$.
+$\phi_{kk}$ = correlation between $z_t$ and $z_{t-k}$ **after removing the linear effect of the intervening lags** $z_{t-1},\dots,z_{t-k+1}$.
 
-Operationally: regress $z_t$ on $z_{t-1},\dots,z_{t-k}$; the PACF at lag $k$ is the coefficient
-on $z_{t-k}$. (In practice computed by the Durbin–Levinson recursion, not by running $k$
-regressions.)
+Operationally: regress $z_t$ on $z_{t-1},\dots,z_{t-k}$; the PACF at lag $k$ is the coefficient on $z_{t-k}$. (In practice computed by the Durbin–Levinson recursion, not by running $k$ regressions.)
 
-Why it exists: an AR(1) with $\phi=0.8$ has $\rho_2 = 0.64$, which is not a *direct* link — it
-is $\rho_1$ acting twice. The PACF strips the indirect path out, so $\phi_{22} = 0$. Hence:
+Why it exists: an AR(1) with $\phi=0.8$ has $\rho_2 = 0.64$, which is not a *direct* link — it is $\rho_1$ acting twice. The PACF strips the indirect path out, so $\phi_{22} = 0$. Hence:
 
 ## The identification table
 
@@ -40,8 +34,7 @@ is $\rho_1$ acting twice. The PACF strips the indirect path out, so $\phi_{22} =
 
 The duality (why AR and MA swap roles) is [[10-08-arma-duality]].
 
-Mnemonic that survives pressure: **the cutoff tells you the order, and it cuts off in the plot
-named after the *other* letter.** MA order shows in the ACF; AR order shows in the PACF.
+Mnemonic that survives pressure: **the cutoff tells you the order, and it cuts off in the plot named after the *other* letter.** MA order shows in the ACF; AR order shows in the PACF.
 
 ## Reading seasonal structure
 
@@ -50,10 +43,7 @@ For monthly data, look at two places at once:
 - **Low lags (1–3)** → the regular $p, q$.
 - **Seasonal lags (12, 24, 36)** → the seasonal $P, Q$.
 
-The multiplicative model creates **satellite spikes** at $12 \pm 1$ — that is, lags 11 and 13,
-23 and 25. Those satellites are the fingerprint of the *product* $\theta(B)\Theta(B^{12})$; a
-purely additive seasonal model would not produce them. Seeing lag 11 and 13 spikes and being
-able to say "that's the cross-term" is a real milestone. Worked out in [[10-10-airline-model]].
+The multiplicative model creates **satellite spikes** at $12 \pm 1$ — that is, lags 11 and 13, 23 and 25. Those satellites are the fingerprint of the *product* $\theta(B)\Theta(B^{12})$; a purely additive seasonal model would not produce them. Seeing lag 11 and 13 spikes and being able to say "that's the cross-term" is a real milestone. Worked out in [[10-10-airline-model]].
 
 ## The workflow
 
@@ -63,18 +53,12 @@ able to say "that's the cross-term" is a real milestone. Worked out in [[10-10-a
 4. Fit; check residual ACF is clean ([[10-13-model-selection]]).
 5. Compare a couple of candidates by AICC.
 
-Honest caveat: for real data these plots are often ambiguous, and reasonable people pick
-different models. That ambiguity is exactly why automatic identification (`automdl` in X-13,
-Hyndman–Khandakar in R) exists — and it is also why SEATS output can differ between analysts
-who both did nothing wrong.
+Honest caveat: for real data these plots are often ambiguous, and reasonable people pick different models. That ambiguity is exactly why automatic identification (`automdl` in X-13, Hyndman–Khandakar in R) exists — and it is also why SEATS output can differ between analysts who both did nothing wrong.
 
 ## Exercises
 
-1. Simulate AR(2), MA(2) and ARMA(1,1) at n=300. Print ACF/PACF for each without labels,
-   shuffle them, and identify them cold. Repeat at n=60 and notice how much harder it gets —
-   that is the real-data regime.
-2. For log-differenced AirPassengers, name every lag whose ACF exceeds the band, and say which
-   polynomial you think produced it.
+1. Simulate AR(2), MA(2) and ARMA(1,1) at n=300. Print ACF/PACF for each without labels, shuffle them, and identify them cold. Repeat at n=60 and notice how much harder it gets — that is the real-data regime.
+2. For log-differenced AirPassengers, name every lag whose ACF exceeds the band, and say which polynomial you think produced it.
 3. Why does a nonstationary series show $\phi_{11}\approx1$?
 
 ## Links

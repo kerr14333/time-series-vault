@@ -5,8 +5,7 @@ tags: [meta]
 
 # Progress
 
-Tick a note when you can explain it out loud without looking. That is a harsher bar than
-"I read it" and it is the one that matters.
+Tick a note when you can explain it out loud without looking. That is a harsher bar than "I read it" and it is the one that matters.
 
 ## Module 1 — ARIMA foundations
 - [ ] [[10-01-lag-operator]]
@@ -40,7 +39,6 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 
 ## Open questions
 
-Things that did not click. Write them down as they happen — this list is the input to the
-next teaching session.
+Things that did not click. Write them down as they happen — this list is the input to the next teaching session.
 
 -

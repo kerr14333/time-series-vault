@@ -5,9 +5,7 @@ tags: [moc, module-1]
 
 # Module 1 — ARIMA foundations
 
-You said you know AR and MA but the surrounding algebra is fuzzy. That is the normal place
-to be stuck, and it is worth fixing properly, because **SEATS is nothing but algebra done to
-the ARIMA polynomials.** If the polynomials are fuzzy, SEATS will stay magic forever.
+You said you know AR and MA but the surrounding algebra is fuzzy. That is the normal place to be stuck, and it is worth fixing properly, because **SEATS is nothing but algebra done to the ARIMA polynomials.** If the polynomials are fuzzy, SEATS will stay magic forever.
 
 The whole module builds toward one sentence being obvious:
 
