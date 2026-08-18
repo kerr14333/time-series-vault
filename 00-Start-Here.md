@@ -9,7 +9,7 @@ tags: [moc]
 
 That goal fixes the syllabus. SEATS is a model-based method: it takes a fitted seasonal ARIMA model, splits that model's **spectrum** into pieces, and turns each piece back into a **filter**. So the path is forced:
 
-```
+```text
 ARIMA algebra  →  spectrum of an ARIMA  →  splitting the spectrum  →  filters  →  SEATS
 ```
 

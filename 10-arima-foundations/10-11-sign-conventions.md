@@ -26,13 +26,13 @@ $$\boxed{\ \theta^{\text{Census}} = -\,\theta^{\text{R}}\ }$$
 
 So a healthy airline fit on `log(AirPassengers)` prints in R as roughly
 
-```
+```text
 ma1 = -0.40    sma1 = -0.61
 ```
 
 and the *same model* appears in X-13 output as
 
-```
+```text
 Nonseasonal MA  0.40     Seasonal MA  0.61
 ```
 
