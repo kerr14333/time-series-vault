@@ -5,7 +5,7 @@ tags: [module-1]
 
 # ARMA duality — one object, two views
 
-Code: `R/10-08-arma-duality.R`
+Code: [[code-10-08-arma-duality|`R/10-08-arma-duality.R`]]
 
 $$\phi(B) z_t = \theta(B) a_t$$
 

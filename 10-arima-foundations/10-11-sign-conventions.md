@@ -5,7 +5,7 @@ tags: [module-1, gotcha]
 
 # Sign conventions — the trap
 
-Code: `R/10-11-sign-conventions.R`
+Code: [[code-10-11-sign-conventions|`R/10-11-sign-conventions.R`]]
 
 Not deep, but it will silently corrupt your work if you skip it, and it is impossible to debug a SEATS implementation without having this straight.
 

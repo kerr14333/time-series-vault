@@ -5,7 +5,7 @@ tags: [module-1]
 
 # AR processes — infinite echo
 
-Code: `R/10-03-ar-processes.R`
+Code: [[code-10-03-ar-processes|`R/10-03-ar-processes.R`]]
 
 $$\phi(B) z_t = a_t \quad\Longleftrightarrow\quad z_t = \phi_1 z_{t-1} + \cdots + \phi_p z_{t-p} + a_t$$
 

@@ -5,7 +5,7 @@ tags: [module-1]
 
 # The lag operator $B$
 
-Code: `R/10-01-lag-operator.R`
+Code: [[code-10-01-lag-operator|`R/10-01-lag-operator.R`]]
 
 ## The definition
 

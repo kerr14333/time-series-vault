@@ -5,7 +5,7 @@ tags: [module-1]
 
 # ACF and PACF — reading a model off two plots
 
-Code: `R/10-07-acf-and-pacf.R`
+Code: [[code-10-07-acf-and-pacf|`R/10-07-acf-and-pacf.R`]]
 
 ## ACF
 

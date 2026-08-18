@@ -5,7 +5,7 @@ tags: [module-1]
 
 # Differencing — the "I" in ARIMA
 
-Code: `R/10-06-differencing.R`
+Code: [[code-10-06-differencing|`R/10-06-differencing.R`]]
 
 ## Two operators
 

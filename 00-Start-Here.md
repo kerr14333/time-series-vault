@@ -40,6 +40,8 @@ source("R/10-01-lag-operator.R")
 
 Every script `source("R/_setup.R")` first, so the working directory must be the vault root, not `R/`.
 
+Obsidian cannot open `.R` files, so every script is mirrored as a readable note with syntax highlighting — see [[code-index]]. Those mirrors are generated; edit the script in `R/`, then run `Rscript R/make-code-notes.R`.
+
 Track where you are in [[_meta/progress]]. Terms you keep forgetting go in [[_meta/glossary]].
 
 ## Prerequisites already assumed

@@ -5,7 +5,7 @@ tags: [module-1, key]
 
 # The airline model
 
-Code: `R/10-10-airline-model.R`
+Code: [[code-10-10-airline-model|`R/10-10-airline-model.R`]]
 
 $$(1-B)(1-B^{12})\,z_t \;=\; (1-\theta B)(1-\Theta B^{12})\,a_t$$
 

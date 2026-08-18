@@ -5,7 +5,7 @@ tags: [module-1]
 
 # Estimation — how the parameters get found
 
-Code: `R/10-12-estimation.R`
+Code: [[code-10-12-estimation|`R/10-12-estimation.R`]]
 
 You mostly do not need to implement this to do SEATS, but you need to know what the numbers you are handed actually are, and which knob to turn when a fit misbehaves.
 

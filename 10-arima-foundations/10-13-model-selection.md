@@ -5,7 +5,7 @@ tags: [module-1]
 
 # Model selection and residual diagnostics
 
-Code: `R/10-13-model-selection.R`
+Code: [[code-10-13-model-selection|`R/10-13-model-selection.R`]]
 
 ## Information criteria
 

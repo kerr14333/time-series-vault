@@ -5,7 +5,7 @@ tags: [module-1, key]
 
 # Forecasting — and why seasonal adjustment needs it
 
-Code: `R/10-14-forecasting.R`
+Code: [[code-10-14-forecasting|`R/10-14-forecasting.R`]]
 
 This note is the hinge between Module 1 and everything after it. Forecasting is not a side application of ARIMA here; **it is the reason X-13 fits an ARIMA at all.**
 

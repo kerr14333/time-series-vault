@@ -5,7 +5,7 @@ tags: [module-1]
 
 # Seasonal ARIMA
 
-Code: `R/10-09-seasonal-arima.R`
+Code: [[code-10-09-seasonal-arima|`R/10-09-seasonal-arima.R`]]
 
 ## The notation, decoded
 

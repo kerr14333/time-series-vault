@@ -5,7 +5,7 @@ tags: [module-1]
 
 # Invertibility — and why anyone cares
 
-Code: `R/10-05-invertibility.R`
+Code: [[code-10-05-invertibility|`R/10-05-invertibility.R`]]
 
 ## Definition
 

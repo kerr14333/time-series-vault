@@ -5,7 +5,7 @@ tags: [module-1]
 
 # Stationarity and polynomial roots
 
-Code: `R/10-02-stationarity-and-roots.R`
+Code: [[code-10-02-stationarity-and-roots|`R/10-02-stationarity-and-roots.R`]]
 
 ## Weak stationarity
 

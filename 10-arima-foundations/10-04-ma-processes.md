@@ -5,7 +5,7 @@ tags: [module-1]
 
 # MA processes — finite memory of shocks
 
-Code: `R/10-04-ma-processes.R`
+Code: [[code-10-04-ma-processes|`R/10-04-ma-processes.R`]]
 
 $$z_t = \theta(B) a_t$$
 
