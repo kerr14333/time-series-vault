@@ -32,6 +32,8 @@ This is the thing to actually stare at, and the script plots it:
 
 The end filter is forced to put all its mass on the past and present. It is not a small perturbation of the symmetric filter; it is a structurally different object.
 
+![[20-07-end-filters.png]]
+
 > [!important] Why the failure happens *at* the turn, not before it
 > The end weights differ **sharply** from the interior weights. So the estimate for recent months is produced by a different filter than the one that will eventually be applied to them.
 >

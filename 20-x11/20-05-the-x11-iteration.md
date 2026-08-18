@@ -41,6 +41,8 @@ Multiplicative case, $Z = T \times S \times I$. (Additive is identical with $-$ 
 
 Steps 6–13 are the same shape as 1–5, run again on better inputs. That is the whole method.
 
+![[20-05-decomposition.png]]
+
 ## The table names
 
 X-13 prints intermediate results with letter-number codes. They look cryptic and are actually just "which pass, which quantity":
@@ -73,6 +75,10 @@ Because every step is linear (ignoring the extreme-value step, which is not), th
 2. **Numerically** — feed X-11 a series that is zero everywhere except a single 1 at the middle. What comes out *is* the filter's weights. This impulse-response trick is far easier and it works on any implementation, including a black box.
 
 Do (2) in the script. Then plot the gain and you will see the notches at the seasonal frequencies. At that point X-11 has become a single object you can compare directly with the SEATS filters of [[40-06-wk-filters-for-the-airline-model]].
+
+![[20-05-composite-gain.png]]
+
+This is the picture to remember. The whole of X-11 — three passes, five different moving averages — collapses into **one** symmetric filter that passes everything except six narrow notches at the seasonal frequencies. Note also the negative weights at $\pm12$ in the impulse response: to remove this January's seasonality, X-11 leans on neighbouring Januaries with a *negative* sign.
 
 ## What this simplified version omits
 

@@ -30,6 +30,10 @@ The payoff is **symmetry**, hence **zero phase** ([[20-01-moving-averages-as-fil
 > [!important] It annihilates a 12-month seasonal *exactly*
 > Its gain is **exactly zero** at every seasonal frequency $\omega_k = 2\pi k/12$ for $k = 1,\ldots,6$.
 
+![[20-02-2x12-gain.png]]
+
+Measured, the gain at the six seasonal frequencies is of order $10^{-16}$ — zero to machine precision, not merely small.
+
 Why: the 12-term average of a periodic-with-period-12 pattern is the average of one full cycle, which is that pattern's mean — zero, if the seasonal is centred. Algebraically, $\frac{1}{12}(1 + B + \cdots + B^{11})$ is the $S(B)$ factor from [[10-06-differencing]], and $S(z) = 0$ at every 12th root of unity except $z=1$.
 
 So the very same polynomial keeps reappearing:

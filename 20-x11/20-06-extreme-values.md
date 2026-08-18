@@ -32,6 +32,10 @@ A zero-weight value is **replaced**, not deleted — substituted with an average
 >
 > Getting this backwards is a common implementation bug: you end up silently smoothing real events out of the published series.
 
+![[20-06-extreme-values.png]]
+
+Left: one +30% spike in January 1954, and what it does to the seasonal factor for **every other January** when the extreme-value step is switched off. Right: the spike is still plainly there in D11 — downweighting affects how the factors are *estimated*, not what gets published.
+
 ## Two graduated passes
 
 X-11 does this twice: preliminary weights during the B pass, refined weights during the C pass (the C17 table). Same reason as everything else here — the first estimate of the irregular is poor, so the first set of weights is poor.

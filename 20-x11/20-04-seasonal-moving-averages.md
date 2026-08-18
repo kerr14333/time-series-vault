@@ -27,6 +27,10 @@ Named "$p \times q$" meaning a $p$-term MA of a $q$-term MA, applied across year
 
 Each is a convolution — 3×5 is $\tfrac13(1,1,1)$ convolved with $\tfrac15(1,1,1,1,1)$ — so you can derive the weights rather than memorise them. All sum to 1.
 
+![[20-04-seasonal-ma.png]]
+
+Note the x-axis on the left panel: **years**, not months. The right panel shows the actual January SI ratios from `AirPassengers` — the raw values wander, and the choice of filter is the choice of how much of that wandering you treat as signal.
+
 **Longer filter = more stable seasonal pattern, slower to adapt.** This is the exact same trade-off that $\Theta$ controls in the airline model ([[10-10-airline-model]]): how fast is the seasonality allowed to evolve? X-11 expresses it by choosing a filter length; SEATS expresses it by estimating a parameter. Same question, two dialects.
 
 ## Choosing the length

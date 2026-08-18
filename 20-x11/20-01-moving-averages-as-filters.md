@@ -41,6 +41,10 @@ Two properties worth memorising:
 
 Second: $\sum_j w_j = 1$ implies $G(0) = 1$ — the filter preserves the level. Every trend filter in X-11 has weights summing to 1.
 
+![[20-01-gain-basics.png]]
+
+The simplest case: a 3-term average annihilates cycles of period 3 exactly (gain 0 at $\omega = 1/3$), and because it is symmetric its phase is flat zero.
+
 ## Reading a gain function
 
 For seasonal adjustment you want to look at three places on the $\omega$ axis:

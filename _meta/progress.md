@@ -24,7 +24,14 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 - [ ] [[10-14-forecasting]]
 
 ## Module 2 — X-11
-- [ ] see [[20-00-x11-map]]
+- [ ] [[20-01-moving-averages-as-filters]]
+- [ ] [[20-02-the-12-term-ma]]
+- [ ] [[20-03-henderson-filters]]
+- [ ] [[20-04-seasonal-moving-averages]]
+- [ ] [[20-05-the-x11-iteration]]
+- [ ] [[20-06-extreme-values]]
+- [ ] [[20-07-end-filters]]
+- [ ] [[20-08-x11-arima]]
 
 ## Module 3 — Spectra and signal extraction
 - [ ] see [[30-00-spectral-map]]
