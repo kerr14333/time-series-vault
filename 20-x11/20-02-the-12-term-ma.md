@@ -5,7 +5,7 @@ tags: [module-2]
 
 # The centred 12-term MA — X-11's first move
 
-Code: `R/20-02-the-12-term-ma.R`
+Code: [[code-20-02-the-12-term-ma|`R/20-02-the-12-term-ma.R`]]
 
 ## The filter
 

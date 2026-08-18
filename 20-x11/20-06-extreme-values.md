@@ -5,7 +5,7 @@ tags: [module-2]
 
 # Extreme values
 
-Code: `R/20-06-extreme-values.R`
+Code: [[code-20-06-extreme-values|`R/20-06-extreme-values.R`]]
 
 The one part of X-11 that is **not** a linear filter. It is what makes X-11 robust, and it is also what stops you from analysing X-11 purely as a gain function.
 

@@ -5,7 +5,7 @@ tags: [module-2]
 
 # Seasonal moving averages
 
-Code: `R/20-04-seasonal-moving-averages.R`
+Code: [[code-20-04-seasonal-moving-averages|`R/20-04-seasonal-moving-averages.R`]]
 
 ## The key structural idea
 

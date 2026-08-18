@@ -5,7 +5,7 @@ tags: [module-2, key]
 
 # The X-11 iteration
 
-Code: `R/20-05-the-x11-iteration.R` — this is where you build a working X-11.
+Code: [[code-20-05-the-x11-iteration|`R/20-05-the-x11-iteration.R`]] — this is where you build a working X-11.
 
 ## Why iterate at all
 

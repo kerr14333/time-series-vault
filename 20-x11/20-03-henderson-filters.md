@@ -5,7 +5,7 @@ tags: [module-2, key]
 
 # Henderson filters
 
-Code: `R/20-03-henderson-filters.R`
+Code: [[code-20-03-henderson-filters|`R/20-03-henderson-filters.R`]]
 
 The trend-cycle filter in X-11. Older than X-11 itself — Robert Henderson, 1916, working on actuarial graduation.
 

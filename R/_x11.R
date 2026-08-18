@@ -67,7 +67,16 @@ seasonal_smooth <- function(si, w) {
   for (mth in 1:s) {
     idx <- seq(mth, length(si), by = s)
     v   <- as.numeric(si)[idx]
-    sm  <- as.numeric(stats::filter(v, w, method = "convolution", sides = 2))
+    # A truncated series may hold fewer years than the filter is long -- which
+    # happens constantly in revision experiments. Degrade to the longest filter
+    # that fits, and finally to the plain mean, rather than erroring out.
+    wj <- w
+    if (length(v) < length(wj)) wj <- seasonal_ma("3x3")
+    if (length(v) < length(wj)) {
+      out[idx] <- mean(v, na.rm = TRUE)
+      next
+    }
+    sm  <- as.numeric(stats::filter(v, wj, method = "convolution", sides = 2))
     ok  <- which(!is.na(sm))
     if (length(ok)) {                       # carry the ends outward
       if (ok[1] > 1) sm[1:(ok[1] - 1)] <- sm[ok[1]]

@@ -13,7 +13,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | Script | What it does | Lines | Concept note |
 |---|---|---|---|
 | [[code-_setup\|`_setup.R`]] | Shared helpers. source() this at the top of every script. | 61 | — |
-| [[code-_x11\|`_x11.R`]] | X-11 building blocks, hand-coded. source() after _setup.R. | 165 | — |
+| [[code-_x11\|`_x11.R`]] | X-11 building blocks, hand-coded. source() after _setup.R. | 174 | — |
 | [[code-10-01-lag-operator\|`10-01-lag-operator.R`]] | The lag operator B is just algebra. | 35 | [[10-01-lag-operator]] |
 | [[code-10-02-stationarity-and-roots\|`10-02-stationarity-and-roots.R`]] | Stationarity is a statement about polynomial roots. | 46 | [[10-02-stationarity-and-roots]] |
 | [[code-10-03-ar-processes\|`10-03-ar-processes.R`]] | AR processes: infinite echo. | 51 | [[10-03-ar-processes]] |
@@ -28,6 +28,14 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-10-12-estimation\|`10-12-estimation.R`]] | ML vs CSS, and why outliers wreck an ARIMA fit. | 48 | [[10-12-estimation]] |
 | [[code-10-13-model-selection\|`10-13-model-selection.R`]] | AICC, Ljung-Box done right, residual spectrum. | 52 | [[10-13-model-selection]] |
 | [[code-10-14-forecasting\|`10-14-forecasting.R`]] | Forecasting, and the revision experiment that motivates everything. | 67 | [[10-14-forecasting]] |
+| [[code-20-01-moving-averages-as-filters\|`20-01-moving-averages-as-filters.R`]] | A moving average is a filter. Gain and phase. | 47 | [[20-01-moving-averages-as-filters]] |
+| [[code-20-02-the-12-term-ma\|`20-02-the-12-term-ma.R`]] | The centred 12-term MA: X-11's first move. | 50 | [[20-02-the-12-term-ma]] |
+| [[code-20-03-henderson-filters\|`20-03-henderson-filters.R`]] | Henderson filters: derive, verify, and see what they do NOT do. | 63 | [[20-03-henderson-filters]] |
+| [[code-20-04-seasonal-moving-averages\|`20-04-seasonal-moving-averages.R`]] | Seasonal MAs: smoothing ACROSS YEARS within a calendar month. | 63 | [[20-04-seasonal-moving-averages]] |
+| [[code-20-05-the-x11-iteration\|`20-05-the-x11-iteration.R`]] | Build X-11, check it against the real thing, then recover its filter. | 76 | [[20-05-the-x11-iteration]] |
+| [[code-20-06-extreme-values\|`20-06-extreme-values.R`]] | Extreme values: the one nonlinear step. | 70 | [[20-06-extreme-values]] |
+| [[code-20-07-end-filters\|`20-07-end-filters.R`]] | End filters: where revisions come from. | 85 | [[20-07-end-filters]] |
+| [[code-20-08-x11-arima\|`20-08-x11-arima.R`]] | X-11-ARIMA: extend with forecasts, then filter symmetrically. | 98 | [[20-08-x11-arima]] |
 | [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 157 | — |
 | [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 159 | — |
 

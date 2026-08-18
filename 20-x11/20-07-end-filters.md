@@ -5,7 +5,7 @@ tags: [module-2, key]
 
 # End filters — where revisions come from
 
-Code: `R/20-07-end-filters.R`
+Code: [[code-20-07-end-filters|`R/20-07-end-filters.R`]]
 
 The most important note in this module. Everything in [[50-00-diagnostics-map]] traces back here.
 

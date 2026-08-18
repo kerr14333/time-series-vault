@@ -5,7 +5,7 @@ tags: [module-2]
 
 # Moving averages are filters
 
-Code: `R/20-01-moving-averages-as-filters.R`
+Code: [[code-20-01-moving-averages-as-filters|`R/20-01-moving-averages-as-filters.R`]]
 
 ## The reframe
 
