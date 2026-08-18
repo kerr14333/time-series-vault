@@ -50,4 +50,6 @@ You know what AR and MA mean and you have run something like `arima()`. Everythi
 
 ## The one running example
 
-Every module uses the same series so the modules stack: monthly US airline passengers (`AirPassengers`, 1949–1960), plus a second real series later. It is the series Box and Jenkins used, the reason the `(0,1,1)(0,1,1)₁₂` model is called the **airline model**, and it is short enough to inspect by eye.
+Every module uses the same series so the modules stack: monthly US airline passengers (`AirPassengers`, 1949–1960). It is the series Box and Jenkins used, the reason the `(0,1,1)(0,1,1)₁₂` model is called the **airline model**, and it is short enough to inspect by eye.
+
+But one series is not enough, and AirPassengers is unrepresentative — no outliers, no calendar effects, no turning points, and comfortably inside the SEATS admissible region. It flatters every method. A catalogue of harder series, each chosen to break something specific, is in [[series-catalogue]]; the modules bring them in where they make a point.

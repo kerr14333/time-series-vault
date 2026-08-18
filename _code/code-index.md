@@ -12,9 +12,11 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 
 | Script | What it does | Lines | Concept note |
 |---|---|---|---|
+| [[code-_series\|`_series.R`]] | The standard test series for this vault. | 53 | — |
 | [[code-_setup\|`_setup.R`]] | Shared helpers. source() this at the top of every script. | 61 | — |
 | [[code-_spectral\|`_spectral.R`]] | Frequency-domain helpers. source() after _setup.R. | 64 | — |
 | [[code-_x11\|`_x11.R`]] | X-11 building blocks, hand-coded. source() after _setup.R. | 174 | — |
+| [[code-00-series-catalogue\|`00-series-catalogue.R`]] | 00 -- The test series, and what each one breaks. | 67 | — |
 | [[code-10-01-lag-operator\|`10-01-lag-operator.R`]] | The lag operator B is just algebra. | 35 | [[10-01-lag-operator]] |
 | [[code-10-02-stationarity-and-roots\|`10-02-stationarity-and-roots.R`]] | Stationarity is a statement about polynomial roots. | 46 | [[10-02-stationarity-and-roots]] |
 | [[code-10-03-ar-processes\|`10-03-ar-processes.R`]] | AR processes: infinite echo. | 51 | [[10-03-ar-processes]] |

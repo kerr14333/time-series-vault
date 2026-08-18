@@ -7,6 +7,9 @@ tags: [meta]
 
 Tick a note when you can explain it out loud without looking. That is a harsher bar than "I read it" and it is the one that matters.
 
+## Module 0 — orientation
+- [ ] [[series-catalogue]] — the test series and what each one breaks
+
 ## Module 1 — ARIMA foundations
 - [ ] [[10-01-lag-operator]]
 - [ ] [[10-02-stationarity-and-roots]]
