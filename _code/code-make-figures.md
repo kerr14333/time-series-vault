@@ -170,6 +170,91 @@ mtext("simple truncate-and-renormalise surrogate; X-11 uses Musgrave's minimum-r
       side = 1, line = 2.8, cex = 0.7)
 dev.off()
 
+# ============================ MODULE 3 =====================================
+source("R/_spectral.R")
+ff <- seq(1e-4, 0.5 - 1e-4, length.out = 4000)
+
+# --- 30-01: harmonics ------------------------------------------------------
+png_("30-01-harmonics.png")
+par(mfrow = c(1, 2))
+tt <- 1:96
+pure  <- sin(2 * pi * tt / 12)
+spiky <- pure + 0.4 * sin(2 * pi * tt / 6) + 0.3 * sin(2 * pi * tt / 4) + 0.2 * sin(2 * pi * tt / 3)
+plot(ts(pure, frequency = 12), ylab = "", main = "pure sine (one frequency)")
+lines(ts(spiky, frequency = 12), col = "firebrick", lwd = 2)
+legend("topright", c("pure", "with harmonics"), col = c("black", "firebrick"), lwd = 2, bty = "n", cex = 0.8)
+s <- spec.pgram(ts(spiky, frequency = 1), taper = 0, plot = FALSE, detrend = FALSE)
+plot(s$freq, s$spec, type = "h", lwd = 3, col = "steelblue", log = "y",
+     xlab = "cycles/month", ylab = "power", main = "power at 1/12, 1/6, 1/4, 1/3")
+mark_seasonal_freq()
+dev.off()
+
+# --- 30-03: AR peaks, MA troughs ------------------------------------------
+png_("30-03-arma-spectra.png")
+par(mfrow = c(1, 2))
+cols3 <- c("steelblue", "firebrick", "darkgreen")
+plot(NA, xlim = c(0, 0.5), ylim = c(0.01, 50), log = "y", xlab = "cycles/period",
+     ylab = "spectrum", main = "AR roots near the circle => PEAKS")
+for (i in seq_along(c(0.80, 0.92, 0.98))) {
+  r <- c(0.80, 0.92, 0.98)[i]
+  lines(FREQ, arma_spectrum(ar_poly = c(1, -2 * r * cos(2 * pi / 12), r^2)), col = cols3[i], lwd = 2)
+}
+abline(v = 1/12, lty = 2)
+legend("topright", paste("modulus", c(0.80, 0.92, 0.98)), col = cols3, lwd = 2, bty = "n", cex = 0.8)
+plot(NA, xlim = c(0, 0.5), ylim = c(0, 0.8), xlab = "cycles/period", ylab = "spectrum",
+     main = "MA root ON the circle => exact ZERO")
+for (i in seq_along(c(0.5, 0.9, 1.0)))
+  lines(FREQ, arma_spectrum(ma_poly = c(1, -c(0.5, 0.9, 1.0)[i])), col = cols3[i], lwd = 2)
+legend("topleft", paste("theta =", c(0.5, 0.9, 1.0)), col = cols3, lwd = 2, bty = "n", cex = 0.8)
+dev.off()
+
+# --- 30-04: the airline pseudo-spectrum -----------------------------------
+png_("30-04-pseudo-spectrum.png")
+par(mfrow = c(1, 2))
+plot(ff, arma_spectrum(ma_poly = airline_ma(0.4, 0.6), ar_poly = airline_ar(), freq = ff),
+     type = "l", lwd = 2, log = "y", xlab = "cycles/month", ylab = "pseudo-spectrum",
+     main = "airline model: seven infinite peaks")
+mark_seasonal_freq(); abline(v = 0, col = "firebrick", lty = 3)
+plot(NA, xlim = c(0.05, 0.12), ylim = c(1e-3, 1e3), log = "y", xlab = "cycles/month",
+     ylab = "pseudo-spectrum", main = "Theta sets the peak WIDTH")
+for (i in seq_along(c(0.2, 0.6, 0.95)))
+  lines(ff, arma_spectrum(ma_poly = airline_ma(0.4, c(0.2, 0.6, 0.95)[i]),
+                          ar_poly = airline_ar(), freq = ff), col = cols3[i], lwd = 2)
+abline(v = 1/12, lty = 2)
+legend("topright", paste("Theta =", c(0.2, 0.6, 0.95)), col = cols3, lwd = 2, bty = "n", cex = 0.8)
+dev.off()
+
+# --- 30-05: differencing as a filter --------------------------------------
+png_("30-05-differencing-gain.png")
+par(mfrow = c(1, 2))
+plot(FREQ, sqrt(sq_gain_poly(c(1, -1), FREQ)), type = "l", lwd = 2, xlab = "cycles/period",
+     ylab = "gain", main = "(1-B): kills the trend, AMPLIFIES the high end")
+abline(h = c(0, 1, 2), col = "grey85")
+plot(FREQ, sqrt(sq_gain_poly(c(1, rep(0, 11), -1), FREQ)), type = "l", lwd = 2,
+     xlab = "cycles/month", ylab = "gain", main = "(1-B^12): seven zeros")
+mark_seasonal_freq(); abline(v = 0, col = "firebrick", lty = 3)
+dev.off()
+
+# --- 30-06: the WK gain ----------------------------------------------------
+png_("30-06-wk-gain.png")
+par(mfrow = c(1, 2))
+fw <- seq(1e-4, 0.5, length.out = 2000)
+mk <- function(sn) {
+  fs <- arma_spectrum(ar_poly = c(1, -1), sigma2 = 1, freq = fw)
+  wk_gain(fs, fs + sn^2 / (2 * pi))
+}
+plot(NA, xlim = c(0, 0.5), ylim = c(0, 1), xlab = "cycles/period", ylab = "gain",
+     main = "WK gain = share of power that is yours")
+for (i in seq_along(c(0.5, 1, 2, 4)))
+  lines(fw, mk(c(0.5, 1, 2, 4)[i]), col = c(cols3, "purple")[i], lwd = 2)
+legend("topright", paste("noise sd =", c(0.5, 1, 2, 4)),
+       col = c(cols3, "purple"), lwd = 2, bty = "n", cex = 0.8)
+wq <- wk_weights(mk(2), fw, max_lag = 40)
+plot(0:40, wq, type = "h", lwd = 3, col = "steelblue", xlab = "lag |j|", ylab = "weight",
+     main = "its weights: symmetric, decaying, INFINITE")
+abline(h = 0, col = "grey70")
+dev.off()
+
 cat("figures written to figures/:\n"); print(list.files("figures"))
 ```
 

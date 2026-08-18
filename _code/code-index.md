@@ -13,6 +13,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | Script | What it does | Lines | Concept note |
 |---|---|---|---|
 | [[code-_setup\|`_setup.R`]] | Shared helpers. source() this at the top of every script. | 61 | — |
+| [[code-_spectral\|`_spectral.R`]] | Frequency-domain helpers. source() after _setup.R. | 64 | — |
 | [[code-_x11\|`_x11.R`]] | X-11 building blocks, hand-coded. source() after _setup.R. | 174 | — |
 | [[code-10-01-lag-operator\|`10-01-lag-operator.R`]] | The lag operator B is just algebra. | 35 | [[10-01-lag-operator]] |
 | [[code-10-02-stationarity-and-roots\|`10-02-stationarity-and-roots.R`]] | Stationarity is a statement about polynomial roots. | 46 | [[10-02-stationarity-and-roots]] |
@@ -36,8 +37,15 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-20-06-extreme-values\|`20-06-extreme-values.R`]] | Extreme values: the one nonlinear step. | 70 | [[20-06-extreme-values]] |
 | [[code-20-07-end-filters\|`20-07-end-filters.R`]] | End filters: where revisions come from. | 85 | [[20-07-end-filters]] |
 | [[code-20-08-x11-arima\|`20-08-x11-arima.R`]] | X-11-ARIMA: extend with forecasts, then filter symmetrically. | 98 | [[20-08-x11-arima]] |
-| [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 157 | — |
-| [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 159 | — |
+| [[code-30-01-frequency-domain-basics\|`30-01-frequency-domain-basics.R`]] | Frequencies, periods, harmonics, aliasing. | 54 | [[30-01-frequency-domain-basics]] |
+| [[code-30-02-spectral-density\|`30-02-spectral-density.R`]] | The spectral density: variance distributed over frequency. | 58 | [[30-02-spectral-density]] |
+| [[code-30-03-spectrum-of-an-arma\|`30-03-spectrum-of-an-arma.R`]] | The central formula: f(w) = (sigma^2/2pi) \|theta\|^2 / \|phi\|^2. | 78 | [[30-03-spectrum-of-an-arma]] |
+| [[code-30-04-pseudo-spectrum\|`30-04-pseudo-spectrum.R`]] | The pseudo-spectrum: unit roots as infinite peaks. | 79 | [[30-04-pseudo-spectrum]] |
+| [[code-30-05-filters-in-the-frequency-domain\|`30-05-filters-in-the-frequency-domain.R`]] | Filtering multiplies the spectrum by the squared gain. | 68 | [[30-05-filters-in-the-frequency-domain]] |
+| [[code-30-06-wiener-kolmogorov\|`30-06-wiener-kolmogorov.R`]] | Wiener-Kolmogorov: keep the share of the power that is yours. | 75 | [[30-06-wiener-kolmogorov]] |
+| [[code-30-07-finite-samples\|`30-07-finite-samples.R`]] | Applying a doubly-infinite filter to 144 observations. | 87 | [[30-07-finite-samples]] |
+| [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 160 | — |
+| [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 244 | — |
 
 ## Regenerating
 

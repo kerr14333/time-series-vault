@@ -76,6 +76,9 @@ CODE_DIR <- "_code"
     n    <- length(readLines(p, warn = FALSE))
     desc <- .first_comment(readLines(p, warn = FALSE))
     note <- if (stem %in% stems) sprintf("[[%s]]", stem) else "—"
+    # A description may contain "|" (e.g. |theta|^2), which would break the
+    # table row. Escape it.
+    desc <- gsub("|", "\\|", desc, fixed = TRUE)
     sprintf("| [[code-%s\\|`%s.R`]] | %s | %d | %s |", stem, stem, desc, n, note)
   }, character(1))
 

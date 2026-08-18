@@ -34,7 +34,13 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 - [ ] [[20-08-x11-arima]]
 
 ## Module 3 — Spectra and signal extraction
-- [ ] see [[30-00-spectral-map]]
+- [ ] [[30-01-frequency-domain-basics]]
+- [ ] [[30-02-spectral-density]]
+- [ ] [[30-03-spectrum-of-an-arma]]
+- [ ] [[30-04-pseudo-spectrum]]
+- [ ] [[30-05-filters-in-the-frequency-domain]]
+- [ ] [[30-06-wiener-kolmogorov]]
+- [ ] [[30-07-finite-samples]]
 
 ## Module 4 — SEATS
 - [ ] see [[40-00-seats-map]]
