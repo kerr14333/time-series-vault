@@ -55,6 +55,15 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-40-06-wk-filters-for-the-airline-model\|`40-06-wk-filters-for-the-airline-model.R`]] | The three WK filters: gains, weights, and X-11 side by side. | 88 | [[40-06-wk-filters-for-the-airline-model]] |
 | [[code-40-07-implementing-seats-in-r\|`40-07-implementing-seats-in-r.R`]] | The build, walked through, plus the traps that produce plausible output. | 98 | [[40-07-implementing-seats-in-r]] |
 | [[code-40-08-validating-against-x13\|`40-08-validating-against-x13.R`]] | Prove it against the Census Bureau binary. | 88 | [[40-08-validating-against-x13]] |
+| [[code-50-01-is-there-seasonality\|`50-01-is-there-seasonality.R`]] | Should this series be adjusted at all? | 68 | [[50-01-is-there-seasonality]] |
+| [[code-50-02-residual-seasonality\|`50-02-residual-seasonality.R`]] | Did any seasonality survive? | 57 | [[50-02-residual-seasonality]] |
+| [[code-50-03-m-and-q-statistics\|`50-03-m-and-q-statistics.R`]] | The M and Q statistics, and their limits. | 58 | [[50-03-m-and-q-statistics]] |
+| [[code-50-04-sliding-spans\|`50-04-sliding-spans.R`]] | Sliding spans: is the answer robust to moving the window? | 60 | [[50-04-sliding-spans]] |
+| [[code-50-05-revision-history\|`50-05-revision-history.R`]] | Revision history: concurrent vs final. | 69 | [[50-05-revision-history]] |
+| [[code-50-06-turning-points\|`50-06-turning-points.R`]] | Adjustment is least reliable exactly when it matters most. | 73 | [[50-06-turning-points]] |
+| [[code-50-07-outliers-and-breaks\|`50-07-outliers-and-breaks.R`]] | AO, LS, TC: getting the TYPE right matters as much as the location. | 81 | [[50-07-outliers-and-breaks]] |
+| [[code-50-08-covid\|`50-08-covid.R`]] | A COVID-like shock, and the three treatment strategies. | 77 | [[50-08-covid]] |
+| [[code-50-09-x11-vs-seats\|`50-09-x11-vs-seats.R`]] | Which method do you publish? | 73 | [[50-09-x11-vs-seats]] |
 | [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 160 | — |
 | [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 305 | — |
 

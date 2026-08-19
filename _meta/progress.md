@@ -56,7 +56,22 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 - [ ] [[40-08-validating-against-x13]]
 
 ## Module 5 — Diagnostics and practice
-- [ ] see [[50-00-diagnostics-map]]
+- [ ] [[50-01-is-there-seasonality]]
+- [ ] [[50-02-residual-seasonality]]
+- [ ] [[50-03-m-and-q-statistics]]
+- [ ] [[50-04-sliding-spans]]
+- [ ] [[50-05-revision-history]]
+- [ ] [[50-06-turning-points]]
+- [ ] [[50-07-outliers-and-breaks]]
+- [ ] [[50-08-covid]]
+- [ ] [[50-09-x11-vs-seats]]
+
+## Quizzes
+- [ ] [[quiz-module-1]]
+- [ ] [[quiz-module-2]]
+- [ ] [[quiz-module-3]]
+- [ ] [[quiz-module-4]]
+- [ ] [[quiz-module-5]]
 
 ---
 

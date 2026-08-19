@@ -1,0 +1,80 @@
+---
+aliases: [Is there seasonality, QS test, Identifiable seasonality]
+tags: [module-5]
+---
+
+# Is there any seasonality to remove?
+
+Code: [[code-50-01-is-there-seasonality|`R/50-01-is-there-seasonality.R`]]
+
+The first question, and the one most often skipped. **Adjusting a series with no seasonality is worse than doing nothing** — you subtract a spurious pattern estimated from noise, adding variance and inventing movements that were never there.
+
+## The tests
+
+**QS statistic.** A Ljung–Box-type statistic computed on the *seasonal lags only* (12, 24, …) of the differenced series, using positive autocorrelations only. Distributed $\chi^2_2$ under no seasonality, so **above about 9 is significant at 1%**.
+
+X-13 reports it for several series at once:
+
+| Key | On what |
+|---|---|
+| `qsori` | the original series — is there seasonality to remove? |
+| `qssadj` | the **adjusted** series — is any left? ([[50-02-residual-seasonality]]) |
+| `qsirr` | the irregular |
+| `qsrsd` | the model residuals |
+
+**M7.** X-11's combined test for *identifiable* seasonality, mixing the stable-seasonality F-test with the moving-seasonality F-test. **M7 > 1 means identifiable seasonality is doubtful.** It is the single most useful of the M statistics ([[50-03-m-and-q-statistics]]).
+
+**The spectrum.** Look for peaks at $k/12$. Direct, visual, and hard to fool.
+
+## A negative control
+
+Every diagnostic needs a case where the answer is known to be "no". Monthly **sunspot** numbers have a strong ~11-year cycle and *no annual seasonality* — the Sun does not know about the calendar.
+
+| Series | QS(orig) | M7 | Q | spectrum at $1/12$ |
+|---|---|---|---|---|
+| `co2` | 495.3 | 0.03 | 0.12 | strong peak |
+| `unemp` | 414.9 | 0.17 | 0.18 | strong peak |
+| `AirPassengers` | 167.6 | 0.20 | 0.20 | strong peak |
+| `ldeaths` | 26.6 | 0.28 | 0.75 | peak |
+| **`sunspots`** | **3.0** | **2.47** | **1.46** | **0.36× the median — no peak at all** |
+
+Everything agrees. QS of 3.0 is not close to the 9 threshold; M7 of 2.47 is well over 1; and the power at the annual frequency is *below* the median, i.e. there is less there than at a typical frequency.
+
+> [!important] SEATS refuses outright
+> Running `seas(sunspots)` in SEATS mode **fails** — X-13 returns a non-zero exit status. A model-based method has nothing to decompose when there is no seasonal component, and rather than invent one it stops.
+>
+> X-11 does *not* stop. It happily produces seasonal factors, because it is a fixed recipe with no notion of whether the exercise makes sense. That difference is worth remembering: the model-based method fails loudly, the filter-based one fails silently.
+
+## What to do about a "no"
+
+- **Do not publish an adjusted series.** Publish the original, and say why.
+- Consider whether the seasonality is *there but unstable* — a series can have real seasonality that moves too fast to estimate. M7 catches this too, since it penalises moving seasonality relative to stable.
+- Consider whether the span is too short. Six years is a common practical minimum; `USAccDeaths` at 72 observations is right at it.
+- For a **composite** series (a sum of components), check whether the components are seasonal even if the total is not — offsetting seasonal patterns can cancel.
+
+## The trap in reading X-13's diagnostics
+
+X-13's `udg()` dictionary has 377 entries, many undocumented and easy to misread. On `AirPassengers` the key `peaks.seas` returns `"rsd sa"`, which looks alarming — as though seasonal peaks were found in both the residuals and the adjusted series.
+
+But the two unambiguous checks both say clean:
+
+```text
+QS(SA)                              0   (p = 1)
+own spectral check, max ratio    1.10   at the seasonal frequencies
+```
+
+> [!warning] Do not build a claim on an undocumented diagnostic key
+> Prefer the statistics with a stated null distribution (QS) and checks you compute yourself (the spectrum). If a `udg` key seems to contradict them, you have probably misunderstood the key — confirm before reporting it.
+
+## Exercises
+
+1. Reproduce the table. Confirm `sunspots` fails every test the others pass.
+2. Try `seas(sunspots)` in SEATS mode and observe the failure; then in X-11 mode and observe that it produces factors regardless.
+3. Plot the sunspot spectrum. Find the 11-year cycle. Confirm nothing at $k/12$.
+4. Simulate white noise, "adjust" it, and compare the variance of the adjusted series with the original. Adjusting noise makes it *worse* — by how much?
+5. Take a seasonal series and progressively shorten it. At what length do the diagnostics stop detecting the seasonality you know is there?
+
+## Links
+
+- Next: [[50-02-residual-seasonality]] · Module map: [[50-00-diagnostics-map]]
+- Data: [[series-catalogue]]
