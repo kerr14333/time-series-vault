@@ -241,4 +241,65 @@ plot(0:40, wq, type = "h", lwd = 3, col = "steelblue", xlab = "lag |j|", ylab = 
 abline(h = 0, col = "grey70")
 dev.off()
 
+# ============================ MODULE 4 =====================================
+source("R/_seats.R")
+fit4 <- arima(log(AirPassengers), c(0,1,1), list(order = c(0,1,1), period = 12))
+th4  <- unname(-coef(fit4)["ma1"]); Th4 <- unname(-coef(fit4)["sma1"])
+build4 <- function(theta, Theta, s = 12) {
+  mm <- poly_mult(c(1, -theta), c(1, rep(0, s - 1), -Theta))
+  ss <- seats_ar_split(1, 1, s)
+  seats_canonical(seats_partial_fractions(mm, ss$trend, ss$seasonal))
+}
+cn4 <- build4(th4, Th4)
+pf4 <- seats_partial_fractions(poly_mult(c(1,-th4), c(1, rep(0,11), -Th4)),
+                               seats_ar_split(1,1,12)$trend, seats_ar_split(1,1,12)$seasonal)
+
+# --- 40-04: the spectrum split into three ---------------------------------
+png_("40-04-spectrum-split.png")
+wq <- seq(0.04, pi - 0.04, length.out = 3000)
+gz <- cospoly_eval(pf4$N, wq) / (cospoly_eval(pf4$DT, wq) * cospoly_eval(pf4$DS, wq))
+plot(wq, gz, type = "l", lwd = 3, log = "y", ylim = c(1e-3, 5e2), xlab = "omega (radians)",
+     ylab = "pseudo-spectrum", main = "the airline pseudo-spectrum, split by partial fractions")
+lines(wq, cospoly_eval(pf4$A, wq) / cospoly_eval(pf4$DT, wq), col = "firebrick", lwd = 2)
+lines(wq, cospoly_eval(pf4$C, wq) / cospoly_eval(pf4$DS, wq), col = "steelblue", lwd = 2)
+abline(h = pf4$Dc[1], col = "darkgreen", lwd = 2)
+abline(v = 2 * pi * (1:6) / 12, lty = 3, col = "grey65")
+legend("topright", c("f_z total", "trend", "seasonal", "irregular"),
+       col = c("black", "firebrick", "steelblue", "darkgreen"), lwd = 2, bty = "n", cex = 0.8)
+dev.off()
+
+# --- 40-06: the three component filters -----------------------------------
+png_("40-06-seats-filters.png")
+par(mfrow = c(1, 2))
+w4 <- seq(1e-8, pi - 1e-8, length.out = 3000)
+nu4 <- seats_filters(cn4, w4)
+plot(w4, nu4$trend, type = "l", lwd = 2, col = "firebrick", ylim = c(0, 1.05),
+     xlab = "omega", ylab = "gain", main = "SEATS component filters (sum to 1)")
+lines(w4, nu4$seasonal, col = "steelblue", lwd = 2)
+lines(w4, nu4$irregular, col = "darkgreen", lwd = 2)
+abline(v = 2 * pi * (1:6) / 12, lty = 3, col = "grey65")
+legend("right", c("trend", "seasonal", "irregular"),
+       col = c("firebrick", "steelblue", "darkgreen"), lwd = 2, bty = "n", cex = 0.8)
+plot(NA, xlim = c(0, pi), ylim = c(0, 1.05), xlab = "omega", ylab = "gain",
+     main = "Theta sets the notch WIDTH")
+cl <- c("steelblue", "darkgreen", "firebrick")
+for (i in seq_along(c(0.3, 0.6, 0.9)))
+  lines(w4, seats_filters(build4(0.4, c(0.3, 0.6, 0.9)[i]), w4)$seasonal, col = cl[i], lwd = 2)
+abline(v = 2 * pi * (1:6) / 12, lty = 3, col = "grey70")
+legend("right", paste("Theta =", c(0.3, 0.6, 0.9)), col = cl, lwd = 2, bty = "n", cex = 0.8)
+dev.off()
+
+# --- 40-07: the finished decomposition ------------------------------------
+png_("40-07-decomposition.png", h = 1400)
+d4 <- seats_decompose(AirPassengers, th4, Th4)
+par(mfrow = c(4, 1), mar = c(2.5, 4.2, 2, 1))
+plot(log(AirPassengers), ylab = "log z", main = "SEATS decomposition of log(AirPassengers)")
+lines(d4$trend, col = "firebrick", lwd = 2)
+legend("topleft", c("log z", "trend"), col = c("black", "firebrick"), lwd = 2, bty = "n")
+plot(d4$sa, ylab = "SA", main = "seasonally adjusted = trend + irregular")
+plot(d4$seasonal, ylab = "S", main = "seasonal"); abline(h = 0, col = "grey60")
+plot(d4$irregular, ylab = "I", main = "irregular (white by construction)")
+abline(h = 0, col = "grey60")
+dev.off()
+
 cat("figures written to figures/:\n"); print(list.files("figures"))

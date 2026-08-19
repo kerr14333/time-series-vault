@@ -46,7 +46,14 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 - [ ] [[30-07-finite-samples]]
 
 ## Module 4 — SEATS
-- [ ] see [[40-00-seats-map]]
+- [ ] [[40-01-unobserved-components-and-reduced-form]]
+- [ ] [[40-02-admissible-decompositions]]
+- [ ] [[40-03-canonical-decomposition]]
+- [ ] [[40-04-partial-fractions-in-b-and-f]]
+- [ ] [[40-05-component-models]]
+- [ ] [[40-06-wk-filters-for-the-airline-model]]
+- [ ] [[40-07-implementing-seats-in-r]]
+- [ ] [[40-08-validating-against-x13]]
 
 ## Module 5 — Diagnostics and practice
 - [ ] see [[50-00-diagnostics-map]]

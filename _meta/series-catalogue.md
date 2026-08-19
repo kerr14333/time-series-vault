@@ -5,7 +5,7 @@ tags: [meta, reference]
 
 # The series catalogue
 
-Code: `R/_series.R` · catalogue script: `R/00-series-catalogue.R`
+Code: [[code-_series|`R/_series.R`]] · catalogue script: `R/00-series-catalogue.R`
 
 ## Why AirPassengers is not enough
 

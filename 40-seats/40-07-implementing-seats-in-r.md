@@ -5,7 +5,7 @@ tags: [module-4, key]
 
 # Implementing SEATS
 
-Code: `R/_seats.R` (the engine) and `R/40-07-implementing-seats-in-r.R` (the walkthrough)
+Code: [[code-_seats|`R/_seats.R`]] (the engine) and `R/40-07-implementing-seats-in-r.R` (the walkthrough)
 
 **This is the goal you set at the start.** Everything else in the vault exists to make this note possible.
 
@@ -38,6 +38,8 @@ Run on `AirPassengers` with $\theta = 0.4018$, $\Theta = 0.5569$, and compare ag
 | `s13` | irregular | **0.010%** |
 
 A from-scratch R implementation reproducing forty-year-old Fortran to within a hundredth of a percent. If you can get here, you understand SEATS.
+
+![[40-07-decomposition.png]]
 
 ## The four traps
 

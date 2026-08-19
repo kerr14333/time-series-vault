@@ -5,7 +5,7 @@ tags: [module-4, key]
 
 # The canonical decomposition
 
-Code: `R/40-03-canonical-decomposition.R`
+Code: [[code-40-03-canonical-decomposition|`R/40-03-canonical-decomposition.R`]]
 
 The convention that makes SEATS's answer unique. Hillmer & Bell (1982), Bell & Hillmer (1984).
 

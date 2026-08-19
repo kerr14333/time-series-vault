@@ -5,7 +5,7 @@ tags: [module-4, key]
 
 # Admissible decompositions
 
-Code: `R/40-02-admissible-decompositions.R`
+Code: [[code-40-02-admissible-decompositions|`R/40-02-admissible-decompositions.R`]]
 
 Not every ARIMA model can be split into components. This note maps exactly which ones can, and shows a real series where it fails.
 

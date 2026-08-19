@@ -5,7 +5,7 @@ tags: [module-4]
 
 # Unobserved components and the reduced form
 
-Code: `R/40-01-unobserved-components-and-reduced-form.R`
+Code: [[code-40-01-unobserved-components-and-reduced-form|`R/40-01-unobserved-components-and-reduced-form.R`]]
 
 ## Two ways to describe the same series
 

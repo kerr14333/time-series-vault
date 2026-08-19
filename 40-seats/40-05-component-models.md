@@ -5,7 +5,7 @@ tags: [module-4]
 
 # What model does each component follow?
 
-Code: `R/40-05-component-models.R`
+Code: [[code-40-05-component-models|`R/40-05-component-models.R`]]
 
 The decomposition does not just produce three *series* — it produces three *models*. Knowing them is what lets you forecast the components, compute their error variances, and sanity-check an implementation.
 

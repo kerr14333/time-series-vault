@@ -5,7 +5,7 @@ tags: [module-4, key]
 
 # Partial fractions in $B$ and $F$
 
-Code: `R/40-04-partial-fractions-in-b-and-f.R`
+Code: [[code-40-04-partial-fractions-in-b-and-f|`R/40-04-partial-fractions-in-b-and-f.R`]]
 
 The mechanical core of SEATS. It is the partial fractions you did in calculus, applied to the pseudo-spectrum. Nothing harder — but the bookkeeping needs care, so this note does it with actual numbers.
 
@@ -84,6 +84,10 @@ Solving gives the three component spectra. Their minima over frequency:
 | irregular $D$ | $0.240$ (constant) |
 
 All three are **non-negative**, so this model is admissible ([[40-02-admissible-decompositions]]). Those two minima are exactly what the canonical step will strip out and hand to the irregular ([[40-03-canonical-decomposition]]).
+
+![[40-04-spectrum-split.png]]
+
+The total pseudo-spectrum (black) and its three pieces. The trend owns the pole at 0, the seasonal owns the six seasonal poles, and the irregular is the flat floor. The partial fractions are just this picture, written algebraically.
 
 ## Why the filters end up pole-free
 

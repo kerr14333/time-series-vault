@@ -12,6 +12,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 
 | Script | What it does | Lines | Concept note |
 |---|---|---|---|
+| [[code-_seats\|`_seats.R`]] | The SEATS canonical decomposition, from scratch. | 195 | — |
 | [[code-_series\|`_series.R`]] | The standard test series for this vault. | 53 | — |
 | [[code-_setup\|`_setup.R`]] | Shared helpers. source() this at the top of every script. | 61 | — |
 | [[code-_spectral\|`_spectral.R`]] | Frequency-domain helpers. source() after _setup.R. | 64 | — |
@@ -46,8 +47,16 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-30-05-filters-in-the-frequency-domain\|`30-05-filters-in-the-frequency-domain.R`]] | Filtering multiplies the spectrum by the squared gain. | 68 | [[30-05-filters-in-the-frequency-domain]] |
 | [[code-30-06-wiener-kolmogorov\|`30-06-wiener-kolmogorov.R`]] | Wiener-Kolmogorov: keep the share of the power that is yours. | 75 | [[30-06-wiener-kolmogorov]] |
 | [[code-30-07-finite-samples\|`30-07-finite-samples.R`]] | Applying a doubly-infinite filter to 144 observations. | 87 | [[30-07-finite-samples]] |
+| [[code-40-01-unobserved-components-and-reduced-form\|`40-01-unobserved-components-and-reduced-form.R`]] | A structural model has an ARIMA reduced form. SEATS runs it backwards. | 73 | [[40-01-unobserved-components-and-reduced-form]] |
+| [[code-40-02-admissible-decompositions\|`40-02-admissible-decompositions.R`]] | Which models can be decomposed at all? | 76 | [[40-02-admissible-decompositions]] |
+| [[code-40-03-canonical-decomposition\|`40-03-canonical-decomposition.R`]] | The canonical rule: give the irregular as much variance as possible. | 96 | [[40-03-canonical-decomposition]] |
+| [[code-40-04-partial-fractions-in-b-and-f\|`40-04-partial-fractions-in-b-and-f.R`]] | The partial fractions, with numbers. | 93 | [[40-04-partial-fractions-in-b-and-f]] |
+| [[code-40-05-component-models\|`40-05-component-models.R`]] | What ARIMA does each component follow? | 84 | [[40-05-component-models]] |
+| [[code-40-06-wk-filters-for-the-airline-model\|`40-06-wk-filters-for-the-airline-model.R`]] | The three WK filters: gains, weights, and X-11 side by side. | 88 | [[40-06-wk-filters-for-the-airline-model]] |
+| [[code-40-07-implementing-seats-in-r\|`40-07-implementing-seats-in-r.R`]] | The build, walked through, plus the traps that produce plausible output. | 98 | [[40-07-implementing-seats-in-r]] |
+| [[code-40-08-validating-against-x13\|`40-08-validating-against-x13.R`]] | Prove it against the Census Bureau binary. | 88 | [[40-08-validating-against-x13]] |
 | [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 160 | — |
-| [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 244 | — |
+| [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 305 | — |
 
 ## Regenerating
 

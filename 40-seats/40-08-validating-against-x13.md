@@ -5,7 +5,7 @@ tags: [module-4]
 
 # Validating against X-13
 
-Code: `R/40-08-validating-against-x13.R`
+Code: [[code-40-08-validating-against-x13|`R/40-08-validating-against-x13.R`]]
 
 Having built it, prove it. This note is also a general recipe for checking *any* implementation against a reference, including a black-box one.
 
@@ -86,6 +86,22 @@ Any of these explains $10^{-4}$ relative error. None explains $10^{-2}$ — so i
 5. **Only then** consider numerical precision.
 
 Step 4 is the one people skip, and it is the one that identified both of this module's real bugs.
+
+## The result worth ending on
+
+Measured on `AirPassengers`:
+
+| Comparison | Mean absolute difference |
+|---|---|
+| SEATS vs X-11 — a **method** difference | **0.760%** |
+| ours vs X-13 SEATS — an **implementation** difference | **0.001%** |
+
+A factor of about **660**.
+
+> [!important] Perspective
+> Which method you publish is a real decision with real consequences for the numbers people read. Whether your code agrees with Census to four decimals or six is not.
+>
+> Spend your scepticism on the modelling choices — logs or levels, which ARIMA, X-11 or SEATS, how to treat outliers — and not on the last decimal place.
 
 ## Exercises
 

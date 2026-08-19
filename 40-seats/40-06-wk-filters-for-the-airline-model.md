@@ -5,7 +5,7 @@ tags: [module-4, key]
 
 # The WK filters for the airline model
 
-Code: `R/40-06-wk-filters-for-the-airline-model.R`
+Code: [[code-40-06-wk-filters-for-the-airline-model|`R/40-06-wk-filters-for-the-airline-model.R`]]
 
 Where all of Module 3 becomes a picture you can look at.
 
@@ -35,6 +35,10 @@ And $\nu_T + \nu_S + \nu_I = 1$ at every frequency, verified to $7\times10^{-12}
 
 > [!important] Note $\nu_S(\pi) = 1$
 > $\omega = \pi$ *is* a seasonal frequency for monthly data — it is $k=6$, the two-month cycle, the last harmonic. So the seasonal component legitimately claims all the power at the highest observable frequency. First-time implementers often think this is a bug. It is not.
+
+![[40-06-seats-filters.png]]
+
+Left: the three gains, summing to 1 at every frequency. Right: the seasonal filter alone as $\Theta$ varies — this is the adaptivity X-11 cannot offer.
 
 ## The filter weights
 
