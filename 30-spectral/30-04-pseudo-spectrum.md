@@ -61,6 +61,28 @@ Two reasons SEATS can work with them:
 1. **The decomposition is about *shares*.** The Wiener–Kolmogorov filter ([[30-06-wiener-kolmogorov]]) is the ratio $f_s/f_z$. At a seasonal frequency both numerator and denominator are infinite, and the *ratio tends to 1* — the seasonal owns all the power there. Ratios of infinities behave, even when the pieces do not.
 2. **Differencing makes everything finite.** In practice you work with the stationary differenced series, where the offending factors have been divided out, and reinstate them at the end.
 
+## Deterministic versus evolving seasonality, spectrally
+
+$\Theta$ sets the peak width, so two real series make the extremes visible.
+
+| Series | $\Theta$ | What the seasonal is | Peaks |
+|---|---|---|---|
+| `nottem` (temperatures) | 0.922 | genuinely **deterministic** — the Earth's orbit | very narrow |
+| `co2` (Mauna Loa) | 0.912 | stochastic but extremely stable | very narrow |
+| `AirPassengers` | 0.557 | ordinary evolving | moderate |
+| `UKgas` | 0.235 | re-rolls almost yearly | **broad** |
+
+A perfectly deterministic seasonal is a set of **pure spectral lines** — infinitely narrow spikes, zero width, no power at neighbouring frequencies. As $\Theta \to 1$ the airline model's seasonal peaks approach exactly that, which is the frequency-domain statement of "the pattern stops evolving".
+
+So the spectral picture and the time-domain reading of $\Theta$ from [[10-10-airline-model]] are the same fact:
+
+```text
+Theta -> 1     narrow peaks     pattern fixed        small revisions
+Theta -> 0     broad peaks      pattern wanders      large revisions
+```
+
+`nottem` and `co2` reach nearly the same $\Theta$ by different routes — one because the physics is fixed, the other because the process is very stable. The model cannot tell them apart, and does not need to.
+
 ## Reading a pseudo-spectrum plot
 
 Always plot $\log f$, and expect the peaks to run off the top of the axis. What to look at:

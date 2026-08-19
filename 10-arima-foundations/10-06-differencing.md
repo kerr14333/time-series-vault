@@ -51,6 +51,22 @@ Rules that actually work:
 - Formal tests exist (ADF, KPSS, HEGY for seasonal roots, and X-13's own `automdl` procedure), but they are a tiebreaker, not the primary tool.
 - **Over-differencing has a signature**: the MA coefficient pins near 1, i.e. a non-invertible root that is trying to cancel the difference you should not have taken. See [[10-05-invertibility]]. It also inflates the variance of the differenced series — a simple check: differencing again should *reduce* variance; if it increases, stop.
 
+## The variance check, on a series where it matters
+
+Differencing once too often *increases* the variance of the result. That gives a cheap test needing no model at all: difference, measure, and stop when the variance stops falling.
+
+On `ldeaths` (monthly UK lung-disease deaths):
+
+| Stage | Variance of $\log$(ldeaths) |
+|---|---|
+| undifferenced | 0.0812 |
+| after $(1-B^{12})$ | **0.0189** ← stop here |
+| after $(1-B)(1-B^{12})$ | 0.0349 ← worse |
+
+So this series needs the **seasonal** difference and not the regular one — $d=0$, $D=1$ — which is exactly the model X-13 chooses when left alone. Compare `AirPassengers`, where both differences reduce the variance and the airline model is right.
+
+The habit worth forming: run this check before accepting $(1,1)$ out of reflex. It costs one line and catches the most common modelling error in the field. See [[10-05-invertibility]] for the same conclusion reached from the MA coefficients.
+
 ## Logs come first
 
 Before differencing, decide on logs. If the seasonal swing grows with the level (multiplicative), take logs — that turns multiplicative structure into additive, which is what ARIMA models. AirPassengers is the textbook case: raw amplitude fans out, log amplitude is roughly constant.

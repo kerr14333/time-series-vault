@@ -88,6 +88,28 @@ cat("  3x5 vs 3x3 final seasonal filter: max diff",
     round(100 * max(abs(ours$d11 - one) / one), 3), "%\n")
 cat("The answer is stable to the details. That robustness is why a 1965 recipe\n")
 cat("is still in production use.\n")
+
+# ---- the whole loop, on quarterly data -----------------------------------
+cat("\n=== the same loop runs on quarterly series ===\n")
+if (requireNamespace("seasonal", quietly = TRUE)) {
+  for (nm in c("UKgas", "JohnsonJohnson")) {
+    x <- get(nm)
+    ours <- x11_decompose(x, verbose = TRUE)
+    m <- seasonal::seas(x, x11 = "", transform.function = "log",
+                        regression.aictest = NULL, outlier = NULL)
+    cmp2 <- function(a, b, lab) {
+      a <- as.numeric(a); b <- as.numeric(b); n <- length(a); int <- 9:(n - 8)
+      pd <- 100 * abs(a - b) / abs(b)
+      cat(sprintf("    %-4s interior mean %5.2f%%  max %5.2f%%\n", lab, mean(pd[int]), max(pd[int])))
+    }
+    cat(" ", nm, "(s =", frequency(x), ")\n")
+    cmp2(ours$d10, seasonal::series(m, "d10"), "d10")
+    cmp2(ours$d11, seasonal::series(m, "d11"), "d11")
+    cmp2(ours$d12, seasonal::series(m, "d12"), "d12")
+  }
+  cat("\nAgreement is as good as the monthly case. x11_decompose() reads the\n")
+  cat("period off the series -- nothing about the method is special to 12.\n")
+}
 ```
 
 ## Run it

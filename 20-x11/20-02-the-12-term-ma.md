@@ -46,6 +46,19 @@ So the very same polynomial keeps reappearing:
 
 That is not a coincidence — it is the same mathematical object seen from three sides, and noticing it is a genuine milestone.
 
+## Quarterly: the same filter, shorter
+
+Nothing conceptual changes for quarterly data — only the arithmetic. The general form is a **2xs MA**, a 2-term MA of an s-term MA:
+
+| | Weights | Terms |
+|---|---|---|
+| monthly, $s=12$ | $\tfrac{1}{24}(1,2,2,\ldots,2,1)$ | 13 |
+| quarterly, $s=4$ | $\tfrac{1}{8}(1,2,2,2,1)$ | **5** |
+
+And the seasonal frequencies it must annihilate shrink from six to **two**: $f = 1/4$ and $1/2$ ([[30-01-frequency-domain-basics]]). Measured, the quarterly gain at both is $3\times10^{-17}$ and $0$ — exactly zero, as for monthly.
+
+The helper is `ma_2xs(s)`; `ma_2x12()` is just the monthly case named. Hardcoding 12 is the most common way to get quarterly silently wrong.
+
 ## What it gets wrong
 
 It kills seasonality exactly, but it is a blunt instrument for the trend:

@@ -60,6 +60,30 @@ cat("\nThat is the whole meaning of Theta: how much the seasonality is allowed t
 tsdiag(fit)
 cat("\nLjung-Box at lag 24, df corrected:\n")
 print(Box.test(residuals(fit), lag = 24, type = "Ljung-Box", fitdf = 2))
+
+# ---- nottem: where the DEFAULTS are wrong -------------------------------
+source("R/_series.R")
+suppressMessages(if (requireNamespace("seasonal", quietly = TRUE)) library(seasonal))
+cat("\n=== nottem: logs are not automatic, seasonality is not always stochastic ===\n")
+if (requireNamespace("seasonal", quietly = TRUE)) {
+  m <- seas(nottem)
+  cat("X-13's automatic choice :", paste(m$model$arima$model, collapse = ""), "\n")
+  cat("transform chosen        :", transformfunction(m), "\n")
+  cat("  -> NO log, and no regular difference. Two habits broken at once.\n")
+}
+f <- airline_fit(nottem)
+cat(sprintf("\nforced airline: theta = %.3f  Theta = %.3f\n", f$theta, f$Theta))
+cat("Theta near 1 = the seasonal pattern does not evolve. For temperature that\n")
+cat("is literally true: the Earth's orbit does not drift. This is the ONE case\n")
+cat("where deterministic seasonal dummies would be the right model.\n\n")
+
+cat("=== the full range of Theta across real series ===\n")
+S <- vault_series()
+th <- sapply(names(S), function(n) tryCatch(airline_fit(S[[n]])$Theta, error = function(e) NA))
+print(round(sort(th), 3))
+cat("\nUKgas 0.235 (re-rolls yearly) ... nottem 0.922 (fixed by physics).\n")
+cat("AirPassengers sits unremarkably in the middle, which is why one series\n")
+cat("teaches you nothing about either extreme.\n")
 ```
 
 ## Run it

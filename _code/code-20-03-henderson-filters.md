@@ -75,6 +75,29 @@ cat("This is why the 2x12 MA runs FIRST. Order of operations is structural.\n")
 # Filter length selection from the I/C ratio -------------------------------
 d <- x11_decompose(AirPassengers, verbose = TRUE)
 cat("chosen Henderson length:", d$henderson, "\n")
+
+# ---- quarterly Henderson: a different menu -------------------------------
+cat("\n=== quarterly uses 5 or 7 terms, not 9/13/23 ===\n")
+for (L in c(5, 7)) {
+  w <- henderson(L)
+  cat(sprintf("  %d-term: %s   sums to 1: %s\n", L,
+              paste(sprintf("%+.4f", w), collapse = " "),
+              isTRUE(all.equal(sum(w), 1))))
+}
+cat("\nselection by I/C ratio:\n")
+for (ic in c(0.5, 2.0)) cat(sprintf("  I/C = %.1f  ->  monthly %2d-term, quarterly %d-term\n",
+                                    ic, henderson_length(ic, 12), henderson_length(ic, 4)))
+cat("\nUsing the MONTHLY table on quarterly data is a silent error: a 13-term\n")
+cat("filter spans over three years of quarterly data and simply oversmooths.\n")
+
+# what that mistake costs
+d_right <- x11_decompose(UKgas)
+d_wrong <- x11_decompose(UKgas, hlen = 13)
+cat(sprintf("\nUKgas trend, correct (%d-term) vs forced 13-term:\n", d_right$henderson))
+cat(sprintf("  max difference: %.2f%%\n",
+            100 * max(abs(d_right$d12 - d_wrong$d12) / d_wrong$d12)))
+cat(sprintf("  roughness (sd of first difference): %.5f vs %.5f\n",
+            sd(diff(as.numeric(d_right$d12))), sd(diff(as.numeric(d_wrong$d12)))))
 ```
 
 ## Run it

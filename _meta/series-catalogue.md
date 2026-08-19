@@ -98,13 +98,31 @@ Useful as the limiting case of the "how much does the seasonal evolve" question 
 
 ## Where each is used
 
-| Module | Series added | Why there |
-|---|---|---|
-| 1 — ARIMA | `ldeaths`, `nottem` | over-differencing; a non-airline model |
-| 2 — X-11 | `UKgas` | quarterly filters: $2\times4$ MA, 5-term Henderson |
-| 3 — spectra | `nottem`, `co2` | deterministic vs evolving seasonality, spectrally |
-| 4 — SEATS | `cpi`, `UKgas` | admissibility; components beyond trend/seasonal/irregular |
-| 5 — diagnostics | `unemp`, `imp` | turning points; moving holidays |
+| Module | Series | Where | Done |
+|---|---|---|---|
+| 1 — ARIMA | `ldeaths` | [[10-05-invertibility]], [[10-06-differencing]] — over-differencing, three ways | ✅ |
+| 1 — ARIMA | `nottem` | [[10-10-airline-model]] — no logs, deterministic seasonality | ✅ |
+| 2 — X-11 | `UKgas`, `JohnsonJohnson` | [[20-02-the-12-term-ma]], [[20-03-henderson-filters]], [[20-05-the-x11-iteration]] — quarterly | ✅ |
+| 3 — spectra | `nottem`, `UKgas` | [[30-04-pseudo-spectrum]] — deterministic vs evolving, as peak width | ✅ |
+| 4 — SEATS | `cpi` | [[40-02-admissible-decompositions]] — a real inadmissible decomposition | ✅ |
+| 5 — diagnostics | `unemp`, `sunspots` | [[50-06-turning-points]], [[50-01-is-there-seasonality]] | ✅ |
+| 5 — diagnostics | `imp`, `iip` | moving holidays — mentioned, not yet worked through | ⬜ |
+
+## What the retrofit turned up
+
+Adding quarterly series was not cosmetic. `x11_decompose()` had **hardcoded the monthly 2×12 MA and the monthly Henderson table**, so quarterly data silently ran with the wrong filters. Fixed by generalising to `ma_2xs(s)` and `henderson_length(ic, s)`.
+
+The cost of that class of bug, measured: forcing a 13-term Henderson on `UKgas` (which should get 7) moves the trend by up to **10.2%**, with no error and no warning.
+
+Verified afterwards, hand-coded X-11 against the real X-13, interior mean absolute difference:
+
+| Series | $s$ | d10 | d11 | d12 |
+|---|---|---|---|---|
+| `AirPassengers` | 12 | 0.52% | 0.52% | 0.61% |
+| `UKgas` | 4 | 0.75% | 0.75% | 1.03% |
+| `JohnsonJohnson` | 4 | 0.76% | 0.75% | 0.92% |
+
+Quarterly agreement is as good as monthly — which is the point worth carrying: nothing about the method is special to 12.
 
 ## A standing caution
 

@@ -77,3 +77,34 @@ cat("\nA periodogram cannot show infinities -- finite data, finite estimate --\n
 cat("but the peaks line up with the model's poles. The pseudo-spectrum is the\n")
 cat("idealisation the model asserts; the periodogram is what 144 observations\n")
 cat("can show of it.\n")
+
+# ---- deterministic vs evolving seasonality, side by side ----------------
+source("R/_series.R")
+cat("\n=== how Theta shows up as peak width, on real series ===\n")
+for (nm in c("ukgas", "airline", "co2", "temperature")) {
+  x <- vault_series()[[nm]]
+  fq <- frequency(x)
+  f2 <- tryCatch(airline_fit(x), error = function(e) NULL)
+  if (is.null(f2)) next
+  cat(sprintf("  %-12s s=%2d  Theta = %.3f\n", nm, fq, f2$Theta))
+}
+cat("\nA perfectly DETERMINISTIC seasonal is a set of pure spectral LINES --\n")
+cat("infinitely narrow, no power at neighbouring frequencies. As Theta -> 1 the\n")
+cat("airline model's peaks approach exactly that.\n\n")
+
+op <- par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+ff2 <- seq(1e-4, 0.5 - 1e-4, length.out = 4000)
+for (pair in list(c("ukgas", "broad: seasonality re-rolls"),
+                  c("temperature", "narrow: seasonality is fixed"))) {
+  nm <- pair[1]
+  x <- vault_series()[[nm]]; f2 <- airline_fit(x); s <- frequency(x)
+  ma2 <- poly_mult(c(1, -f2$theta), c(1, rep(0, s - 1), -f2$Theta))
+  ar2 <- diff_poly(d = 1, D = 1, s = s)
+  ps2 <- arma_spectrum(ma_poly = ma2, ar_poly = ar2, freq = ff2)
+  plot(ff2, ps2, type = "l", lwd = 2, log = "y", xlab = "cycles per period",
+       ylab = "pseudo-spectrum",
+       main = sprintf("%s (Theta = %.2f)\n%s", nm, f2$Theta, pair[2]))
+  abline(v = (1:(s %/% 2))/s, col = "firebrick", lty = 3)
+}
+par(op)
+cat("Same picture, two extremes. Theta is the single number that moves it.\n")

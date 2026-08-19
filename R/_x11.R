@@ -24,8 +24,17 @@ na_fill_ends <- function(x) {
 
 # ---- the filters -----------------------------------------------------------
 
-# centred 12-term MA: (1/24)(1,2,2,...,2,1)
-ma_2x12 <- function() c(1, rep(2, 11), 1) / 24
+# Centred 2xs MA -- the general form of the "first move" of note 20-02.
+#   monthly  (s=12): (1/24)(1,2,2,...,2,1), 13 terms
+#   quarterly (s=4): (1/8) (1,2,2,2,1),      5 terms
+# It is a 2-term MA of an s-term MA, so the interior weights are hit twice and
+# the two ends once. Its gain is exactly zero at every seasonal frequency k/s.
+ma_2xs <- function(s = 12) c(1, rep(2, s - 1), 1) / (2 * s)
+ma_2x12 <- function() ma_2xs(12)          # kept: the monthly case, named
+
+# The seasonal frequencies for period s, in cycles per period.
+# monthly -> 6 of them (1/12 .. 1/2); quarterly -> only 2 (1/4, 1/2).
+seas_freq <- function(s = 12) (1:(s %/% 2)) / s
 
 # Henderson weights, closed form. len must be odd.
 # For a (2m+1)-term filter, with n = m+2:
@@ -130,13 +139,19 @@ ic_ratio <- function(trend, irr) {
   ibar <- mean(abs(diff(ii) / head(ii, -1)), na.rm = TRUE)
   ibar / cbar
 }
-henderson_length <- function(ic) if (ic < 1.0) 9L else if (ic < 3.5) 13L else 23L
+# Monthly uses 9/13/23 terms; QUARTERLY uses 5 or 7. Passing the wrong table is
+# a silent error -- a 13-term Henderson on quarterly data spans three years.
+henderson_length <- function(ic, s = 12) {
+  if (s == 4) return(if (ic < 1.0) 5L else 7L)
+  if (ic < 1.0) 9L else if (ic < 3.5) 13L else 23L
+}
 
 # ---- the full X-11 loop ----------------------------------------------------
 # Multiplicative only. Returns the D-tables.
 x11_decompose <- function(z, sfilter1 = "3x3", sfilter2 = "3x5",
                           hlen = NULL, extreme = TRUE, verbose = FALSE) {
-  w12 <- ma_2x12()
+  s   <- frequency(z)                       # 12 monthly, 4 quarterly
+  w12 <- ma_2xs(s)
 
   # 1-2. crude trend, then SI ratios
   T1 <- na_fill_ends(symfilter(z, w12))
@@ -149,8 +164,8 @@ x11_decompose <- function(z, sfilter1 = "3x3", sfilter2 = "3x5",
   # 5-6. first adjusted series, then a proper Henderson trend
   A1 <- z / S1
   ic <- ic_ratio(T1, z / (T1 * S1))
-  h  <- if (is.null(hlen)) henderson_length(ic) else hlen
-  if (verbose) cat(sprintf("I/C ratio = %.2f  ->  %d-term Henderson\n", ic, h))
+  h  <- if (is.null(hlen)) henderson_length(ic, s) else hlen
+  if (verbose) cat(sprintf("s = %d, I/C ratio = %.2f  ->  %d-term Henderson\n", s, ic, h))
   T2 <- na_fill_ends(symfilter(A1, henderson(h)))
 
   # 7-8. better SI ratios; downweight extremes

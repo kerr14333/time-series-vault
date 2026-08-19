@@ -62,6 +62,30 @@ op <- par(mfrow = c(2, 1), mar = c(3, 4, 2, 1))
 plot(ts(line + s12), ylab = "", main = "period 12 + line"); lines(symfilter(line + s12, ma_2x12()), col = "firebrick", lwd = 2)
 plot(ts(line + s11), ylab = "", main = "period 11 + line (leaks through)"); lines(symfilter(line + s11, ma_2x12()), col = "firebrick", lwd = 2)
 par(op)
+
+# ---- the same filter, quarterly ------------------------------------------
+cat("\n=== 2xs MA: nothing is special about 12 ===\n")
+for (s in c(12, 4)) {
+  w <- ma_2xs(s)
+  cat(sprintf("  s = %2d : %2d terms, weights x %2d = %s, sum = %g\n",
+              s, length(w), 2*s, paste(round(w * 2 * s), collapse = " "), sum(w)))
+  cat(sprintf("           seasonal frequencies: %s\n",
+              paste(round(seas_freq(s), 4), collapse = " ")))
+  cat(sprintf("           gain there           : %s\n",
+              paste(signif(gain(w, seas_freq(s)), 3), collapse = " ")))
+}
+cat("\nQuarterly has TWO seasonal frequencies, not six. The gain is exactly zero\n")
+cat("at both, for the same reason: an s-term average of a period-s pattern\n")
+cat("averages one whole cycle.\n")
+
+op <- par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+for (s in c(12, 4)) {
+  ff <- seq(0, 0.5, length.out = 1001)
+  plot(ff, gain(ma_2xs(s), ff), type = "l", lwd = 2, xlab = "cycles per period",
+       ylab = "gain", main = sprintf("2x%d MA", s))
+  abline(h = 0, col = "grey85"); abline(v = seas_freq(s), col = "firebrick", lty = 3)
+}
+par(op)
 ```
 
 ## Run it

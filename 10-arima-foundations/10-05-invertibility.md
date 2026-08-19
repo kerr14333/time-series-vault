@@ -45,6 +45,25 @@ The MA has a **unit root at $z=1$** — non-invertible, right on the boundary. T
 
 When you get to [[40-00-seats-map]] and see a unit MA root come out of the decomposition, come back and reread this box. It is the single most confusing thing in SEATS for people who learned ARIMA first, because ARIMA training teaches you that unit MA roots are a *symptom of a mistake*. In SEATS they are the *goal*.
 
+## Seen in real data: `ldeaths`
+
+Not a simulation. Monthly UK lung-disease deaths, 72 observations. Force the airline model on it and **both** MA coefficients come back at $0.9999$ — pinned on the non-invertible boundary.
+
+Left to choose its own model, X-13 picks $(0,0,1)(0,1,1)_{12}$: **$d = 0$, no regular differencing at all.** The pinned coefficient was not a numerical quirk; it was the model reporting that the regular difference should never have been taken.
+
+Three independent diagnostics agree:
+
+```text
+1. both MA coefficients pin at 0.9999          (this note)
+2. AIC prefers d=0:  -82.52  vs  -81.99        (10-13)
+3. the regular difference INCREASES variance:  (10-06)
+     log(ldeaths)              0.0812
+     after (1-B^12)            0.0189   <- stop here
+     after (1-B)(1-B^12)       0.0349   <- worse
+```
+
+Worth internalising, because the airline model is such a reliable default that it is easy to apply it without looking. `ldeaths` is the case where the default is wrong and says so clearly — if you check.
+
 ## Exercises
 
 1. Compute the first 8 $\pi$-weights for $\theta = 0.5$ and for $\theta = 0.95$. Plot both.

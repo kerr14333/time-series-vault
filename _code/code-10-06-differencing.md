@@ -66,6 +66,19 @@ cat("  reported 'intercept' =", round(coef(fit2)["intercept"], 6),
 cat("  i.e.", round(100 * coef(fit2)["intercept"], 4), "% per month =",
     round(100 * (exp(12 * coef(fit2)["intercept"]) - 1), 2), "% per year\n")
 # It is NOT a level. It is a slope.
+
+# ---- the variance check on a series where it CHANGES the answer ---------
+cat("\n=== ldeaths: differencing too far ===\n")
+v <- c(`undifferenced`      = var(log(ldeaths)),
+       `(1-B^12)`           = var(diff(log(ldeaths), 12)),
+       `(1-B)(1-B^12)`      = var(diff(diff(log(ldeaths)), 12)))
+print(round(v, 5))
+cat("The seasonal difference helps; the regular one makes it WORSE.\n")
+cat("So d = 0, D = 1 -- which is exactly what X-13 picks unaided.\n\n")
+cat("Contrast AirPassengers, where both differences reduce the variance:\n")
+v2 <- c(`undifferenced` = var(lap), `(1-B)(1-B^12)` = var(diff(diff(lap), 12)))
+print(round(v2, 5))
+cat("\nOne line, no model, and it catches the commonest modelling error there is.\n")
 ```
 
 ## Run it

@@ -80,6 +80,18 @@ Do (2) in the script. Then plot the gain and you will see the notches at the sea
 
 This is the picture to remember. The whole of X-11 — three passes, five different moving averages — collapses into **one** symmetric filter that passes everything except six narrow notches at the seasonal frequencies. Note also the negative weights at $\pm12$ in the impulse response: to remove this January's seasonality, X-11 leans on neighbouring Januaries with a *negative* sign.
 
+## It all generalises to quarterly
+
+`x11_decompose()` reads the period off the series, so the same loop runs on quarterly data with the 2x4 MA and a 5- or 7-term Henderson. Checked against the real X-13:
+
+| Series | $s$ | d10 | d11 | d12 |
+|---|---|---|---|---|
+| `AirPassengers` | 12 | 0.52% | 0.52% | 0.61% |
+| `UKgas` | **4** | 0.75% | 0.75% | 1.03% |
+| `JohnsonJohnson` | **4** | 0.76% | 0.75% | 0.92% |
+
+Interior mean absolute differences. Quarterly agreement is as good as monthly, which is the point: nothing about the method is special to 12.
+
 ## What this simplified version omits
 
 Be honest about the gap between what you build and what X-13 runs:

@@ -62,6 +62,19 @@ Noisy series get a longer filter, which is the right instinct: more noise to ave
 
 This ratio is computed from a preliminary decomposition, which is one of several reasons X-11 must iterate — you cannot choose the filter until you have an estimate, and you cannot get a good estimate until you have chosen the filter.
 
+## Quarterly lengths
+
+The same closed form, but the menu of lengths is different — and getting this wrong is a **silent** error, because a 13-term Henderson on quarterly data spans over three years and simply oversmooths.
+
+| Data | I/C ratio | Henderson length |
+|---|---|---|
+| monthly | $<1.0$ / $1.0$–$3.5$ / $\ge3.5$ | 9 / 13 / 23 |
+| **quarterly** | $<1.0$ / $\ge1.0$ | **5 / 7** |
+
+The 5-term weights are $(-0.073,\ 0.294,\ 0.559,\ 0.294,\ -0.073)$ — same shape as the monthly ones, negative at the ends, summing to 1. `henderson_length(ic, s)` takes the period so the right table is used.
+
+**What the mistake costs.** Forcing the monthly 13-term filter onto `UKgas` (which should get 7) changes the trend by up to **10.2%**. That is not a subtlety — it is a visibly different published series, produced by code that runs without complaint.
+
 ## Where it breaks
 
 The Henderson filter is symmetric, so it needs $m$ observations on each side. For a 13-term filter that is six months of future data you do not have at the end of the sample. X-11's answer is a set of **asymmetric surrogate filters** (Musgrave), and those end weights differ *sharply* from the interior weights.

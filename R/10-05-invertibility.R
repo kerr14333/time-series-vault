@@ -47,3 +47,16 @@ plot(sp$freq, sp$spec, type = "l", lwd = 2, xlab = "frequency (cycles/period)",
 abline(v = 0, col = "red", lty = 2)
 # A non-invertible unit MA root <=> a spectral zero.
 # SEATS creates these ON PURPOSE (canonical decomposition). See 40-00.
+
+# ---- REAL DATA: ldeaths, where the airline model over-differences --------
+source("R/_series.R")
+cat("\n=== ldeaths: the boundary, in real data ===\n")
+f_forced <- airline_fit(ldeaths)
+cat(sprintf("forced (0,1,1)(0,1,1): theta = %.4f  Theta = %.4f  <- PINNED\n",
+            f_forced$theta, f_forced$Theta))
+f_auto <- arima(log(ldeaths), c(0,0,1), list(order = c(0,1,1), period = 12))
+cat(sprintf("X-13's choice (0,0,1)(0,1,1): theta = %.4f  Theta = %.4f\n",
+            -coef(f_auto)["ma1"], -coef(f_auto)["sma1"]))
+cat(sprintf("AIC: forced %.2f  vs  auto %.2f\n", AIC(f_forced$fit), AIC(f_auto)))
+cat("d = 0 -- there was never a regular unit root. The pinned coefficient was\n")
+cat("the model telling you so. Compare the variance check in 10-06.\n")

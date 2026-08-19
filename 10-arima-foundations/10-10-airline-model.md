@@ -40,6 +40,19 @@ That is the bridge:
 
 Reading the airline model as "trend + seasonal + noise, differenced" makes the whole of Module 4 feel like an inevitability instead of a trick.
 
+## Two series where the default is wrong
+
+The airline model is such a good default that it is easy to apply without checking. Two cases from [[series-catalogue]] where it should not be:
+
+**`ldeaths`** — forcing it pins both MA coefficients at $0.9999$. X-13 picks $(0,0,1)(0,1,1)$: **no regular difference**. See [[10-05-invertibility]].
+
+**`nottem`** — monthly Nottingham temperatures. X-13 picks $(1,0,0)(1,1,1)_{12}$ with **no log transform** and no regular differencing. Two habits broken at once:
+
+- *Logs are not automatic.* Temperature has no multiplicative structure and can be negative in principle; the log/level test correctly says no.
+- *Seasonality is not always stochastic.* The seasonal cycle here is driven by the Earth's orbit, so it genuinely is fixed. This is the one case where deterministic seasonal dummies would be right, and $\Theta \to 1$ is the airline model's way of saying so.
+
+`nottem` is the useful limiting case for the whole "how much does the seasonal evolve" question. Everything else in this vault sits between it and a series like `UKgas` ($\Theta = 0.235$), whose pattern re-rolls almost every year.
+
 ## Acceptable region
 
 Not every $(\theta, \Theta)$ pair yields a valid decomposition. There is an **admissible region** in the parameter space; outside it, SEATS cannot produce non-negative component spectra and falls back to an approximating model. You will map that region yourself in [[40-00-seats-map]] — it is one of the more satisfying exercises in the sequence.

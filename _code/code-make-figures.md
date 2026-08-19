@@ -316,6 +316,39 @@ plot(d4$irregular, ylab = "I", main = "irregular (white by construction)")
 abline(h = 0, col = "grey60")
 dev.off()
 
+# ============================ MODULE 5 =====================================
+# Revisions cluster at turning points. This recomputes ~75 X-13 runs, so it is
+# the slow part of this script; step `by` up if you want it faster.
+if (requireNamespace("seasonal", quietly = TRUE)) {
+  suppressMessages(library(seasonal))
+  z5 <- seasonal::unemp
+  fin5 <- as.numeric(series(seas(z5, x11 = ""), "d11"))
+  idx5 <- seq(96, length(z5) - 12, by = 3)
+  conc5 <- sapply(idx5, function(i) {
+    y <- ts(as.numeric(z5)[1:i], start = start(z5), frequency = 12)
+    tryCatch(as.numeric(series(seas(y, x11 = ""), "d11"))[i], error = function(e) NA_real_)
+  })
+  tt5  <- as.numeric(time(z5))[idx5]
+  rev5 <- 100 * (fin5[idx5] - conc5) / fin5[idx5]
+  recs <- list(c(1990.5, 1991.25), c(2001.17, 2001.92), c(2007.92, 2009.5))
+  near5 <- Reduce(`|`, lapply(recs, function(r) tt5 >= r[1] - 1 & tt5 <= r[2] + 1))
+  ok5 <- !is.na(rev5)
+
+  png_("50-06-turning-points.png")
+  par(mfrow = c(1, 2))
+  plot(tt5, abs(rev5), type = "n", xlab = "", ylab = "|revision| %",
+       main = "US unemployment: revisions cluster at recessions")
+  for (r in recs) rect(r[1], -1, r[2], 100, col = rgb(1, 0, 0, 0.15), border = NA)
+  lines(tt5, abs(rev5), type = "h", lwd = 2, col = "steelblue")
+  legend("topleft", c("NBER recession"), fill = rgb(1, 0, 0, 0.15), border = NA, bty = "n", cex = 0.8)
+  boxplot(list(`near a\nrecession` = abs(rev5[ok5 & near5]),
+               `everywhere\nelse`  = abs(rev5[ok5 & !near5])),
+          col = c("firebrick", "grey80"), ylab = "|revision| %",
+          main = sprintf("ratio %.2fx",
+                         mean(abs(rev5[ok5 & near5])) / mean(abs(rev5[ok5 & !near5]))))
+  dev.off()
+}
+
 cat("figures written to figures/:\n"); print(list.files("figures"))
 ```
 
