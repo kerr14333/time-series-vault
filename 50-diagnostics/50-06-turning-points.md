@@ -41,6 +41,13 @@ Ten of the fifteen worst-revised months in twenty-six years sit inside 2007–20
 > [!important] The headline
 > Revisions roughly **double** at business-cycle turning points. The seasonally adjusted unemployment number is about twice as provisional during a recession as it is in normal times — and that is precisely when it drives policy and dominates the news.
 
+![[50-06-turning-points.png]]
+
+> [!note] Why the figure says 1.59x and the text says 1.82x
+> The figure recomputes revisions every **third** month from 1998 to keep `make-figures.R` runnable; the table above uses **every** month from 1996. Different samples of months, same data and same code.
+>
+> Neither is wrong, and the gap is the point: the exact ratio moves with how you sample, so quote it as **"roughly 1.5-2x"** rather than to three digits. The finding that survives every variant is that revisions are **substantially larger near turning points** — not any particular decimal.
+
 ## The three mechanisms
 
 Kept separate, because they are usually merged into one hand-wave and the distinctions matter.
