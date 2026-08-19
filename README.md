@@ -54,7 +54,18 @@ Rscript R/make-figures.R        # regenerate figures/
 | `_meta/` | progress tracker, glossary |
 | `_quiz/` | spaced-repetition flashcards |
 
-Module 1 is complete. Modules 2–5 currently hold their maps — the note list, the algorithm in outline, and the checkpoint for each.
+All five modules are complete: 46 notes, 48 runnable scripts, 16 figures and five spaced-repetition quiz banks.
+
+The centrepiece is `R/_seats.R`, a from-scratch implementation of the SEATS canonical decomposition. On `AirPassengers` it reproduces the US Census Bureau's X-13 binary to:
+
+| X-13 table | | Max difference |
+|---|---|---|
+| `s10` | seasonal factors | 0.000% |
+| `s11` | seasonally adjusted | 0.001% |
+| `s12` | trend | 0.012% |
+| `s13` | irregular | 0.010% |
+
+Every quantitative claim in the notes was measured on the machine rather than quoted, and several corrected a first draft that turned out to be wrong.
 
 ## Conventions
 
