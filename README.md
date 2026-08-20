@@ -69,7 +69,7 @@ The centrepiece is `R/_seats.R`, a from-scratch implementation of the SEATS cano
 
 Every number in the notes should be reproducible by running a script. That is enforced, not asserted:
 
-```r
+```bash
 Rscript R/check-numbers.R      # exits 1 if a note quotes a number no script produces
 ```
 

@@ -16,7 +16,7 @@ Neither was caught by reading. Both are caught by `R/check-numbers.R`.
 
 ## Running it
 
-```r
+```bash
 Rscript R/check-numbers.R           # reuse cached output where still valid
 Rscript R/check-numbers.R --fresh   # re-run every script from scratch
 ```

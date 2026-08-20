@@ -21,24 +21,50 @@ run_ss <- function(x, label) {
   m <- tryCatch(seas(x, slidingspans = "", x11 = ""), error = function(e) NULL)
   if (is.null(m)) { cat(sprintf("%-14s could not run (series too short?)\n", label)); return(invisible()) }
   u <- udg(m)
-  keys <- grep("sspan|ssp", names(u), value = TRUE)
-  pick <- function(pat) { k <- grep(pat, keys, value = TRUE)
-                          if (length(k)) suppressWarnings(as.numeric(u[[k[1]]])[1]) else NA }
-  cat(sprintf("%-14s n=%3d  flagged(seasonal factors) = %s%%\n",
-              label, length(x),
-              ifelse(is.na(pick("sfmax|s\\.f")), "?", round(pick("sfmax|s\\.f"), 1))))
-  invisible(keys)
+  # The percentages live in the s2.* keys, NOT in anything matching "sspan".
+  # udg("sspans") is just the string "yes" -- the spec ran, nothing more.
+  # s2.a.per = c(n flagged, n tested, percent) for the seasonal factors;
+  # s2.d.per is the same for month-to-month changes.
+  per <- function(key) {
+    if (!key %in% names(u)) return(c(NA, NA, NA))
+    suppressWarnings(as.numeric(u[[key]]))
+  }
+  a <- per("s2.a.per"); d <- per("s2.d.per")
+  if (is.na(a[3])) {
+    # X-13 does not emit the breakdown for every series. Say so rather than
+    # printing a silent NA -- sspans tells you whether the spec even ran.
+    st <- if ("sspans" %in% names(u)) u[["sspans"]] else "absent"
+    cat(sprintf("%-14s n=%3d  no s2.a.per from X-13 (sspans = %s)\n",
+                label, length(x), st))
+  } else {
+    cat(sprintf("%-14s n=%3d  SF flagged %5.2f%% (%g/%g)   MM changes %5.2f%%   %s\n",
+                label, length(x), a[3], a[1], a[2], d[3],
+                if (a[3] > 15) "<- FAILS (>15%)" else "ok"))
+  }
+  invisible(u)
 }
 
 cat("=== sliding spans across the catalogue ===\n")
 S <- vault_series()
 for (nm in names(S)) run_ss(S[[nm]], nm)
 
-cat("\n(If the key names above come back '?', inspect them directly:)\n")
+cat("\nTRAP: the obvious grep finds the wrong thing.\n")
 m <- seas(AirPassengers, slidingspans = "", x11 = "")
-k <- grep("sspan|ssp", names(udg(m)), value = TRUE)
-cat("  sliding-span keys available:", length(k), "\n")
-print(head(k, 25))
+u <- udg(m)
+cat("  keys matching 'sspan'   :", paste(grep("sspan", names(u), value = TRUE),
+      collapse = ", "), "  value:", u[["sspans"]], "\n")
+cat("  -> that is just a yes/no that the spec ran. The numbers are here:\n")
+for (k in c("s2.a.per", "s2.d.per", "s2.e.per")) {
+  if (k %in% names(u))
+    cat(sprintf("     %-9s %s\n", k, paste(format(u[[k]]), collapse = "  ")))
+}
+cat("  read as: n flagged, n tested, percent flagged.\n")
+cat("\nNot every series yields s2.a.per: accdeaths reports sspans = 'failed'\n")
+cat("(6 years is too short to build 4 spans), and temperature, co2, unemp and\n")
+cat("cpi report sspans = 'yes' but emit ssa/sscut/ssdiff instead. That is NOT\n")
+cat("the additive-vs-multiplicative split -- co2 and cpi are both log. The rule\n")
+cat("X-13 uses here was not established; read out(m) for the printed S 2 tables\n")
+cat("when the udg key is missing.\n")
 
 # A hand-rolled version, so the idea is visible ------------------------
 cat("\n=== hand-rolled sliding spans (the idea, without X-13) ===\n")

@@ -23,7 +23,7 @@ Circular. The escape is to start crude and refine: use the blunt $2\times12$ MA 
 
 Multiplicative case, $Z = T \times S \times I$. (Additive is identical with $-$ and $\div$ swapped for $+$ and $\times$; taking logs converts one to the other.)
 
-```r
+```text
 1.  T1  = 2x12 MA of Z                    # crude trend, kills seasonality exactly
 2.  SI  = Z / T1                          # seasonal + irregular
 3.  S1  = 3x3 MA of SI, by calendar month # seasonal

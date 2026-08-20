@@ -72,9 +72,28 @@ Run both when you can. If sliding spans are clean but revisions are large, the a
 `seasonal` exposes this through the `slidingspans` spec:
 
 ```r
-m <- seas(x, slidingspans = "")
-udg(m)      # look for keys containing "sspan"
+m <- seas(x, slidingspans = "", x11 = "")
+udg(m)[["s2.a.per"]]   # c(n flagged, n tested, percent) for seasonal factors
+udg(m)[["s2.d.per"]]   # the same for month-to-month changes
 ```
+
+> [!warning] The obvious grep finds the wrong thing
+> Searching `udg(m)` for keys containing `"sspan"` returns exactly one: `sspans`, whose value is the string `"yes"`. That is a yes/no that the spec ran — not a statistic. The numbers live in the **`s2.*`** keys. This vault's own script made that mistake and printed `?%` for every series in the catalogue until it was audited; the wrong key returned something truthy, so nothing looked broken.
+
+Measured across the catalogue:
+
+| Series | Seasonal factors flagged | Month-to-month | |
+|---|---|---|---|
+| `AirPassengers` | 2.08% (2/96) | 2.10% | passes |
+| `imp` | 5.56% (6/108) | 15.89% | passes |
+| `iip` | 0.00% (0/92) | 0.00% | passes |
+| `UKgas` | **40.62%** (13/32) | 77.42% | **fails** |
+| `JohnsonJohnson` | **18.75%** (6/32) | 51.61% | **fails** |
+
+The two quarterly series fail badly, and that is the lesson: quarterly data gives you a quarter as many observations per span, and both have seasonality that genuinely evolves. Compare their $\Theta$ in [[series-catalogue]].
+
+> [!note] It is not available for every series
+> `accdeaths` and `ldeaths` return `sspans = "failed"` — six years is too short to build four spans, the limitation described above. But `temperature`, `co2`, `unemp` and `cpi` return `sspans = "yes"` and still emit no `s2.a.per`, giving `ssa`/`sscut`/`ssdiff` instead. That is **not** the additive-versus-multiplicative split — `co2` and `cpi` are both log transformed. What rule X-13 actually applies here I did not establish; when the key is missing, read the printed S 2 tables with `out(m)`.
 
 ## Exercises
 
