@@ -43,7 +43,7 @@ Rscript R/make-figures.R        # regenerate figures/
 | Path | Contents |
 |---|---|
 | `00-Start-Here.md` | curriculum map and how to use the vault |
-| `10-arima-foundations/` | Module 1 — lag operator through forecasting (14 notes) |
+| `10-arima-foundations/` | Module 1 — lag operator through forecasting (15 notes) |
 | `20-x11/` | Module 2 — X-11 filters |
 | `30-spectral/` | Module 3 — spectra and Wiener–Kolmogorov signal extraction |
 | `40-seats/` | Module 4 — the SEATS canonical decomposition |
@@ -54,7 +54,7 @@ Rscript R/make-figures.R        # regenerate figures/
 | `_meta/` | progress tracker, glossary |
 | `_quiz/` | spaced-repetition flashcards |
 
-All five modules are complete: 46 notes, 48 runnable scripts, 16 figures and five spaced-repetition quiz banks.
+All five modules are complete: 52 module notes, 48 runnable scripts, 17 figures and five spaced-repetition quiz banks (206 cards).
 
 The centrepiece is `R/_seats.R`, a from-scratch implementation of the SEATS canonical decomposition. On `AirPassengers` it reproduces the US Census Bureau's X-13 binary to:
 

@@ -71,9 +71,9 @@ What should be published about revisions but usually is not? ::: The distributio
 
 ## Turning points
 
-The headline measurement ::: On US unemployment 1990–2016, mean absolute revision is **1.23%** within a year of a recession versus **0.68%** elsewhere — a ratio of **1.82×**. For 2008–2010 specifically it is 1.66% versus 0.72%, a ratio of **2.32×**.
+The headline measurement ::: On US unemployment 1990–2016, mean absolute revision is **1.11%** within a year of a recession versus **0.62%** elsewhere — a ratio of **1.79×**. For 2008–2010 specifically it is 1.60% versus 0.63%, a ratio of **2.53×**.
 
-What happens in the tail? ::: **62%** of the worst 10% of revisions fall near a recession, against a 33% baseline — a 1.91× enrichment. Ten of the fifteen worst-revised months in twenty-six years sit in 2007–2010.
+What happens in the tail? ::: **64%** of the worst 10% of revisions fall near a recession, against a 35% baseline — a 1.81× enrichment. Nine of the fifteen worst-revised months in twenty-six years sit in 2007–2010.
 
 The three mechanisms ::: **Forecast contamination** (the model extrapolates the old regime, so the error is systematic not random); **asymmetric end-filter weights** (structurally different filter, nonzero phase); and **the revision path** (later vintages converge to the symmetric-filter value, so the concurrent estimate was biased, not merely noisy).
 
@@ -81,7 +81,7 @@ Why can't a better model fix it? ::: A better model forecasts the *old regime* m
 
 What is the practical advice for users? ::: Stop reading single months. Three-month averages or year-on-year comparisons are far more robust — roughly 40% of month-to-month movements in an adjusted series can be false signals.
 
-The methodological warning from measuring this ::: Using trend curvature as a proxy for "near a turning point" gave 1.18× and correlation 0.071 — essentially nothing. Using actual NBER recession dates gave 2.32×. **A weak result can mean the effect is absent, or that your operationalisation is bad.**
+The methodological warning from measuring this ::: Using trend curvature as a proxy for "near a turning point" gave 1.42× and correlation 0.083 — the correlation essentially nil. Using actual NBER recession dates gave 1.79× (2.53× for 2008–2010). **A weak result can mean the effect is absent, or that your operationalisation is bad.**
 
 ## Outliers and COVID
 

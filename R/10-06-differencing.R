@@ -46,12 +46,26 @@ cat("so (1-B)(1-B^12) = (1-B)^2 * S(B):",
 # CONSTANT IN A DIFFERENCED MODEL = DRIFT ------------------------------------
 fit <- arima(lap, order = c(0, 1, 1), seasonal = list(order = c(0, 1, 1), period = 12))
 cat("\nairline fit has no constant by default (d+D=2). Now with d=1 only:\n")
+# TRAP: arima() SILENTLY IGNORES include.mean when d >= 1. No intercept is
+# fitted, and coef(fit2)["intercept"] is NA -- not zero, and not an error.
 fit2 <- arima(lap, order = c(0, 1, 1), include.mean = TRUE)
-cat("  reported 'intercept' =", round(coef(fit2)["intercept"], 6),
-    " -> that is drift per MONTH in logs\n")
-cat("  i.e.", round(100 * coef(fit2)["intercept"], 4), "% per month =",
-    round(100 * (exp(12 * coef(fit2)["intercept"]) - 1), 2), "% per year\n")
-# It is NOT a level. It is a slope.
+cat("  include.mean = TRUE with d = 1 gives coefficients:",
+    paste(names(coef(fit2)), collapse = ", "), "\n")
+cat("  -> no intercept at all. R drops it silently; asking is not enough.\n")
+
+# To fit a drift you must supply it yourself as a regressor.
+n    <- length(lap)
+fit3 <- arima(lap, order = c(0, 1, 1), xreg = 1:n)
+k    <- length(coef(fit3))
+dft  <- as.numeric(coef(fit3)[k])
+sdft <- as.numeric(sqrt(diag(fit3$var.coef))[k])
+cat(sprintf("  with xreg = 1:n the drift is %+.6f per month in logs (se %.6f, t = %.2f)\n",
+            dft, sdft, dft / sdft))
+cat(sprintf("  i.e. %+.3f%% per month = %+.2f%% per year\n",
+            100 * dft, 100 * (exp(12 * dft) - 1)))
+# It is NOT a level. It is a slope -- a straight-line ramp in the original.
+cat("  Note the t-statistic: with d = 1 plus an MA term the drift is only\n")
+cat("  weakly identified, because differencing already removed the level.\n")
 
 # ---- the variance check on a series where it CHANGES the answer ---------
 cat("\n=== ldeaths: differencing too far ===\n")

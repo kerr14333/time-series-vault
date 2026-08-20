@@ -79,7 +79,7 @@ Standing caution about component models ::: They are implied by the fitted reduc
 
 ## The filters
 
-Who owns which frequency, for the airline model? ::: $\nu_T(0)=1$; $\nu_S=1$ at every seasonal frequency; the irregular takes the gaps. Measured: $\nu_T(0)=1.00000$, $\nu_S(2\pi/12)=0.99994$.
+Who owns which frequency, for the airline model? ::: $\nu_T(0)=1$; $\nu_S=1$ at every seasonal frequency; the irregular takes the gaps. Measured: $\nu_T(0)=1.00000$, $\nu_S(2\pi/12)=0.99993$.
 
 Why is $\nu_S(\pi) = 1$ and not a bug? ::: $\omega=\pi$ *is* a seasonal frequency for monthly data — $k=6$, the two-month cycle. The seasonal legitimately owns all the power there.
 

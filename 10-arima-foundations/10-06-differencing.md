@@ -28,7 +28,9 @@ Read left to right: differencing operators sit on the **AR side**, applied to th
 Verify #1 by hand: $(1-B)(\alpha + \beta t) = \alpha + \beta t - \alpha - \beta(t-1) = \beta$.
 
 > [!important] The consequence people get wrong
-> A **constant term in a differenced model is a drift, not a level.** If $d \ge 1$, the fitted "Constant" is the mean of the *differenced* series. Its effect on the original level is an integrated polynomial — a straight-line ramp when $d=1$. So a printed constant of $-0.0002$ in a $d=1$ log model is not "the level is near zero", it is "the series drifts down 0.02% per period", i.e. about $-0.24\%$ per year. You will meet this again reading X-13 output.
+> A **constant term in a differenced model is a drift, not a level.** If $d \ge 1$, the fitted "Constant" is the mean of the *differenced* series. Its effect on the original level is an integrated polynomial — a straight-line ramp when $d=1$. So a printed constant in a $d=1$ log model is not "the level"; it is a per-period growth rate. Fitting $\log$ `AirPassengers` as $(0,1,1)$ with a drift regressor gives $+0.009726$ per month — that is $+0.97\%$ per month, or $+12.4\%$ per year, not a level near zero. You will meet this again reading X-13 output.
+>
+> **The R trap:** `arima()` *silently ignores* `include.mean = TRUE` when $d \ge 1$. You get no intercept, no warning, and `coef(fit)["intercept"]` is `NA` rather than an error. To fit a drift you must pass it yourself: `arima(x, order = c(0,1,1), xreg = 1:n)`. Its $t$ here is only $0.89$ — with the level already differenced away, drift is weakly identified.
 
 ## The factorisation that explains everything
 

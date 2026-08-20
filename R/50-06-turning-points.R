@@ -20,8 +20,12 @@ ok  <- !is.na(rev)
 # NBER recessions in this span
 recs <- list(c(1990.5, 1991.25), c(2001.17, 2001.92), c(2007.92, 2009.5))
 near <- Reduce(`|`, lapply(recs, function(r) tt >= r[1] - 1 & tt <= r[2] + 1))
+# strictly inside a recession, as opposed to within a year of one
+strict <- Reduce(`|`, lapply(recs, function(r) tt >= r[1] & tt <= r[2]))
 
 cat("=== revisions in vs out of recessions ===\n")
+cat(sprintf("  strictly in an NBER recession: %.3f%%  (n = %d)\n",
+            mean(abs(rev[ok & strict])), sum(ok & strict)))
 cat(sprintf("  within a year of a recession : %.3f%%  (n = %d)\n",
             mean(abs(rev[ok & near])), sum(ok & near)))
 cat(sprintf("  everywhere else              : %.3f%%  (n = %d)\n",
@@ -42,6 +46,10 @@ cat(sprintf("  worst 10%% of revisions near a recession : %.0f%%\n", 100*mean(ne
 cat(sprintf("  baseline share of months near a recession: %.0f%%\n", 100*mean(near[ok])))
 cat(sprintf("  enrichment                               : %.2fx\n",
             mean(near[big]) / mean(near[ok])))
+o <- order(abs(rev), decreasing = TRUE); o <- o[ok[o]]
+top15 <- tt[head(o, 15)]
+cat(sprintf("  of the 15 worst-revised months, in 2007-2010 : %d\n",
+            sum(top15 >= 2007 & top15 < 2011)))
 
 plot(tt, abs(rev), type = "h", lwd = 2, xlab = "", ylab = "|revision| %",
      main = "US unemployment: revisions cluster at turning points")

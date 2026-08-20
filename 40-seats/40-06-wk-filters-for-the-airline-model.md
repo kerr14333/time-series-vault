@@ -26,12 +26,12 @@ Measured on `AirPassengers` ($\theta = 0.4018$, $\Theta = 0.5569$):
 | Frequency | $\nu_T$ | $\nu_S$ | $\nu_I$ |
 |---|---|---|---|
 | $\omega = 0$ (trend) | **1.00000** | 0.00000 | 0.00000 |
-| $\omega = 2\pi/12$ (annual) | 0.00004 | **0.99994** | 0.00002 |
+| $\omega = 2\pi/12$ (annual) | 0.00005 | **0.99993** | 0.00002 |
 | $\omega = \pi$ (Nyquist) | 0.00000 | **1.00000** | 0.00000 |
 
 Read it as ownership. At frequency 0 the trend takes everything; at each seasonal frequency the seasonal takes everything; in between they share according to the model. Exactly the Wiener–Kolmogorov principle of [[30-06-wiener-kolmogorov]] — *keep the share of the power that is yours* — with the shares turning out to be 0 or 1 at the poles because those frequencies are unambiguously owned.
 
-And $\nu_T + \nu_S + \nu_I = 1$ at every frequency, verified to $7\times10^{-12}$.
+And $\nu_T + \nu_S + \nu_I = 1$ at every frequency, verified to $\sim10^{-12}$.
 
 > [!important] Note $\nu_S(\pi) = 1$
 > $\omega = \pi$ *is* a seasonal frequency for monthly data — it is $k=6$, the two-month cycle, the last harmonic. So the seasonal component legitimately claims all the power at the highest observable frequency. First-time implementers often think this is a bug. It is not.

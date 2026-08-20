@@ -23,7 +23,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-10-03-ar-processes\|`10-03-ar-processes.R`]] | AR processes: infinite echo. | 51 | [[10-03-ar-processes]] |
 | [[code-10-04-ma-processes\|`10-04-ma-processes.R`]] | MA processes: finite memory, and the non-uniqueness of theta. | 52 | [[10-04-ma-processes]] |
 | [[code-10-05-invertibility\|`10-05-invertibility.R`]] | Invertibility, pi-weights, and the unit MA root. | 62 | [[10-05-invertibility]] |
-| [[code-10-06-differencing\|`10-06-differencing.R`]] | Differencing: logs first, then (1-B) and (1-B^12). | 67 | [[10-06-differencing]] |
+| [[code-10-06-differencing\|`10-06-differencing.R`]] | Differencing: logs first, then (1-B) and (1-B^12). | 81 | [[10-06-differencing]] |
 | [[code-10-07-acf-and-pacf\|`10-07-acf-and-pacf.R`]] | Identification from ACF and PACF. | 49 | [[10-07-acf-and-pacf]] |
 | [[code-10-08-arma-duality\|`10-08-arma-duality.R`]] | Psi-weights, pi-weights, and common factors. | 43 | [[10-08-arma-duality]] |
 | [[code-10-09-seasonal-arima\|`10-09-seasonal-arima.R`]] | Multiplicative seasonal ARIMA: four polynomials. | 55 | [[10-09-seasonal-arima]] |
@@ -60,7 +60,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-50-03-m-and-q-statistics\|`50-03-m-and-q-statistics.R`]] | The M and Q statistics, and their limits. | 58 | [[50-03-m-and-q-statistics]] |
 | [[code-50-04-sliding-spans\|`50-04-sliding-spans.R`]] | Sliding spans: is the answer robust to moving the window? | 60 | [[50-04-sliding-spans]] |
 | [[code-50-05-revision-history\|`50-05-revision-history.R`]] | Revision history: concurrent vs final. | 69 | [[50-05-revision-history]] |
-| [[code-50-06-turning-points\|`50-06-turning-points.R`]] | Adjustment is least reliable exactly when it matters most. | 73 | [[50-06-turning-points]] |
+| [[code-50-06-turning-points\|`50-06-turning-points.R`]] | Adjustment is least reliable exactly when it matters most. | 81 | [[50-06-turning-points]] |
 | [[code-50-07-outliers-and-breaks\|`50-07-outliers-and-breaks.R`]] | AO, LS, TC: getting the TYPE right matters as much as the location. | 81 | [[50-07-outliers-and-breaks]] |
 | [[code-50-08-covid\|`50-08-covid.R`]] | A COVID-like shock, and the three treatment strategies. | 77 | [[50-08-covid]] |
 | [[code-50-09-x11-vs-seats\|`50-09-x11-vs-seats.R`]] | Which method do you publish? | 73 | [[50-09-x11-vs-seats]] |

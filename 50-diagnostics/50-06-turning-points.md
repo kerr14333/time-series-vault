@@ -11,40 +11,40 @@ The most important note in the vault, and the reason any of this matters. Season
 
 ## The claim, measured
 
-US unemployment, 1990–2016 (`seasonal::unemp`), 232 months, each adjusted twice: once **concurrently** (as if that month were the last observation) and once from the **full sample**.
+US unemployment, 1990–2016 (`seasonal::unemp`, 323 months). Every **second** month from December 1997 to November 2015 — 108 months in all — is adjusted twice: once **concurrently** (as if that month were the last observation) and once from the **full sample**.
 
 | Months | Mean absolute revision |
 |---|---|
-| in an NBER recession | **1.333%** |
-| within a year of a recession | 1.234% |
-| everywhere else | **0.679%** |
-| **ratio** | **1.82×** |
+| in an NBER recession | **1.163%** |
+| within a year of a recession | 1.112% |
+| everywhere else | **0.620%** |
+| **ratio** | **1.79×** |
 
 Narrowing to the Great Recession:
 
 | Months | Mean absolute revision |
 |---|---|
-| 2008–2010 | **1.656%** |
-| all other months | 0.715% |
-| **ratio** | **2.32×** |
+| 2008–2010 | **1.600%** |
+| all other months | 0.632% |
+| **ratio** | **2.53×** |
 
 And the tail — which is what actually damages credibility:
 
 | | |
 |---|---|
-| worst 10% of revisions falling near a recession | **62%** |
-| baseline share of months near a recession | 33% |
-| **enrichment** | **1.91×** |
+| worst 10% of revisions falling near a recession | **64%** |
+| baseline share of months near a recession | 35% |
+| **enrichment** | **1.81×** |
 
-Ten of the fifteen worst-revised months in twenty-six years sit inside 2007–2010.
+Nine of the fifteen worst-revised months in twenty-six years sit inside 2007–2010.
 
 > [!important] The headline
 > Revisions roughly **double** at business-cycle turning points. The seasonally adjusted unemployment number is about twice as provisional during a recession as it is in normal times — and that is precisely when it drives policy and dominates the news.
 
 ![[50-06-turning-points.png]]
 
-> [!note] Why the figure says 1.59x and the text says 1.82x
-> The figure recomputes revisions every **third** month from 1998 to keep `make-figures.R` runnable; the table above uses **every** month from 1996. Different samples of months, same data and same code.
+> [!note] Why the figure says 1.59x and the text says 1.79x
+> Both start from the same month (December 1997) and run the same code on the same data. The figure steps every **third** month to keep `make-figures.R` runnable; the table above steps every **second**. Only the sampling differs.
 >
 > Neither is wrong, and the gap is the point: the exact ratio moves with how you sample, so quote it as **"roughly 1.5-2x"** rather than to three digits. The finding that survives every variant is that revisions are **substantially larger near turning points** — not any particular decimal.
 
@@ -79,18 +79,18 @@ The correct response is not to abandon adjustment but to stop reading single mon
 
 ## A methodological warning from building this
 
-My first attempt used **trend curvature** (the absolute second difference of the trend) as a proxy for "near a turning point". It found almost nothing:
+My first attempt used **trend curvature** (the absolute second difference of the trend) as a proxy for "near a turning point". It recovered a much weaker effect, and essentially no correlation:
 
 ```text
-curvature-based split      1.18x   correlation 0.071
-recession-date split       1.82x
-2008-2010 window           2.32x
+curvature-based split      1.42x   correlation 0.083
+recession-date split       1.79x
+2008-2010 window           2.53x
 ```
 
-Curvature is dominated by many small wiggles, so the proxy is swamped by ordinary months. Using actual NBER recession dates — external information, not derived from the series — makes the effect obvious.
+Curvature is dominated by many small wiggles, so the proxy is swamped by ordinary months — note the correlation of 0.083 between curvature and revision size, which is essentially nothing. Using actual NBER recession dates — external information, not derived from the series — separates the groups more sharply and, more importantly, gives a variable that means what it claims to.
 
 > [!warning] The lesson generalises
-> A weak result can mean the effect is absent, or that your operationalisation is bad. Before concluding "no effect", check whether the variable you constructed actually measures the thing you meant. Here the same data gave 1.18× and 2.32× depending only on how "turning point" was defined.
+> A weak result can mean the effect is absent, or that your operationalisation is bad. Before concluding "no effect", check whether the variable you constructed actually measures the thing you meant. Here the same data gave 1.42× and 1.79× depending only on how "turning point" was defined — and the correlation between curvature and revision size is 0.083, essentially nil.
 
 ## Exercises
 
