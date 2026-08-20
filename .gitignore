@@ -22,3 +22,6 @@ Rplots.pdf
 Thumbs.db
 .DS_Store
 desktop.ini
+
+# Cached script output for R/check-numbers.R -- regenerable, machine-specific.
+.audit/

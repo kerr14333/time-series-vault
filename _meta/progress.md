@@ -9,6 +9,7 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 
 ## Module 0 — orientation
 - [ ] [[series-catalogue]] — the test series and what each one breaks
+- [ ] [[checking-the-vault]] — how the notes' numbers are kept honest, and what that check misses
 
 ## Module 1 — ARIMA foundations
 - [ ] [[10-01-lag-operator]]

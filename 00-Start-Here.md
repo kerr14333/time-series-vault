@@ -44,6 +44,8 @@ Obsidian cannot open `.R` files, so every script is mirrored as a readable note 
 
 Track where you are in [[_meta/progress]]. Terms you keep forgetting go in [[_meta/glossary]].
 
+Every number in these notes should be reproducible by running a script. `Rscript R/check-numbers.R` verifies that across the whole vault and fails loudly when it stops being true — see [[checking-the-vault]] for what it catches and, just as importantly, what it does not.
+
 ## Prerequisites already assumed
 
 You know what AR and MA mean and you have run something like `arima()`. Everything else gets built. If a note assumes something it did not define, that is a bug in the note — flag it and I will fix it.

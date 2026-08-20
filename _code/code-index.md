@@ -53,7 +53,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-40-04-partial-fractions-in-b-and-f\|`40-04-partial-fractions-in-b-and-f.R`]] | The partial fractions, with numbers. | 93 | [[40-04-partial-fractions-in-b-and-f]] |
 | [[code-40-05-component-models\|`40-05-component-models.R`]] | What ARIMA does each component follow? | 84 | [[40-05-component-models]] |
 | [[code-40-06-wk-filters-for-the-airline-model\|`40-06-wk-filters-for-the-airline-model.R`]] | The three WK filters: gains, weights, and X-11 side by side. | 88 | [[40-06-wk-filters-for-the-airline-model]] |
-| [[code-40-07-implementing-seats-in-r\|`40-07-implementing-seats-in-r.R`]] | The build, walked through, plus the traps that produce plausible output. | 98 | [[40-07-implementing-seats-in-r]] |
+| [[code-40-07-implementing-seats-in-r\|`40-07-implementing-seats-in-r.R`]] | The build, walked through, plus the traps that produce plausible output. | 103 | [[40-07-implementing-seats-in-r]] |
 | [[code-40-08-validating-against-x13\|`40-08-validating-against-x13.R`]] | Prove it against the Census Bureau binary. | 88 | [[40-08-validating-against-x13]] |
 | [[code-50-01-is-there-seasonality\|`50-01-is-there-seasonality.R`]] | Should this series be adjusted at all? | 68 | [[50-01-is-there-seasonality]] |
 | [[code-50-02-residual-seasonality\|`50-02-residual-seasonality.R`]] | Did any seasonality survive? | 57 | [[50-02-residual-seasonality]] |
@@ -65,6 +65,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-50-08-covid\|`50-08-covid.R`]] | A COVID-like shock, and the three treatment strategies. | 77 | [[50-08-covid]] |
 | [[code-50-09-x11-vs-seats\|`50-09-x11-vs-seats.R`]] | Which method do you publish? | 73 | [[50-09-x11-vs-seats]] |
 | [[code-50-10-calendar-effects\|`50-10-calendar-effects.R`]] | Trading day, Easter, and moving holidays that are NOT built in. | 134 | [[50-10-calendar-effects]] |
+| [[code-check-numbers\|`check-numbers.R`]] | Guard against stale numbers in the notes. | 162 | — |
 | [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 160 | — |
 | [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 338 | — |
 

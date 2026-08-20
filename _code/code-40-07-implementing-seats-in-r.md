@@ -96,6 +96,11 @@ cat(sprintf("  log-seasonal mean, normalised    : %+.6f\n", mean(as.numeric(d$se
 cat(sprintf("  -var/2 of the log factors        : %+.6f\n", -var(as.numeric(d$seasonal))/2))
 cat(sprintf("  mean of exp(seasonal), normalised: %.6f  (want 1)\n",
             mean(exp(as.numeric(d$seasonal)))))
+# The constant offset this convention imposes, in levels -- the number the
+# note quotes, so it must be printed rather than left as arithmetic.
+cat(sprintf("  resulting level discrepancy      : %.2f%%  (s10, s11, s12 alike)\n",
+            100 * (exp(mean(as.numeric(raw$seasonal)) -
+                       mean(as.numeric(d$seasonal))) - 1)))
 cat("nu_S(0) = 0, so the seasonal filter kills constants -- the theory CANNOT\n")
 cat("say whether a constant belongs to the trend or the seasonal. X-13 fixes it\n")
 cat("by making multiplicative factors average 1 in LEVELS.\n")
