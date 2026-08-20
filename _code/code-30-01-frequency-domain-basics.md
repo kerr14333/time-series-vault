@@ -24,6 +24,26 @@ cat("the six seasonal frequencies for monthly data:\n"); print(tab, row.names = 
 cat("plus frequency 0 (period Inf) = THE TREND\n")
 cat("k=6 is the Nyquist frequency: period 2, the fastest observable cycle.\n\n")
 
+# The count is NOT universal: it is floor(s/2) for period s. Quarterly gives
+# two seasonal frequencies, not six -- and UKgas / JohnsonJohnson are quarterly.
+seas_table <- function(s, unit) {
+  k <- 1:(s %/% 2)
+  data.frame(k = k, cycles_per_unit = round(k/s, 4),
+             omega_radians = round(2*pi*k/s, 4),
+             period = round(s/k, 2), unit = unit)
+}
+cat("quarterly (s = 4) has floor(4/2) = 2 seasonal frequencies:\n")
+print(seas_table(4, "quarters"), row.names = FALSE)
+cat("monthly (s = 12) has floor(12/2) = 6. Same rule, different s.\n\n")
+
+# TRAP: f is per SAMPLING INTERVAL, not per year.
+cat("f = 0.25 means period 4 in BOTH tables -- but 4 months when monthly and\n")
+cat("4 quarters (a whole year) when quarterly. The axis knows no calendar.\n")
+cat("monthly  f=0.25 -> period", round(1/0.25, 2), "months\n")
+cat("quarterly f=0.25 -> period", round(1/0.25, 2), "quarters =",
+    round(1/0.25/4, 2), "year\n\n")
+
+
 # EXERCISE 1: harmonics -- why the seasonal is six frequencies, not one -----
 t <- 1:96
 pure   <- sin(2*pi*t/12)

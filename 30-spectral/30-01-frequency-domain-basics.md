@@ -32,6 +32,23 @@ $\omega = 2\pi f$. Both appear constantly and authors rarely say which they mean
 
 **Learn this table.** Every plot in Modules 3 to 5 has these six vertical lines on it, and "seasonality" means "power concentrated at exactly these frequencies".
 
+### Quarterly data: two, not six
+
+The count is not universal — it is $\lfloor s/2 \rfloor$ for period $s$. Monthly gives six; quarterly gives **two**:
+
+| $k$ | $f = k/4$ | $\omega = 2\pi k/4$ | Period | Meaning |
+|---|---|---|---|---|
+| — | 0 | 0 | $\infty$ | **the trend** |
+| 1 | 0.25 | 1.571 | 4 quarters | the annual cycle |
+| 2 | 0.5 | 3.142 | 2 quarters | **Nyquist**, and seasonal |
+
+This matters from Module 2 onward: `UKgas` and `JohnsonJohnson` are quarterly, and they are the two series that **fail** sliding spans in [[50-04-sliding-spans]]. Part of the reason is right here — a quarterly series has a quarter as many observations, and only two seasonal frequencies to pin the pattern down.
+
+> [!warning] $f$ is per *sampling interval*, not per year
+> $f = 0.25$ appears in **both** tables and means different things: four **months** for monthly data, four **quarters** — a full year — for quarterly. The frequency axis knows nothing about calendars. Always ask what one time unit is before reading a period off a spectrum.
+
+Note also that for even $s$ the last seasonal frequency *is* the Nyquist frequency ($k = s/2$), which is why $\nu_S(\pi) = 1$ in [[40-06-wk-filters-for-the-airline-model]] rather than being some in-between value — $\omega = \pi$ is genuinely seasonal, not a boundary artefact.
+
 Two facts about the endpoints:
 
 - $\omega = 0$ is the trend. Not "low frequency" — literally zero frequency, an infinite-period cycle.

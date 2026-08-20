@@ -40,7 +40,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-20-06-extreme-values\|`20-06-extreme-values.R`]] | Extreme values: the one nonlinear step. | 70 | [[20-06-extreme-values]] |
 | [[code-20-07-end-filters\|`20-07-end-filters.R`]] | End filters: where revisions come from. | 85 | [[20-07-end-filters]] |
 | [[code-20-08-x11-arima\|`20-08-x11-arima.R`]] | X-11-ARIMA: extend with forecasts, then filter symmetrically. | 98 | [[20-08-x11-arima]] |
-| [[code-30-01-frequency-domain-basics\|`30-01-frequency-domain-basics.R`]] | Frequencies, periods, harmonics, aliasing. | 54 | [[30-01-frequency-domain-basics]] |
+| [[code-30-01-frequency-domain-basics\|`30-01-frequency-domain-basics.R`]] | Frequencies, periods, harmonics, aliasing. | 74 | [[30-01-frequency-domain-basics]] |
 | [[code-30-02-spectral-density\|`30-02-spectral-density.R`]] | The spectral density: variance distributed over frequency. | 58 | [[30-02-spectral-density]] |
 | [[code-30-03-spectrum-of-an-arma\|`30-03-spectrum-of-an-arma.R`]] | The central formula: f(w) = (sigma^2/2pi) \|theta\|^2 / \|phi\|^2. | 78 | [[30-03-spectrum-of-an-arma]] |
 | [[code-30-04-pseudo-spectrum\|`30-04-pseudo-spectrum.R`]] | The pseudo-spectrum: unit roots as infinite peaks. | 110 | [[30-04-pseudo-spectrum]] |
@@ -65,7 +65,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-50-08-covid\|`50-08-covid.R`]] | A COVID-like shock, and the three treatment strategies. | 77 | [[50-08-covid]] |
 | [[code-50-09-x11-vs-seats\|`50-09-x11-vs-seats.R`]] | Which method do you publish? | 73 | [[50-09-x11-vs-seats]] |
 | [[code-50-10-calendar-effects\|`50-10-calendar-effects.R`]] | Trading day, Easter, and moving holidays that are NOT built in. | 134 | [[50-10-calendar-effects]] |
-| [[code-check-numbers\|`check-numbers.R`]] | Guard against stale numbers in the notes. | 162 | — |
+| [[code-check-numbers\|`check-numbers.R`]] | Guard against stale numbers in the notes. | 159 | — |
 | [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 160 | — |
 | [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 338 | — |
 

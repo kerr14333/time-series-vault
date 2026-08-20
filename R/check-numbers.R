@@ -30,18 +30,15 @@ NUM_RE <- "(?<![0-9A-Za-z.])-?[0-9]{1,6}[.][0-9]{2,6}"
 # Keep this list short and give a reason for every entry -- it is the only
 # way a wrong number can hide from this check.
 ALLOW <- data.frame(
-  file  = c("30-spectral/30-01-frequency-domain-basics.md",
-            "50-diagnostics/50-10-calendar-effects.md",
+  file  = c("50-diagnostics/50-10-calendar-effects.md",
             "40-seats/40-03-canonical-decomposition.md",
             "_meta/checking-the-vault.md",
             "_meta/checking-the-vault.md"),
-  value = c("1.571",
-            "0.00001",
+  value = c("0.00001",
             "0.2977",
             "1.82",
             "1.18"),
-  why   = c("pi/2, a theory constant in the frequency table",
-            "a significance threshold ('p < 0.00001'), not a measured value",
+  why   = c("a significance threshold ('p < 0.00001'), not a measured value",
             "a sum worked in the text (0.2238 + 0.0514 + 0.0225); the three
              addends are each checked against script output",
             "the superseded 50-06 ratio, quoted as the error this check exists
