@@ -106,7 +106,7 @@ Useful as the limiting case of the "how much does the seasonal evolve" question 
 | 3 — spectra | `nottem`, `UKgas` | [[30-04-pseudo-spectrum]] — deterministic vs evolving, as peak width | ✅ |
 | 4 — SEATS | `cpi` | [[40-02-admissible-decompositions]] — a real inadmissible decomposition | ✅ |
 | 5 — diagnostics | `unemp`, `sunspots` | [[50-06-turning-points]], [[50-01-is-there-seasonality]] | ✅ |
-| 5 — diagnostics | `imp`, `iip` | moving holidays — mentioned, not yet worked through | ⬜ |
+| 5 — diagnostics | `imp`, `iip` | [[50-10-calendar-effects]] — Chinese New Year and Diwali, via `genhol()` | ✅ |
 
 ## What the retrofit turned up
 

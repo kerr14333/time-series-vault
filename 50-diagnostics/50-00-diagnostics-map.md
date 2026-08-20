@@ -18,6 +18,7 @@ Being able to *run* an adjustment is not the same as knowing whether to believe 
 - [[50-07-outliers-and-breaks]] — AO / LS / TC; when to intervene manually
 - [[50-08-covid]] — the canonical modern breakdown case and what agencies did about it
 - [[50-09-x11-vs-seats]] — when they disagree, and which to trust
+- [[50-10-calendar-effects]] — trading day, Easter, and moving holidays (Chinese New Year, Diwali). The most commonly missed part of a real adjustment.
 
 ## The turning-point problem, stated properly
 

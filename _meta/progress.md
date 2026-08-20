@@ -65,6 +65,7 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 - [ ] [[50-07-outliers-and-breaks]]
 - [ ] [[50-08-covid]]
 - [ ] [[50-09-x11-vs-seats]]
+- [ ] [[50-10-calendar-effects]]
 
 ## Quizzes
 - [ ] [[quiz-module-1]]

@@ -64,6 +64,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-50-07-outliers-and-breaks\|`50-07-outliers-and-breaks.R`]] | AO, LS, TC: getting the TYPE right matters as much as the location. | 81 | [[50-07-outliers-and-breaks]] |
 | [[code-50-08-covid\|`50-08-covid.R`]] | A COVID-like shock, and the three treatment strategies. | 77 | [[50-08-covid]] |
 | [[code-50-09-x11-vs-seats\|`50-09-x11-vs-seats.R`]] | Which method do you publish? | 73 | [[50-09-x11-vs-seats]] |
+| [[code-50-10-calendar-effects\|`50-10-calendar-effects.R`]] | Trading day, Easter, and moving holidays that are NOT built in. | 134 | [[50-10-calendar-effects]] |
 | [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 160 | — |
 | [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 338 | — |
 
