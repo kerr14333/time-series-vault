@@ -88,6 +88,8 @@ seasonal AR side: 1 + B + B^2 + B^3 + B^4 + B^5 + B^6 + B^7 + B^8 + B^9 + B^10 +
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Difference the canonical trend twice and confirm its autocovariances vanish beyond lag 2.
 2. Do the same for the seasonal with $S(B)$ and lag 11.
 3. Confirm the irregular's autocovariances vanish beyond lag 0 — that it is exactly white.

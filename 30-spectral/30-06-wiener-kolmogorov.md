@@ -141,6 +141,8 @@ lag 60    : 0.01504468  -- still not zero after five years
 
 ## Exercises
 
+*Solutions: [[solutions#30-06-wiener-kolmogorov|worked answers]] in the solutions appendix.*
+
 1. Signal + noise: random walk plus white noise. Plot $f_s$, $f_n$, and $\nu_s = f_s/f_z$. Confirm the gain is near 1 at low frequencies and near 0 at high.
 2. Vary the noise-to-signal ratio and watch the filter's cutoff move. Relate to the MA coefficient you fitted in `R/10-04-ma-processes.R`.
 3. Compute the WK filter weights by inverting the transfer function numerically, and confirm they are symmetric and decay.

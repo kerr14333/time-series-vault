@@ -118,6 +118,8 @@ gain 0.00  0.0
 
 ## Exercises
 
+*Solutions: [[solutions#20-02-the-12-term-ma|worked answers]] in the solutions appendix.*
+
 1. Derive the 13 weights by expanding $\frac{1}{2}(1+B)\cdot\frac{1}{12}(1+B+\cdots+B^{11})$ on paper.
 2. Plot the gain. Confirm the zeros sit exactly at $k/12$ cycles per month for $k=1..6$, and find the side lobes.
 3. Apply it to a pure sine of period 12 plus a straight line. Confirm the sine vanishes and the line survives. Then try period 11 — what leaks through, and why should that worry you?

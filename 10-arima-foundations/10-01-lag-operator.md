@@ -88,6 +88,8 @@ $B c = c$ for a constant $c$, so $(1-B)c = 0$. Differencing kills a constant. An
 
 ## Exercises
 
+*Solutions: [[solutions#10-01-lag-operator|worked answers]] in the solutions appendix.*
+
 1. Expand $(1-B)^2$ and write the resulting recipe on $z_t$. What kind of trend does it kill?
 2. Show $(1-B^{12}) = (1-B)(1 + B + B^2 + \cdots + B^{11})$. What does the second factor mean in words? (This factorisation is the seed of the whole trend/seasonal split — see [[10-06-differencing]].)
 3. Expand $1/(1 - 0.8B)$ to five terms. How much weight does an observation 5 periods ago get?

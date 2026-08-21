@@ -156,6 +156,8 @@ max |D11 - D12*D13|: 5.684342e-14
 
 ## Exercises
 
+*Solutions: [[solutions#20-05-the-x11-iteration|worked answers]] in the solutions appendix.*
+
 1. Build the loop. Compare your D11 to `seasonal::series(m, "d11")` — report the max absolute percentage difference.
 2. Recover the composite filter by the impulse trick. Do the weights sum to 1? Are they symmetric?
 3. Plot the composite gain. Mark the seasonal frequencies. How deep are the notches, and how wide?

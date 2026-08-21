@@ -148,6 +148,8 @@ mean of log seasonal  : -0.00026  (not zero -- that is the convention)
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Run the walkthrough and reproduce the table of differences.
 2. Break it deliberately: set `max_lag = 60` and confirm the 0.88%-style constant offset appears. Then set `normalize = FALSE` and confirm a *different* constant offset.
 3. Decompose `co2` ($\Theta = 0.912$). How many lags does the rule demand? Does it still match X-13?

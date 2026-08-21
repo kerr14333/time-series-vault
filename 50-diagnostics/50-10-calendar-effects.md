@@ -122,6 +122,8 @@ The transferable point: **every economy has its own moving holidays.** Use the o
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Reproduce the Easter comparison between `AirPassengers` and `unemp`.
 2. Build the CNY regressor and confirm the $-7.52$ $t$-statistic.
 3. Sweep the window from $-3$ to $-28$ days. Where is the AICC minimum, and how flat is it?

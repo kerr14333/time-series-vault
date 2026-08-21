@@ -108,6 +108,8 @@ poly_roots(c(1, -1.6, 0.9))   # 1 - 1.6B + 0.9B^2, a complex pair
 
 ## Exercises
 
+*Solutions: [[solutions#10-02-stationarity-and-roots|worked answers]] in the solutions appendix.*
+
 1. Is $\phi(B) = 1 - 1.2B + 0.5B^2$ stationary? Find the roots by hand ($z = \frac{1.2 \pm \sqrt{1.44 - 2}}{1}$… careful, do it properly) and check with `polyroot(c(1, -1.2, 0.5))`. Note the roots are complex — what does that imply about the ACF?
 2. What are the 12 roots of $1 - B^{12} = 0$? Where are they on the unit circle? Convert each to a frequency in cycles per year.
 3. Why can you *not* make a nonstationary series stationary by subtracting a fitted straight line, when the nonstationarity comes from a unit root?

@@ -92,6 +92,8 @@ for (nm in c("AirPassengers", "white noise")) {
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Reproduce the table. Confirm `sunspots` fails every test the others pass.
 2. Try `seas(sunspots)` in SEATS mode and observe the failure; then in X-11 mode and observe that it produces factors regardless.
 3. Plot the sunspot spectrum. Find the 11-year cycle. Confirm nothing at $k/12$.

@@ -114,6 +114,8 @@ last point, concurrent vs final: 471.42 vs 473.58  (0.46% revision)
 
 ## Exercises
 
+*Solutions: [[solutions#20-07-end-filters|worked answers]] in the solutions appendix.*
+
 1. Plot the symmetric 13-term Henderson weights against the end-point weights on one axis. Confirm the end filter has zero weight on the future and much more on the present.
 2. Adjust a series truncated at successive endpoints and plot the revision path for one month. Compare with the same experiment in `R/10-14-forecasting.R` — you already ran this once for SEATS.
 3. Measure it: mean absolute revision between the concurrent estimate and the estimate 12 months later, across the whole series.

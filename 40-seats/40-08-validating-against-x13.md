@@ -105,6 +105,8 @@ A factor of about **660**.
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Reproduce the comparison table.
 2. Deliberately set `transform.function = "none"` and observe the failure. How large, and what shape?
 3. Turn on `outlier` and re-compare. Which months move, and why?

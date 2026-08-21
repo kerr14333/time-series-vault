@@ -97,6 +97,8 @@ The mean dwarfs the scatter: a bias, not noise.
 
 ## Exercises
 
+*Solutions: [[solutions#30-07-finite-samples|worked answers]] in the solutions appendix.*
+
 1. Compute WK weights for a signal-plus-noise model and plot their decay. How many terms until they fall below $10^{-4}$?
 2. Apply the truncated filter with and without renormalisation. Compare the gains near $\omega=0$.
 3. Extend a series with ARIMA forecasts, filter, and compare to the truncated version. Where do they differ, and by how much?

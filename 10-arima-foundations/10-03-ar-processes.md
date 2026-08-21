@@ -91,6 +91,8 @@ theory 0.700 0.490 0.343 0.24 0.168 0.118
 
 ## Exercises
 
+*Solutions: [[solutions#10-03-ar-processes|worked answers]] in the solutions appendix.*
+
 1. Simulate AR(1) with $\phi = 0.9$ and with $\phi = -0.9$. Describe both series in words before looking at the ACFs, then look.
 2. AR(2) with $\phi_1 = 1.6,\ \phi_2 = -0.9$: find the roots, the implied period, and confirm it in a simulation.
 3. Derive $\rho_1$ for AR(2) from the Yule–Walker equations. (Use $\rho_0 = 1$, $\rho_{-1} = \rho_1$.)

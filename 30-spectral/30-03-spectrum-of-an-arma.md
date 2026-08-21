@@ -77,6 +77,8 @@ The result is a spectrum that is **infinite** at 0 and at the six seasonal frequ
 
 ## Exercises
 
+*Solutions: [[solutions#30-03-spectrum-of-an-arma|worked answers]] in the solutions appendix.*
+
 1. Plot the AR(1) spectrum for $\phi = 0.5, 0.9, -0.9$. Match each to the shape of the simulated series.
 2. Plot the AR(2) spectrum with complex roots of modulus 0.95 at angle $2\pi/12$. Confirm the peak sits at the annual frequency, and that it sharpens as the modulus $\to 1$.
 3. Plot the MA(1) spectrum for $\theta = 0.5$ and $\theta = 1$. Confirm the exact zero at $\omega=0$ in the second.

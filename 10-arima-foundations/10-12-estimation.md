@@ -355,6 +355,8 @@ n = 131   AIC = -483.4   AICC = -483.21
 
 ## Exercises
 
+*Solutions: [[solutions#10-12-estimation|worked answers]] in the solutions appendix.*
+
 1. Fit the airline model to `log(AirPassengers)` with `method="ML"` and `method="CSS"`. Compare $\Theta$. Which is closer to 1?
 2. Insert an artificial level shift into the series, refit, and watch the ARIMA parameters move. Then add the level shift as a regressor via `xreg=` and confirm they come back.
 3. Fit an over-parameterised model and inspect the standard errors.

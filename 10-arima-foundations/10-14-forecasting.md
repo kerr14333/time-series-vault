@@ -232,6 +232,8 @@ round(data.frame(horizon = c(1, 3, 6, 12),
 
 ## Exercises
 
+*Solutions: [[solutions#10-14-forecasting|worked answers]] in the solutions appendix.*
+
 1. Forecast `log(AirPassengers)` 24 months ahead from the airline model. Plot with intervals on the original scale. How fast do the bands widen?
 2. Compute $\psi$-weights for the airline model with `ARMAtoMA()` after expanding the polynomials. Confirm they do not decay to zero.
 3. **The key experiment.** Fit the model to data through 1958, forecast 1959–60, and compare to the truth. Then re-run holding out a different window. Where are the errors largest?

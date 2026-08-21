@@ -109,6 +109,8 @@ product = (1-B)(1-B^12)? TRUE
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Simulate the structural model with known $\sigma_\eta^2, \sigma_\omega^2, \sigma_\varepsilon^2$. Apply $\nabla\nabla_{12}$, fit an airline model, and check the ACF vanishes beyond lag 13.
 2. Vary the three variances and watch the fitted $(\theta,\Theta)$ move. Which variance controls which parameter?
 3. Set $\sigma_\omega^2 = 0$ (fixed seasonality). What does $\Theta$ come back as? Relate to [[10-10-airline-model]].

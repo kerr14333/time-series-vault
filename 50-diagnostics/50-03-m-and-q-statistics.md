@@ -96,6 +96,8 @@ Q = 0.2  -- accepted
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Print all eleven M statistics for `AirPassengers` and for `sunspots`. Which differ most?
 2. Find a series where Q is below 1 but QS on the adjusted series is significant. What does that combination mean?
 3. Adjust the same series with a 3×3 and a 3×9 seasonal filter. How much do M8–M11 move? Does Q pick the filter you would?

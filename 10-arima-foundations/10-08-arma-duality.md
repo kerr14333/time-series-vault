@@ -75,6 +75,8 @@ MA root moduli: 2 3.3333
 
 ## Exercises
 
+*Solutions: [[solutions#10-08-arma-duality|worked answers]] in the solutions appendix.*
+
 1. Compute the first 12 $\psi$-weights of ARMA(1,1), $\phi=0.7$, $\theta=0.4$ (Census sign), by equating coefficients in $\phi(B)\psi(B) = \theta(B)$. Check with `ARMAtoMA()`.
 2. Same model, get the $\pi$-weights from $\theta(B)\pi(B) = \phi(B)$.
 3. Fit ARMA(2,2) to data simulated from ARMA(1,1) and inspect the roots. Find the common factor.

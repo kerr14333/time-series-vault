@@ -96,6 +96,8 @@ Curvature is dominated by many small wiggles, so the proxy is swamped by ordinar
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Reproduce the revision history for `unemp` and the recession split.
 2. Look at the *sign* of the revisions during 2008–09. Are concurrent estimates systematically too low or too high? That is mechanism 1, visible directly.
 3. Compare X-11 and SEATS revisions during the recession. Does the model-based method help at a turn?

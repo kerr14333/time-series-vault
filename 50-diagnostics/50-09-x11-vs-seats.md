@@ -105,6 +105,8 @@ choice of implementation.
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Reproduce the comparison table. Confirm the low-$\Theta$ pattern.
 2. Investigate `imp`'s 27% month. What is happening there — an outlier, a moving holiday, a break?
 3. For `UKgas`, plot both adjusted series. Is the difference visible, or only in the statistics?

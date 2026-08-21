@@ -69,6 +69,8 @@ Whether the model-derived notch is *better* is an empirical question, and [[50-0
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Plot all three gains on one axis. Mark the seasonal frequencies. Confirm they sum to 1.
 2. Reproduce the ownership table above.
 3. Vary $\Theta$ from 0.3 to 0.95 and watch the seasonal notches narrow. Overlay X-11's fixed composite gain from [[20-05-the-x11-iteration]] — where does each method concede more?

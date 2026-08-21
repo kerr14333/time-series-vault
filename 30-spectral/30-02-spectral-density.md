@@ -114,6 +114,8 @@ flat to within 0
 
 ## Exercises
 
+*Solutions: [[solutions#30-02-spectral-density|worked answers]] in the solutions appendix.*
+
 1. Simulate white noise. Plot the raw periodogram, then with `spans = c(3,3)` and `c(7,7)`. Watch it settle toward the flat truth.
 2. Confirm $\int f = \gamma_0$ numerically by summing the periodogram.
 3. Plot the spectrum of `log(AirPassengers)` after $\nabla\nabla_{12}$. Where are the peaks? Compare with the ACF of the same series from [[10-07-acf-and-pacf]] — the same facts in two languages.

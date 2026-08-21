@@ -73,6 +73,8 @@ Everything else — Henderson lengths, 3×5 versus 3×9, canonical decomposition
 
 ## Exercises
 
+*Solutions: [[solutions#30-05-filters-in-the-frequency-domain|worked answers]] in the solutions appendix.*
+
 1. Plot the gain of $(1-B)$ and confirm $2|\sin(\omega/2)|$, including the value 2 at $\omega = \pi$.
 2. Plot the gain of $(1-B^{12})$ and count the zeros.
 3. Difference white noise and compare its periodogram with the flat original. Confirm the high-frequency amplification.

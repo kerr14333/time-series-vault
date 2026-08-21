@@ -100,6 +100,8 @@ freq    0 0.1000 0.2000 0.3000 0.4000 0.5000
 
 ## Exercises
 
+*Solutions: [[solutions#20-04-seasonal-moving-averages|worked answers]] in the solutions appendix.*
+
 1. Derive the 3×5 weights by convolving $\tfrac13(1,1,1)$ with $\tfrac15(1,1,1,1,1)$.
 2. Take the SI ratios from a decomposition, extract just the Januaries, and smooth them with a 3×3 and a 3×5. Plot both. Which tracks the evolution, which is steadier?
 3. Skip the centring step and compare the resulting trend to the centred version. How large is the drift after 10 years?

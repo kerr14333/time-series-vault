@@ -62,6 +62,8 @@ That is the honest limit of the whole subject. Seasonal adjustment is an extrapo
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Simulate a COVID-like shock: a monthly series with a −40% drop in one month and a partial recovery over six. Adjust it untreated and inspect the seasonal factors for the *other* years.
 2. Now treat the shock as AOs. How much of the contamination goes away?
 3. Try an LS instead. Compare the trend.

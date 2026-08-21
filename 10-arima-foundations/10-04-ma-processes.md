@@ -94,6 +94,8 @@ rho1   -0.3
 
 ## Exercises
 
+*Solutions: [[solutions#10-04-ma-processes|worked answers]] in the solutions appendix.*
+
 1. Plot $\rho_1(\theta)$ for $\theta \in [-3, 3]$. Mark the pair $(0.5, 2)$.
 2. Simulate MA(2) and confirm the ACF dies after lag 2 while the PACF does not.
 3. Simulate a random walk plus white noise, difference it, and look at the ACF. Which MA order does it look like? Is $\rho_1$ positive or negative? Why must it be that sign?

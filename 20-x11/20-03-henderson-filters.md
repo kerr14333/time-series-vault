@@ -137,6 +137,8 @@ H23  0.3478 0.0107 0.0027 0.0015 0.0012 0.0011
 
 ## Exercises
 
+*Solutions: [[solutions#20-03-henderson-filters|worked answers]] in the solutions appendix.*
+
 1. Implement the closed form. Confirm it reproduces the published 13-term weights to 3 decimals.
 2. Verify the cubic-reproducing property numerically: apply the filter to $t^3$ and confirm you get $t^3$ back (in the interior).
 3. Plot gains for the 9-, 13- and 23-term filters on one axis. Where do they differ most, and what does that imply about the smoothness/responsiveness trade-off?

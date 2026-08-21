@@ -132,6 +132,8 @@ why inadmissibility is rare in practice but not impossible.
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Reproduce the region map. Mark `AirPassengers` on it.
 2. Find the admissible boundary along $\Theta = 0.5$: at what $\theta$ does it fail, and which component goes negative first?
 3. Test the catalogue and confirm `cpi` is the only failure.

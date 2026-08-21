@@ -95,6 +95,8 @@ all greater than 1, so the fitted model is invertible
 
 ## Exercises
 
+*Solutions: [[solutions#10-10-airline-model|worked answers]] in the solutions appendix.*
+
 1. Fit the airline model to `log(AirPassengers)` with `arima()`. Convert the reported MA coefficients to Census sign. What do $\theta$ and $\Theta$ say about this series?
 2. Simulate the airline model at $(\theta,\Theta) = (0.4, 0.6)$ and at $(0.9, 0.95)$. Plot both. Which looks more like real economic data?
 3. Set $\Theta = 1$ in a simulation. Confirm the seasonal pattern stops evolving.

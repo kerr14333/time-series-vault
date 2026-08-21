@@ -147,6 +147,8 @@ for (Th in c(0.2, 0.6, 0.95))
 
 ## Exercises
 
+*Solutions: [[solutions#30-04-pseudo-spectrum|worked answers]] in the solutions appendix.*
+
 1. Plot the airline-model pseudo-spectrum on a log axis for $(\theta,\Theta) = (0.4, 0.6)$. Mark the seven infinite peaks.
 2. Vary $\Theta$ from 0.2 to 0.95 and watch the seasonal peaks narrow. Relate to revision size ([[20-08-x11-arima]]).
 3. Vary $\theta$ and watch the trend peak change shape.

@@ -120,6 +120,8 @@ undifferenced      seasonal          both
 
 ## Exercises
 
+*Solutions: [[solutions#10-06-differencing|worked answers]] in the solutions appendix.*
+
 1. Take logs of AirPassengers, apply $\nabla$, then $\nabla_{12}$, and plot at each stage. At which stage does it start to look stationary?
 2. Compute the variance after each stage. What happens if you difference once more?
 3. Find the 12 roots of $1-B^{12}$ numerically and convert each to a period in months. Confirm you get 12, 6, 4, 3, 2.4 and 2 months.

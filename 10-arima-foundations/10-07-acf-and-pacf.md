@@ -103,6 +103,8 @@ round(sapply(c(72, 144, 500, 2000), function(n) 2 / sqrt(n)), 4)
 
 ## Exercises
 
+*Solutions: [[solutions#10-07-acf-and-pacf|worked answers]] in the solutions appendix.*
+
 1. Simulate AR(2), MA(2) and ARMA(1,1) at n=300. Print ACF/PACF for each without labels, shuffle them, and identify them cold. Repeat at n=60 and notice how much harder it gets — that is the real-data regime.
 2. For log-differenced AirPassengers, name every lag whose ACF exceeds the band, and say which polynomial you think produced it.
 3. Why does a nonstationary series show $\phi_{11}\approx1$?

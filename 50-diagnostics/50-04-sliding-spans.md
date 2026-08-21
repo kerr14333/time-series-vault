@@ -97,6 +97,8 @@ The two quarterly series fail badly, and that is the lesson: quarterly data give
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Run sliding spans on `AirPassengers`. What percentage of months are flagged?
 2. Do the same for a series with volatile seasonality (`UKgas`, `JohnsonJohnson`). Does the flag rate track $\Theta$?
 3. Inject an outlier near a span boundary and watch the flag rate jump. Then model it as an AO and confirm it settles.

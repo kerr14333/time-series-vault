@@ -107,6 +107,8 @@ by the boxed identity. **The filters sum to 1 for the same reason the partial fr
 
 ## Exercises
 
+*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+
 1. Verify `cospoly_from_poly(c(1,-0.4))` equals $(1.16,-0.4)$ by hand.
 2. Recount the degrees for a *quarterly* airline model ($s=4$): what are $\deg N$, $\deg D_T$, $\deg D_S$, and how many unknowns? Confirm the system is still square.
 3. Solve the system for `AirPassengers` and reproduce the $6\times10^{-14}$ residual.

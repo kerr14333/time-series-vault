@@ -104,6 +104,8 @@ length 13  sum = 1.0000000000  gain(0) = 1.0000000000
 
 ## Exercises
 
+*Solutions: [[solutions#20-01-moving-averages-as-filters|worked answers]] in the solutions appendix.*
+
 1. Plot the gain of a simple 3-term MA $(1/3, 1/3, 1/3)$. What does it do at $\omega = 2\pi/3$? Why exactly zero?
 2. Plot the gain of a 12-term *uncentred* MA. Notice the phase is nonzero — confirm it, and confirm centring fixes it.
 3. Convolve a 3-term and a 5-term MA. Verify the gain of the product equals the product of the gains.

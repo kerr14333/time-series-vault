@@ -90,6 +90,8 @@ A polynomial in the lag operator becomes a complex-valued function of frequency.
 
 ## Exercises
 
+*Solutions: [[solutions#30-01-frequency-domain-basics|worked answers]] in the solutions appendix.*
+
 1. Plot $\sin(2\pi t/12)$ and $\sin(2\pi t/12) + 0.3\sin(2\pi t/3)$. Both are seasonal with period 12. Which needs harmonics?
 2. Sample a cycle of period 1.5 months at monthly intervals. What period does it appear to have? (Aliasing.)
 3. Confirm numerically that $|1 - 0.8e^{-i\omega}|^2 = (1-0.8e^{-i\omega})(1-0.8e^{i\omega})$ is real for every $\omega$.

@@ -108,6 +108,8 @@ theta=2.0  2.0 4.00 8.000 16.000 32.000 64.000 128.000 256.000
 
 ## Exercises
 
+*Solutions: [[solutions#10-05-invertibility|worked answers]] in the solutions appendix.*
+
 1. Compute the first 8 $\pi$-weights for $\theta = 0.5$ and for $\theta = 0.95$. Plot both.
 2. Simulate white noise, difference it, fit an MA(1). What $\theta$ comes back? Now fit `arima(x, c(0,1,1))` to plain white noise repeatedly — how often does it pin at the boundary?
 3. Argue in one sentence why "over-differenced" and "non-invertible" are the same statement.

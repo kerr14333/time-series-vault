@@ -95,6 +95,8 @@ max difference in seasonal factors: 1.146%
 
 ## Exercises
 
+*Solutions: [[solutions#20-06-extreme-values|worked answers]] in the solutions appendix.*
+
 1. Inject a +30% spike into one January. Adjust with and without the extreme-value step. How much does the seasonal factor for *other* Januaries move?
 2. Confirm the spike is still visible in D11 even when the value was fully downweighted for estimating the factors.
 3. Vary the sigma limits from (1.5, 2.5) to (2.5, 4.0). How much does D11 change on a clean series? On a contaminated one?

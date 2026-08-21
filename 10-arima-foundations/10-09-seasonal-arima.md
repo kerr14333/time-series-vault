@@ -92,6 +92,8 @@ round(a[c(1, 11, 12, 13, 23, 24, 25)], 3)
 
 ## Exercises
 
+*Solutions: [[solutions#10-09-seasonal-arima|worked answers]] in the solutions appendix.*
+
 1. Expand $(1 - \phi B)(1 - \Phi B^{12})$ fully. Which lags get nonzero coefficients?
 2. Write $(0,1,1)(1,0,0)_{12}$ out in full scalar form.
 3. Simulate an airline model with $\theta=0.4,\Theta=0.6$; plot its ACF after $\nabla\nabla_{12}$ and locate the satellite spikes.
