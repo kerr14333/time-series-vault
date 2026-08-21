@@ -58,6 +58,7 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 - [ ] [[40-07-implementing-seats-in-r]]
 - [ ] [[40-08-validating-against-x13]]
 - [ ] [[40-09-burman-algorithm]]
+- [ ] [[40-10-general-seats]]
 
 ## Module 5 — Diagnostics and practice
 - [ ] [[50-01-is-there-seasonality]]

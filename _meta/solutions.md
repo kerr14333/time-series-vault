@@ -422,6 +422,22 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 **6.** The brute-force cost is in applying hundreds of filter weights at every time point, not in the forecasting. Burman avoids it by replacing the convolution with two recursions.
 
+## 40-10-general-seats
+
+**1.** The seasonal polynomial matches to $2\times10^{-14}$; the trend to only $2\times10^{-8}$. Not a bug: $(1-B)^2$ has a **double root** at $B=1$, and root-finding at a repeated root loses about half the available precision — you get $\sqrt{\varepsilon}$ rather than $\varepsilon$. The hard-coded split knows the answer algebraically; the general one has to find it numerically and cannot match that.
+
+**2.** A 6-month period is exactly the second seasonal frequency ($k=2$), so those roots are classified **seasonal** — correctly. This is the case where the tolerance matters: a root at period 6.5 would fall outside `tol_frac` and become transitory instead.
+
+**3.** With `tol_frac` small, a root slightly off a seasonal frequency is called transitory; widen it and the same root becomes seasonal. There is no natural cutoff — this is a **modelling choice**, and the honest response is to look at the classification table rather than trusting a default.
+
+**4.** For `unemp` with $(1,1,1)(0,1,1)$: 12 seasonal roots and 2 trend. Note the AR(1) coefficient is $-0.50$, giving a real **negative** root, whose frequency is $\pi$ — the Nyquist frequency, which for even $s$ *is* a seasonal frequency. So it is correctly seasonal, and if you had classified by "stationary AR goes to the trend" you would have got it wrong.
+
+**5.** Yes. The partial fraction is solved as a least-squares system with one numerator block per denominator, so additional components just add blocks. Residuals stay around $10^{-12}$.
+
+**6.** `sunspots` has an 11-year cycle at about $1/132$ cycles per month — far from zero and far from any $k/12$ — so with a model that captures it, it lands in the **transitory** component. It is the clearest real example, and note it is also a series with *no seasonality at all* ([[50-01-is-there-seasonality]]).
+
+**7.** Most of it. The trend gap between the general and hard-coded routes is $1.3\times10^{-5}$, while the hard-coded route matches X-13 to $3\times10^{-6}$ — so the general implementation's error is roughly four times the total error of the special-case one, and it enters at the root-finding step.
+
 ---
 
 # Module 5 — Diagnostics and practice

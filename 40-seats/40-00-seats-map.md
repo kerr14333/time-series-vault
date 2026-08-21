@@ -55,6 +55,7 @@ where $\delta(B)$ collects the differencing operators (the nonstationary AR fact
 - [[40-07-implementing-seats-in-r]] — **the build**
 - [[40-08-validating-against-x13]] — match `seasonal::seas()` table by table
 - [[40-09-burman-algorithm]] — how SEATS actually computes the filter: partial fractions into two one-sided recursions, worked slowly
+- [[40-10-general-seats]] — beyond the airline model: sort the AR roots by frequency to discover the trend/seasonal split, and pick up a fourth **transitory** component for cyclical roots that belong to neither
 
 ## The build target
 
