@@ -168,6 +168,16 @@ Speed is the least interesting benefit.
 2. **It works at the ends.** The recursions run right up to the last observation without a special case, which is where seasonal adjustment is hardest ([[20-07-end-filters]]).
 3. **It generalises.** Nothing above used the airline model specifically. Any invertible $\theta(B)$ gives a $g$ and two loops.
 
+![[40-09-burman-vs-truncation.png]]
+
+*Drawn by [[figure-index#40-09-burman-vs-truncation.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Left:** the WK seasonal filter weights out to lag 120, on a log scale, with year boundaries marked. The spikes sit at multiples of 12 — the filter reaches back through *the same month in previous years*, which is exactly what a seasonal filter should do. And after ten years they are still visibly nonzero.
+
+**Right:** the consequence. As $\Theta$ rises the filter needs more and more history: past $\Theta \approx 0.4$ it already wants more filter than `AirPassengers` has data, and at $\Theta = 0.95$ it wants **50 years**. The dashed line is the length of the series itself.
+
+That gap between the two lines is the whole argument for Burman's algorithm. You cannot supply 50 years of data; you can run two recursions.
+
 ## Exercises
 
 *Solutions: [[solutions#40-09-burman-algorithm|worked answers]] in the solutions appendix.*

@@ -77,6 +77,14 @@ Across the grid scan the irregular went negative most often (722 cells), then th
 
 The irregular is the usual casualty, and there is an intuition for it. The irregular's spectrum is the **constant** $D$ in the partial fraction — the flat floor under everything else. If the fitted model implies a spectrum with less power at high frequencies than the trend and seasonal components jointly require, the leftover flat part comes out negative. Negative $\theta$ does exactly that: it puts a *peak* rather than a trough at high frequency, leaving nothing for the irregular.
 
+![[40-02-admissible-region.png]]
+
+*Drawn by [[figure-index#40-02-admissible-region.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+Every point in the $(\theta,\Theta)$ plane is a possible airline model; blue means a canonical decomposition exists. The pattern is stark and worth memorising: **the positive quadrant is entirely admissible and almost nothing else is.**
+
+`AirPassengers` sits comfortably inside. Real fitted models overwhelmingly land in that quadrant, which is why inadmissibility is rare in practice — but `cpi` has $\theta = -0.086$, lands in the grey, and is the one catalogue series where X-13 quietly substitutes a different model.
+
 ## Numerically
 
 Not every model can be decomposed. The region is smaller than you would guess.

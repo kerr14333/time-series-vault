@@ -71,6 +71,14 @@ A leftover seasonal of even 0.3% in a monthly series is invisible in a plot and 
 
 This is the diagnostic to run every time, on every series, without exception.
 
+![[50-02-residual-seasonality.png]]
+
+*Drawn by [[figure-index#50-02-residual-seasonality.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+The diagnostic in its most direct form. Before adjustment the spectrum has clear peaks at the seasonal frequencies; after adjustment they are gone. That is what a successful adjustment looks like in the frequency domain, and QS is a formal test of exactly this picture.
+
+When a peak *survives* at $k/12$ in the adjusted series, you have residual seasonality — and the usual causes are an unmodelled calendar effect ([[50-10-calendar-effects]]), a seasonal filter too long for how fast the pattern evolves, or a seasonal break partway through.
+
 ## Numerically
 
 The question that matters after adjusting: did any seasonality survive?

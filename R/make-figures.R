@@ -150,6 +150,164 @@ text(-coef(mle)[2], min(prof, na.rm = TRUE),
      sprintf(" Theta = %.3f", -coef(mle)[2]), col = "firebrick", cex = 0.8, adj = 0)
 dev.off()
 
+# ===== MODULES 4 and 5 ======================================================
+suppressMessages(library(seasonal))
+source("R/_spectral.R"); source("R/_seats.R"); source("R/_series.R")
+colsM4 <- c("steelblue", "firebrick", "darkgreen")
+
+# --- 40-02: the admissible region ------------------------------------------
+png_("40-02-admissible-region.png")
+# Coarse grids on purpose: this is a yes/no map, not a precision calculation,
+# and the fine defaults make it a ten-minute figure instead of a ten-second one.
+spADM <- seats_ar_split(1, 1, 12)
+adm <- function(th, Th) {
+  isTRUE(tryCatch(seats_canonical(
+    seats_partial_fractions(airline_ma(th, Th), spADM$trend, spADM$seas,
+                            ngrid = 400), ngrid = 600)$admissible,
+    error = function(e) FALSE))
+}
+gg <- seq(-0.95, 0.95, length.out = 26)
+M <- outer(gg, gg, Vectorize(adm))
+image(gg, gg, M, col = c("grey92", "steelblue"),
+      xlab = "theta (Census sign)", ylab = "Theta (Census sign)",
+      main = "admissible decompositions: only the positive quadrant")
+abline(h = 0, v = 0, col = "grey40", lty = 2)
+box()
+fitA <- arima(lap, order = c(0,1,1), seasonal = list(order = c(0,1,1), period = 12))
+points(-coef(fitA)[1], -coef(fitA)[2], pch = 19, col = "firebrick", cex = 1.8)
+text(-coef(fitA)[1], -coef(fitA)[2] + 0.09, "AirPassengers", col = "firebrick", cex = 0.85)
+legend("bottomleft", c("admissible", "not"), fill = c("steelblue", "grey92"),
+       bty = "n", cex = 0.8)
+dev.off()
+
+# --- 40-03: what the canonical step actually does --------------------------
+png_("40-03-canonical-shift.png")
+par(mfrow = c(1, 2))
+maA <- airline_ma(0.4018, 0.5569); spA <- seats_ar_split(1, 1, 12)
+pfA <- seats_partial_fractions(maA, spA$trend, spA$seas)
+cnA <- seats_canonical(pfA)
+wg  <- seq(1e-4, pi - 1e-4, length.out = 800)
+gT  <- cospoly_eval(pfA$A, wg) / cospoly_eval(pfA$DT, wg)
+gTc <- cospoly_eval(cnA$Acan, wg) / cospoly_eval(cnA$DT, wg)
+gS  <- cospoly_eval(pfA$C, wg) / cospoly_eval(pfA$DS, wg)
+gSc <- cospoly_eval(cnA$Ccan, wg) / cospoly_eval(cnA$DS, wg)
+plot(wg, gT, type = "l", lwd = 2, col = "grey55", log = "y", xlab = "omega",
+     ylab = "spectrum", main = "trend: the floor is removed")
+lines(wg, pmax(gTc, 1e-12), lwd = 2, col = "steelblue")
+abline(h = cnA$mT, lty = 3, col = "firebrick")
+legend("topright", c("before", "canonical", "min removed"),
+       col = c("grey55", "steelblue", "firebrick"), lwd = c(2,2,1), lty = c(1,1,3),
+       bty = "n", cex = 0.75)
+plot(wg, gS, type = "l", lwd = 2, col = "grey55", log = "y", xlab = "omega",
+     ylab = "spectrum", main = "seasonal: same move")
+lines(wg, pmax(gSc, 1e-12), lwd = 2, col = "darkgreen")
+abline(h = cnA$mS, lty = 3, col = "firebrick")
+dev.off()
+
+# --- 40-05: the three component spectra ------------------------------------
+png_("40-05-component-spectra.png")
+nuA <- seats_filters(cnA, wg)
+fz  <- cospoly_eval(cnA$N, wg) /
+       (cospoly_eval(cnA$DT, wg) * cospoly_eval(cnA$DS, wg))
+plot(wg, fz * nuA$trend, type = "l", lwd = 2, col = "steelblue", log = "y",
+     ylim = c(1e-6, 1e3), xlab = "omega", ylab = "component spectrum",
+     main = "who owns which frequency (airline model)")
+lines(wg, fz * nuA$seasonal, lwd = 2, col = "darkgreen")
+lines(wg, pmax(fz * nuA$irregular, 1e-12), lwd = 2, col = "firebrick")
+abline(v = 2 * pi * seas_freq(12), col = "grey70", lty = 3)
+legend("topright", c("trend", "seasonal", "irregular"),
+       col = c("steelblue", "darkgreen", "firebrick"), lwd = 2, bty = "n", cex = 0.8)
+dev.off()
+
+# --- 40-09: why Burman beats brute force -----------------------------------
+png_("40-09-burman-vs-truncation.png")
+par(mfrow = c(1, 2))
+wtsS <- filter_weights(nuA$seasonal, wg, max_lag = 120)
+plot(0:120, abs(wtsS), type = "h", lwd = 1.5, col = "darkgreen", log = "y",
+     xlab = "lag", ylab = "|weight|",
+     main = "WK seasonal weights: 120 lags, still alive")
+abline(v = seq(0, 120, by = 12), col = "grey85", lty = 3)
+Ths <- seq(0.2, 0.95, by = 0.05)
+need <- vapply(Ths, function(T_) seats_max_lag(0.4, T_), numeric(1))
+plot(Ths, need / 12, type = "b", pch = 19, lwd = 2, col = "firebrick",
+     xlab = "Theta", ylab = "years of filter needed",
+     main = "cost of the brute-force route")
+abline(h = 12, lty = 2, col = "grey50")
+text(0.3, 13.5, "length of AirPassengers", cex = 0.75, col = "grey40")
+dev.off()
+
+# --- 50-01: seasonal, cyclical, and the difference -------------------------
+png_("50-01-seasonal-vs-cyclical.png")
+par(mfrow = c(1, 2))
+sp1 <- spec.pgram(diff(log(AirPassengers)), spans = c(3,3), taper = 0.1,
+                  plot = FALSE)
+plot(sp1$freq / 12, sp1$spec, type = "l", lwd = 2, log = "y", col = "steelblue",
+     xlab = "cycles/month", ylab = "spectrum", main = "AirPassengers: SEASONAL")
+abline(v = seas_freq(12), col = "firebrick", lty = 3)
+sun <- ts(as.numeric(sunspots), frequency = 12)
+sp2 <- spec.pgram(sun, spans = c(5,5), taper = 0.1, plot = FALSE)
+plot(sp2$freq / 12, sp2$spec, type = "l", lwd = 2, log = "y", col = "darkgreen",
+     xlab = "cycles/month", ylab = "spectrum", main = "sunspots: CYCLICAL, not seasonal")
+abline(v = seas_freq(12), col = "firebrick", lty = 3)
+abline(v = 1/132, col = "blue", lty = 2)
+text(0.06, max(sp2$spec) / 5, "11-year cycle,\nnot at k/12", cex = 0.75, col = "blue")
+dev.off()
+
+# --- 50-02: did the seasonal peaks go? -------------------------------------
+png_("50-02-residual-seasonality.png")
+mR <- seas(AirPassengers, x11 = "")
+d11R <- series(mR, "d11")
+par(mfrow = c(1, 2))
+sa <- spec.pgram(diff(log(AirPassengers)), spans = c(3,3), taper = 0.1, plot = FALSE)
+plot(sa$freq / 12, sa$spec, type = "l", lwd = 2, log = "y", col = "grey40",
+     xlab = "cycles/month", ylab = "spectrum", main = "before adjustment")
+abline(v = seas_freq(12), col = "firebrick", lty = 3)
+sb <- spec.pgram(diff(log(d11R)), spans = c(3,3), taper = 0.1, plot = FALSE)
+plot(sb$freq / 12, sb$spec, type = "l", lwd = 2, log = "y", col = "steelblue",
+     xlab = "cycles/month", ylab = "spectrum", main = "after: the peaks are gone")
+abline(v = seas_freq(12), col = "firebrick", lty = 3)
+dev.off()
+
+# --- 50-07: the three outlier types, and what they do ----------------------
+png_("50-07-outlier-types.png", h = 1250)
+par(mfrow = c(2, 3), mar = c(3.2, 4, 3, 1))
+n7 <- 120; t7 <- 1:n7; brk <- 60
+base <- 100 + 0.3 * t7 + 8 * sin(2 * pi * t7 / 12)
+ao <- base; ao[brk] <- ao[brk] + 25
+ls_ <- base; ls_[brk:n7] <- ls_[brk:n7] + 25
+tc <- base; tc[brk:n7] <- tc[brk:n7] + 25 * 0.7^(0:(n7 - brk))
+for (i in seq_along(list(ao, ls_, tc))) {
+  y <- list(ao, ls_, tc)[[i]]
+  plot(t7, y, type = "l", lwd = 1.6, col = colsM4[i], xlab = "", ylab = "",
+       main = c("AO: additive outlier", "LS: level shift", "TC: temporary change")[i])
+  abline(v = brk, col = "grey60", lty = 3)
+}
+for (i in seq_along(list(ao, ls_, tc))) {
+  y <- ts(list(ao, ls_, tc)[[i]], frequency = 12)
+  d <- x11_decompose(y)
+  plot(as.numeric(d$d10), type = "l", lwd = 1.6, col = colsM4[i], xlab = "", ylab = "",
+       main = "resulting seasonal factors")
+  abline(v = brk, col = "grey60", lty = 3)
+}
+dev.off()
+
+# --- 50-09: X-11 and SEATS, side by side -----------------------------------
+png_("50-09-x11-vs-seats.png")
+par(mfrow = c(1, 2))
+m11 <- seas(AirPassengers, x11 = "")
+mse <- seas(AirPassengers, x11 = NULL)
+a11 <- as.numeric(series(m11, "d11")); ase <- as.numeric(series(mse, "s11"))
+tt9 <- as.numeric(time(AirPassengers))
+plot(tt9, a11, type = "l", lwd = 1.8, col = "steelblue", xlab = "", ylab = "adjusted",
+     main = "X-11 and SEATS adjusted series")
+lines(tt9, ase, lwd = 1.8, col = "firebrick", lty = 2)
+legend("topleft", c("X-11 (d11)", "SEATS (s11)"), col = c("steelblue", "firebrick"),
+       lwd = 2, lty = c(1, 2), bty = "n", cex = 0.8)
+plot(tt9, 100 * (a11 - ase) / ase, type = "h", lwd = 2, col = "grey35",
+     xlab = "", ylab = "% difference", main = "the method difference")
+abline(h = 0, col = "firebrick")
+dev.off()
+
 # --- 20-01: what a gain function is ----------------------------------------
 png_("20-01-gain-basics.png")
 par(mfrow = c(1, 2))

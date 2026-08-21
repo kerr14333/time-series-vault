@@ -73,7 +73,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-inline\|`inline.R`]] | Run the R snippets embedded in the notes and fill in their output. | 143 | — |
 | [[code-make-code-notes\|`make-code-notes.R`]] | Mirror every R/*.R script into a readable note in _code/. | 165 | — |
 | [[code-make-figure-index\|`make-figure-index.R`]] | Generate _meta/figure-index.md, the figure appendix. | 143 | — |
-| [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 477 | — |
+| [[code-make-figures\|`make-figures.R`]] | Regenerate every PNG embedded in the notes. | 635 | — |
 
 ## Regenerating
 

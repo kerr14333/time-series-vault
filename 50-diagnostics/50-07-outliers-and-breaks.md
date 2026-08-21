@@ -71,6 +71,16 @@ Harder than outliers in the level, and less well handled. If the seasonal patter
 
 Sliding spans ([[50-04-sliding-spans]]) is the diagnostic that finds these, because a seasonal break makes the adjustment unstable to which window you use.
 
+![[50-07-outlier-types.png]]
+
+*Drawn by [[figure-index#50-07-outlier-types.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Top row:** the three outlier types on the same synthetic series — an additive outlier (one point), a level shift (permanent), and a temporary change (decaying back).
+
+**Bottom row:** the seasonal factors X-11 produces from each, untreated. This is the part worth studying. The AO leaves a local disturbance; the **level shift does the most damage**, because a permanent change is not something a seasonal filter can absorb cleanly, and the contamination spreads either side of the break.
+
+Note the damage propagates **backwards** as well as forwards. The filters are two-sided, so an event at month 60 corrupts factors before month 60 too — which is why an untreated shock contaminates years of history, not just its own date ([[50-08-covid]]).
+
 ## Exercises
 
 *Solutions: [[solutions#50-07-outliers-and-breaks|worked answers]] in the solutions appendix.*

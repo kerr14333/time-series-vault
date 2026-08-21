@@ -64,6 +64,14 @@ The component models are **implied by** the fitted reduced form plus the canonic
 
 This is the standing limitation of model-based adjustment, and it is worth stating plainly rather than burying: **you are reporting the consequences of assumptions, not measurements of unobservable things.**
 
+![[40-05-component-spectra.png]]
+
+*Drawn by [[figure-index#40-05-component-spectra.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+The three component spectra that the decomposition produces, with the seasonal frequencies marked. Read it as ownership: the trend takes the low-frequency power, the seasonal takes the spikes at $k/12$, and the irregular takes the flat remainder.
+
+Note the irregular is **exactly flat** — that is white noise, and it is white by construction because the canonical step swept every component's floor into it. Note also that the three curves sum to $f_z$ at every frequency: nothing is created or lost, only assigned.
+
 ## Numerically
 
 Each component is itself an ARIMA. SEATS tells you which one.

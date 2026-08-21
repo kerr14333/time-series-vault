@@ -78,6 +78,16 @@ A factor of ~660. The method choice dominates implementation precision by nearly
 
 That last point is the one that matters institutionally. A series adjusted by SEATS this month and X-11 next month has revisions that mean nothing.
 
+![[50-09-x11-vs-seats.png]]
+
+*Drawn by [[figure-index#50-09-x11-vs-seats.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Left:** the two adjusted series on top of each other. They are close enough that the debate between the methods looks overheated at this scale — which is itself the finding most worth having.
+
+**Right:** the difference, month by month. Mean **0.53%**, maximum **2.63%**. Compare that with **0.001%** between our from-scratch SEATS and the Census binary ([[40-08-validating-against-x13]]): the choice of *method* matters hundreds of times more than the choice of *implementation*, and both matter far less than model specification and outlier treatment.
+
+The differences concentrate at the ends and near irregular episodes — precisely where the two methods must each improvise.
+
 ## Numerically
 
 Two methods, same data. How far apart do they actually land?

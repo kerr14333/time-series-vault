@@ -89,6 +89,16 @@ It is a choice, and worth holding at arm's length.
 
 The honest summary: the canonical decomposition is a defensible, well-defined, conservative convention — not a discovered truth about the series.
 
+![[40-03-canonical-shift.png]]
+
+*Drawn by [[figure-index#40-03-canonical-shift.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+What the canonical rule actually does, on a log scale. Each component's spectrum has a **floor** — a flat white-noise level it never drops below — and the canonical choice subtracts exactly that floor, handing it to the irregular.
+
+The dashed line marks the minimum removed: $m_T = 0.0514$ for the trend, $m_S = 0.0225$ for the seasonal. After the shift each component touches zero somewhere, which is the formal statement of "as smooth as it can be while remaining a valid spectrum".
+
+This is a **convention, not a result** — the data cannot distinguish it from any other admissible split ([[derivations#D9. The canonical decomposition, and why it is a convention|D9]]).
+
 ## Numerically
 
 The canonical choice: give every component its own minimum away, and hand the total to the irregular.

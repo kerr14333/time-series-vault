@@ -66,6 +66,18 @@ own spectral check, max ratio    1.10   at the seasonal frequencies
 > [!warning] Do not build a claim on an undocumented diagnostic key
 > Prefer the statistics with a stated null distribution (QS) and checks you compute yourself (the spectrum). If a `udg` key seems to contradict them, you have probably misunderstood the key — confirm before reporting it.
 
+![[50-01-seasonal-vs-cyclical.png]]
+
+*Drawn by [[figure-index#50-01-seasonal-vs-cyclical.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Seasonal is not the same as cyclical**, and this is the picture that settles it.
+
+**Left:** `AirPassengers` has sharp peaks sitting exactly on the seasonal frequencies $k/12$ (red lines). That is seasonality.
+
+**Right:** `sunspots` has an enormous peak — but at about $1/132$ cycles per month, the 11-year solar cycle, and **nothing at $k/12$**. It is strongly cyclical and not seasonal at all.
+
+The practical consequence is in the note: SEATS refuses to adjust `sunspots`, while X-11 will produce seasonal factors for it without complaint. Test before adjusting.
+
 ## Numerically
 
 Before adjusting, ask whether there is anything to adjust.
