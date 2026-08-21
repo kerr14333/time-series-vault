@@ -84,6 +84,57 @@ The Henderson filter is symmetric, so it needs $m$ observations on each side. Fo
 > [!warning] This is the mechanism behind turning-point failure
 > The distortion appears **at** the turn, not before it, because it is the end filter — not the interior filter — that is doing the work there. Carry this into [[20-07-end-filters]] and [[50-06-turning-points]].
 
+## Numerically
+
+Henderson filters are chosen to be smooth, not to remove seasonality. Both halves of that matter.
+
+The weights are a closed form, and they sum to 1. Note they go *negative* at the ends — that is what makes them sharper than a plain average:
+
+<!-- run -->
+```r
+round(henderson(9), 5)
+cat("sum:", sum(henderson(13)), "  negative weights:", sum(henderson(13) < 0), "\n")
+```
+```text
+sum: 1   negative weights: 4 
+```
+<!-- end -->
+
+They reproduce a cubic exactly. That is the design criterion — feed in a polynomial of degree 3 and it comes back unchanged:
+
+<!-- run -->
+```r
+h <- henderson(13); m <- (length(h) - 1) / 2; j <- -m:m
+for (deg in 0:4) cat(sprintf("  t^%d reproduced: max error %.3e\n",
+                             deg, abs(sum(h * j^deg) - (deg == 0))))
+```
+```text
+  t^0 reproduced: max error 0.000e+00
+  t^1 reproduced: max error 0.000e+00
+  t^2 reproduced: max error 2.220e-16
+  t^3 reproduced: max error 0.000e+00
+  t^4 reproduced: max error 6.923e+01
+```
+<!-- end -->
+
+But the gain at the annual frequency is **0.85**, not zero. A Henderson filter is a low-pass smoother; removing seasonality is not its job:
+
+<!-- run -->
+```r
+round(rbind(freq = seas_freq(12),
+            H9  = gain(henderson(9),  seas_freq(12)),
+            H13 = gain(henderson(13), seas_freq(12)),
+            H23 = gain(henderson(23), seas_freq(12))), 4)
+```
+```text
+       [,1]   [,2]   [,3]   [,4]   [,5]   [,6]
+freq 0.0833 0.1667 0.2500 0.3333 0.4167 0.5000
+H9   0.9520 0.5397 0.0128 0.0329 0.0286 0.0267
+H13  0.8456 0.1095 0.0160 0.0015 0.0066 0.0079
+H23  0.3478 0.0107 0.0027 0.0015 0.0012 0.0011
+```
+<!-- end -->
+
 ## Exercises
 
 1. Implement the closed form. Confirm it reproduces the published 13-term weights to 3 decimals.

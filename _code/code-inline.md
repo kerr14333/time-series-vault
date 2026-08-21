@@ -91,7 +91,11 @@ render_note <- function(path) {
     source("R/_x11.R", local = env)
     source("R/_spectral.R", local = env)
     source("R/_seats.R", local = env)
+    source("R/_series.R", local = env)
   })
+  # Module 5 snippets call seas()/udg()/series(); load it once here rather than
+  # making every snippet say so.
+  suppressMessages(library(seasonal))
 
   # rewrite from the bottom up so earlier line numbers stay valid
   outs <- vector("list", length(blocks))

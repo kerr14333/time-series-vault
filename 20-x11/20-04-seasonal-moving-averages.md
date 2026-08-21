@@ -58,6 +58,46 @@ $$\hat{S}_t \leftarrow \frac{\hat{S}_t}{\nu_{2\times12}(B)\,\hat{S}_t}$$
 
 Note this is the same $2\times12$ filter from [[20-02-the-12-term-ma]], used for a third purpose. Small step, easy to omit when hand-coding, and omitting it produces a subtle drift that is genuinely hard to diagnose later — so put it in from the start.
 
+## Numerically
+
+Seasonal filters average *across years within a calendar month*, which is a different axis from everything else in X-11.
+
+The 3x3 and 3x5 weight vectors. They are short because there are only so many Januaries:
+
+<!-- run -->
+```r
+for (ty in c("3x3", "3x5", "3x9")) {
+  w <- seasonal_ma(ty)
+  cat(sprintf("%-4s length %2d  sum %.6f  weights %s\n",
+              ty, length(w), sum(w), paste(round(w, 4), collapse = " ")))
+}
+```
+```text
+3x3  length  5  sum 1.000000  weights 0.1111 0.2222 0.3333 0.2222 0.1111
+3x5  length  7  sum 1.000000  weights 0.0667 0.1333 0.2 0.2 0.2 0.1333 0.0667
+3x9  length 11  sum 1.000000  weights 0.037 0.0741 0.1111 0.1111 0.1111 0.1111 0.1111 0.1111 0.1111 0.0741 0.037
+```
+<!-- end -->
+
+A longer filter is smoother but slower to react. The gain at the *annual* frequency of the year-over-year series shows the trade-off directly:
+
+<!-- run -->
+```r
+ff <- seq(0, 0.5, length.out = 6)
+round(rbind(freq = ff,
+            `3x3` = gain(seasonal_ma("3x3"), ff),
+            `3x5` = gain(seasonal_ma("3x5"), ff),
+            `3x9` = gain(seasonal_ma("3x9"), ff)), 4)
+```
+```text
+     [,1]   [,2]   [,3]   [,4]   [,5]   [,6]
+freq    0 0.1000 0.2000 0.3000 0.4000 0.5000
+3x3     1 0.7616 0.2909 0.0162 0.0424 0.1111
+3x5     1 0.5648 0.0000 0.0315 0.0000 0.0667
+3x9     1 0.0970 0.0599 0.0141 0.0229 0.0370
+```
+<!-- end -->
+
 ## Exercises
 
 1. Derive the 3×5 weights by convolving $\tfrac13(1,1,1)$ with $\tfrac15(1,1,1,1,1)$.

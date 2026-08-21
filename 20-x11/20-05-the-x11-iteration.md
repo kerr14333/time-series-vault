@@ -109,6 +109,51 @@ Be honest about the gap between what you build and what X-13 runs:
 
 The script quantifies the resulting discrepancy against real X-13 output rather than hand-waving it.
 
+## Numerically
+
+The whole algorithm, run on the real thing.
+
+Our hand-coded X-11 against the Census binary on `AirPassengers`, split into the **interior** (where the symmetric filters apply) and the **ends** (where they cannot). Report the two separately — quoting a single number here is how you end up claiming either far better or far worse agreement than you have:
+
+<!-- run -->
+```r
+z  <- AirPassengers
+ours <- x11_decompose(z)
+ref  <- seas(z, x11 = "", transform.function = "log",
+             arima.model = "(0 1 1)(0 1 1)", regression.aictest = NULL,
+             outlier = NULL)
+for (tb in c("d10", "d11", "d12")) {
+  a <- as.numeric(ours[[tb]]); b <- as.numeric(series(ref, tb))
+  n <- length(a); int <- 13:(n - 12)          # a year clear of each end
+  pd <- 100 * abs(a - b) / abs(b)
+  cat(sprintf("  %s  interior mean %5.2f%%   interior max %5.2f%%   ends max %5.2f%%\n",
+              tb, mean(pd[int]), max(pd[int]), max(pd[-int])))
+}
+```
+```text
+  d10  interior mean  0.52%   interior max  3.83%   ends max  4.37%
+  d11  interior mean  0.52%   interior max  3.98%   ends max  4.57%
+  d12  interior mean  0.61%   interior max  2.41%   ends max  2.44%
+```
+<!-- end -->
+
+Half a percent through the middle, and roughly **nine times worse at the ends**. That gap is not sloppiness in either implementation — it is the end-filter problem ([[20-07-end-filters]]) showing up as a number. Any two X-11 implementations agree where the symmetric filter applies and disagree where each has to improvise.
+
+The identity the whole method rests on — the pieces multiply back to the original:
+
+<!-- run -->
+```r
+cat("max |z - D10*D11| :",
+    format(max(abs(as.numeric(z) - as.numeric(ours$d10) * as.numeric(ours$d11)))), "\n")
+cat("max |D11 - D12*D13|:",
+    format(max(abs(as.numeric(ours$d11) - as.numeric(ours$d12) * as.numeric(ours$d13)))), "\n")
+```
+```text
+max |z - D10*D11| : 5.684342e-14 
+max |D11 - D12*D13|: 5.684342e-14 
+```
+<!-- end -->
+
 ## Exercises
 
 1. Build the loop. Compare your D11 to `seasonal::series(m, "d11")` — report the max absolute percentage difference.

@@ -71,6 +71,47 @@ Applying a **symmetric** filter to a series extended by **forecasts** is algebra
 
 Musgrave derives his directly, under a simple assumed model. X-11-ARIMA and X-13 derive theirs implicitly, from a regARIMA model fitted to the actual series — which is usually better, because the model is tailored rather than assumed. That is [[20-08-x11-arima]].
 
+## Numerically
+
+At the end of the sample the symmetric filter has no future to average over, and everything downstream follows from that.
+
+A symmetric filter has real transfer, so zero phase. A one-sided filter does not — and nonzero phase means cycles are shifted in time:
+
+<!-- run -->
+```r
+w_sym <- ma_2xs(12)
+w_end <- w_sym[7:13] / sum(w_sym[7:13])      # crude one-sided version
+ff <- c(1/24, 1/12, 1/6)
+round(rbind(freq = ff,
+            phase_symmetric = phase(w_sym, ff),
+            phase_onesided  = phase(w_end, ff)), 4)
+```
+```text
+                  [,1]    [,2]   [,3]
+freq            0.0417  0.0833 0.1667
+phase_symmetric 0.0000 -0.0001 3.1416
+phase_onesided  0.0617  0.1332 3.1416
+```
+<!-- end -->
+
+The practical consequence, measured: the concurrent estimate of the last point differs from what the symmetric filter will eventually say:
+
+<!-- run -->
+```r
+z <- AirPassengers
+full <- as.numeric(x11_decompose(z)$d11)
+n <- length(z)
+short <- as.numeric(x11_decompose(ts(as.numeric(z)[1:(n-6)],
+                                     start = start(z), frequency = 12))$d11)
+cat(sprintf("last point, concurrent vs final: %.2f vs %.2f  (%.2f%% revision)\n",
+            short[n-6], full[n-6],
+            100 * abs(short[n-6] - full[n-6]) / full[n-6]))
+```
+```text
+last point, concurrent vs final: 471.42 vs 473.58  (0.46% revision)
+```
+<!-- end -->
+
 ## Exercises
 
 1. Plot the symmetric 13-term Henderson weights against the end-point weights on one axis. Confirm the end filter has zero weight on the future and much more on the present.

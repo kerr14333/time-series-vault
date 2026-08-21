@@ -59,6 +59,40 @@ The distinction is worth holding onto:
 
 Because of this step X-11 is **nonlinear**: doubling the input does not double the output, and the composite-filter trick of [[20-05-the-x11-iteration]] is only exact for a series with no extremes. When people write "the X-11 filter", they mean the linear filter you get with the extreme-value step disabled. That is a real approximation, not a formality — say so when you compare X-11 to SEATS.
 
+## Numerically
+
+Extreme-value replacement is where X-11 stops being a linear filter.
+
+The sigma limits turn residuals into weights: full weight inside 1.5 sigma, zero outside 2.5, and a linear ramp between:
+
+<!-- run -->
+```r
+set.seed(11)
+irr <- c(rnorm(60, 1, 0.02), 1.12, rnorm(11, 1, 0.02))   # one spike at t=61
+w <- extreme_weights(irr)
+cat("observations down-weighted:", sum(w < 1), "  fully excluded:", sum(w == 0), "\n")
+round(w[58:64], 3)
+```
+```text
+observations down-weighted: 4   fully excluded: 1 
+[1] 1.000 1.000 1.000 0.000 1.000 0.476 1.000
+```
+<!-- end -->
+
+Why it matters: the same input, with and without replacement, gives different seasonal factors. X-11 is therefore **not** a fixed linear filter — its weights depend on the data:
+
+<!-- run -->
+```r
+a <- x11_decompose(AirPassengers, extreme = TRUE)$d10
+b <- x11_decompose(AirPassengers, extreme = FALSE)$d10
+cat(sprintf("max difference in seasonal factors: %.3f%%\n",
+            100 * max(abs(as.numeric(a) - as.numeric(b)) / as.numeric(b))))
+```
+```text
+max difference in seasonal factors: 1.146%
+```
+<!-- end -->
+
 ## Exercises
 
 1. Inject a +30% spike into one January. Adjust with and without the extreme-value step. How much does the seasonal factor for *other* Januaries move?

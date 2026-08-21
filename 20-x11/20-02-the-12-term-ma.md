@@ -71,6 +71,51 @@ It kills seasonality exactly, but it is a blunt instrument for the trend:
 
 Hence the iteration: this MA gives a *preliminary* trend, good enough to compute SI ratios from. The trend gets replaced by a **Henderson filter** ([[20-03-henderson-filters]]) once the seasonality is out of the way, and the end-loss gets handled by [[20-07-end-filters]] or by forecast extension ([[20-08-x11-arima]]).
 
+## Numerically
+
+The filter that defines seasonal adjustment: zero gain at every seasonal frequency.
+
+The 2x12 weights. Note the halved endpoints — that is the centring correction, not a rounding artefact:
+
+<!-- run -->
+```r
+w <- ma_2xs(12)
+cat("length:", length(w), "  sum:", sum(w), "\n")
+round(w, 5)
+```
+```text
+length: 13   sum: 1 
+ [1] 0.04167 0.08333 0.08333 0.08333 0.08333 0.08333 0.08333 0.08333 0.08333
+[10] 0.08333 0.08333 0.08333 0.04167
+```
+<!-- end -->
+
+Its gain at the six seasonal frequencies. These are zeros, not small numbers:
+
+<!-- run -->
+```r
+round(rbind(freq = seas_freq(12), gain = gain(ma_2xs(12), seas_freq(12))), 12)
+```
+```text
+           [,1]      [,2] [,3]      [,4]      [,5] [,6]
+freq 0.08333333 0.1666667 0.25 0.3333333 0.4166667  0.5
+gain 0.00000000 0.0000000 0.00 0.0000000 0.0000000  0.0
+```
+<!-- end -->
+
+Quarterly works the same way with two seasonal frequencies instead of six:
+
+<!-- run -->
+```r
+round(rbind(freq = seas_freq(4), gain = gain(ma_2xs(4), seas_freq(4))), 12)
+```
+```text
+     [,1] [,2]
+freq 0.25  0.5
+gain 0.00  0.0
+```
+<!-- end -->
+
 ## Exercises
 
 1. Derive the 13 weights by expanding $\frac{1}{2}(1+B)\cdot\frac{1}{12}(1+B+\cdots+B^{11})$ on paper.

@@ -67,6 +67,41 @@ $$G_{\text{total}}(\omega) = G_1(\omega)\,G_2(\omega)$$
 
 This is how you analyse X-11 despite it being an iteration of six or seven separate averages: **compose them into one filter and plot its gain.** That is the goal of [[20-05-the-x11-iteration]], and the reason X-11 is comparable to SEATS at all — both end up as a single linear filter with a plottable gain.
 
+## Numerically
+
+A moving average is a filter, and a filter is defined by what it does to each frequency.
+
+The 3-term average, as weights and as a gain. Gain 1 at frequency 0 means the trend passes untouched; the dip is what it removes:
+
+<!-- run -->
+```r
+w3 <- rep(1, 3) / 3
+f  <- c(0, 1/12, 1/6, 1/4, 1/3, 5/12, 1/2)
+round(rbind(freq = f, gain = gain(w3, f)), 4)
+```
+```text
+     [,1]   [,2]   [,3]   [,4]   [,5]   [,6]   [,7]
+freq    0 0.0833 0.1667 0.2500 0.3333 0.4167 0.5000
+gain    1 0.9107 0.6667 0.3333 0.0000 0.2440 0.3333
+```
+<!-- end -->
+
+Weights always sum to 1, which *is* the statement that gain at frequency 0 equals 1 — a filter that changes the level of a flat series would be useless:
+
+<!-- run -->
+```r
+for (w in list(rep(1,3)/3, ma_2xs(12), henderson(13))) {
+  cat(sprintf("length %2d  sum = %.10f  gain(0) = %.10f\n",
+              length(w), sum(w), gain(w, 0)))
+}
+```
+```text
+length  3  sum = 1.0000000000  gain(0) = 1.0000000000
+length 13  sum = 1.0000000000  gain(0) = 1.0000000000
+length 13  sum = 1.0000000000  gain(0) = 1.0000000000
+```
+<!-- end -->
+
 ## Exercises
 
 1. Plot the gain of a simple 3-term MA $(1/3, 1/3, 1/3)$. What does it do at $\omega = 2\pi/3$? Why exactly zero?
