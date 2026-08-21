@@ -70,6 +70,30 @@ The healthy use is as a **screen over many series** — flag the worst 5% for hu
 
 M and Q answer none of the last three, and those are the questions users actually feel.
 
+## Numerically
+
+Eleven M statistics and one Q. Under 1 passes; over 1 is a complaint.
+
+The full panel on `AirPassengers`. Read which ones are near or above 1 rather than the overall verdict alone:
+
+<!-- run -->
+```r
+m <- seas(AirPassengers, x11 = "")
+u <- udg(m)
+ks <- sprintf("f3.m%02d", 1:11)
+v <- vapply(ks, function(k) if (k %in% names(u)) as.numeric(u[[k]])[1] else NA_real_, 0)
+names(v) <- sprintf("M%d", 1:11)
+print(round(v, 3))
+cat("Q =", round(as.numeric(u[["f3.q"]])[1], 3),
+    if (as.numeric(u[["f3.q"]])[1] < 1) " -- accepted\n" else " -- FAILED\n")
+```
+```text
+   M1    M2    M3    M4    M5    M6    M7    M8    M9   M10   M11 
+0.041 0.042 0.000 0.283 0.190 0.703 0.203 0.418 0.368 0.431 0.418 
+Q = 0.2  -- accepted
+```
+<!-- end -->
+
 ## Exercises
 
 1. Print all eleven M statistics for `AirPassengers` and for `sunspots`. Which differ most?

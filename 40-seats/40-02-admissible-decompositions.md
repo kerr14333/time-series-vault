@@ -77,6 +77,59 @@ Across the grid scan the irregular went negative most often (722 cells), then th
 
 The irregular is the usual casualty, and there is an intuition for it. The irregular's spectrum is the **constant** $D$ in the partial fraction — the flat floor under everything else. If the fitted model implies a spectrum with less power at high frequencies than the trend and seasonal components jointly require, the leftover flat part comes out negative. Negative $\theta$ does exactly that: it puts a *peak* rather than a trough at high frequency, leaving nothing for the irregular.
 
+## Numerically
+
+Not every model can be decomposed. The region is smaller than you would guess.
+
+Sweep the (theta, Theta) grid and ask which points admit a canonical decomposition:
+
+<!-- run -->
+```r
+ok <- function(th, Th) {
+  sp <- seats_ar_split(1, 1, 12)
+  isTRUE(tryCatch({
+    pf <- seats_partial_fractions(airline_ma(th, Th), sp$trend, sp$seas)
+    seats_canonical(pf)$admissible
+  }, error = function(e) FALSE))
+}
+g <- c(-0.9, -0.6, -0.3, 0.3, 0.6, 0.9)
+M <- outer(g, g, Vectorize(ok))
+dimnames(M) <- list(theta = g, Theta = g)
+cat("admissible fraction of this grid:", round(mean(M), 3), "\n")
+M
+```
+```text
+admissible fraction of this grid: 0.25 
+      Theta
+theta   -0.9  -0.6  -0.3   0.3   0.6   0.9
+  -0.9 FALSE FALSE FALSE FALSE FALSE FALSE
+  -0.6 FALSE FALSE FALSE FALSE FALSE FALSE
+  -0.3 FALSE FALSE FALSE FALSE FALSE FALSE
+  0.3  FALSE FALSE FALSE  TRUE  TRUE  TRUE
+  0.6  FALSE FALSE FALSE  TRUE  TRUE  TRUE
+  0.9  FALSE FALSE FALSE  TRUE  TRUE  TRUE
+```
+<!-- end -->
+
+The pattern is not subtle: both parameters positive is always admissible, and almost nothing else is:
+
+<!-- run -->
+```r
+cat("theta > 0 AND Theta > 0 :", round(mean(M[g > 0, g > 0]), 3), "\n")
+cat("theta < 0 (any Theta)   :", round(mean(M[g < 0, ]), 3), "\n")
+cat("any Theta < 0           :", round(mean(M[, g < 0]), 3), "\n")
+cat("Fitted models overwhelmingly land in the positive quadrant, which is\n")
+cat("why inadmissibility is rare in practice but not impossible.\n")
+```
+```text
+theta > 0 AND Theta > 0 : 1 
+theta < 0 (any Theta)   : 0 
+any Theta < 0           : 0 
+Fitted models overwhelmingly land in the positive quadrant, which is
+why inadmissibility is rare in practice but not impossible.
+```
+<!-- end -->
+
 ## Exercises
 
 1. Reproduce the region map. Mark `AirPassengers` on it.

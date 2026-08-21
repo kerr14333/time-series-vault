@@ -77,6 +77,36 @@ Publish the revision history. Concretely:
 
 That last split is the one almost nobody publishes, and it is the one that would tell users when to distrust the number.
 
+## Numerically
+
+How much will today's number move as data arrives?
+
+Concurrent versus final, on the last few points of the sample:
+
+<!-- run -->
+```r
+x <- AirPassengers
+fin <- as.numeric(series(seas(x, x11 = ""), "d11"))
+n <- length(x)
+idx <- (n - 6):(n - 1)
+conc <- sapply(idx, function(i) {
+  z <- ts(as.numeric(x)[1:i], start = start(x), frequency = 12)
+  as.numeric(series(seas(z, x11 = ""), "d11"))[i]
+})
+round(data.frame(t = idx, concurrent = conc, final = fin[idx],
+                 pct = 100 * (fin[idx] - conc) / fin[idx]), 3)
+```
+```text
+    t concurrent   final    pct
+1 138    480.150 477.793 -0.493
+2 139    479.611 477.994 -0.338
+3 140    482.071 481.124 -0.197
+4 141    482.931 482.666 -0.055
+5 142    492.335 489.487 -0.582
+6 143    492.427 490.665 -0.359
+```
+<!-- end -->
+
 ## Exercises
 
 1. Compute the full revision history for a series: for each month, the concurrent estimate and the full-sample estimate. Plot the difference.

@@ -83,6 +83,62 @@ Two ways out:
 
 SEATS takes the second. That convention is [[40-03-canonical-decomposition]], and this note is the reason one is needed at all.
 
+## Numerically
+
+Keep the share of the power that is yours. That is the whole filter.
+
+The gains must sum to 1 at every frequency — every bit of power goes somewhere:
+
+<!-- run -->
+```r
+ma <- airline_ma(0.4018, 0.5569); ar <- airline_ar()
+sp <- seats_ar_split(1, 1, 12)
+pf <- seats_partial_fractions(ma, sp$trend, sp$seas)
+cn <- seats_canonical(pf)
+w  <- seq(0, pi, length.out = 400)
+nu <- seats_filters(cn, w)
+cat("max |nu_T + nu_S + nu_I - 1| =",
+    format(max(abs(nu$trend + nu$seasonal + nu$irregular - 1))), "\n")
+```
+```text
+max |nu_T + nu_S + nu_I - 1| = 1.17395e-12 
+```
+<!-- end -->
+
+Ownership at the poles is total, not approximate. The trend takes everything at frequency 0; the seasonal takes everything at each seasonal frequency:
+
+<!-- run -->
+```r
+wq <- c(0, 2*pi/12, 2*pi/6, pi)
+nq <- seats_filters(cn, wq)
+round(rbind(omega = wq, trend = nq$trend,
+            seasonal = nq$seasonal, irregular = nq$irregular), 5)
+```
+```text
+          [,1]   [,2]   [,3]    [,4]
+omega        0 0.5236 1.0472 3.14159
+trend        1 0.0000 0.0000 0.00000
+seasonal     0 1.0000 1.0000 1.00000
+irregular    0 0.0000 0.0000 0.00000
+```
+<!-- end -->
+
+The filter weights, returned as lags $0,1,2,\dots$ — the filter is symmetric by construction, so $w_{-j} = w_j$ and only one side needs storing. Watch how slowly they die:
+
+<!-- run -->
+```r
+wts <- filter_weights(nu$seasonal, w, max_lag = 60)   # index 1 is lag 0
+cat("lags 0..5 :", round(wts[1:6], 5), "\n")
+cat("lag 12    :", round(wts[13], 5), "   lag 24:", round(wts[25], 5), "\n")
+cat("lag 60    :", format(wts[61]), " -- still not zero after five years\n")
+```
+```text
+lags 0..5 : 0.21067 -0.01406 -0.01844 -0.01967 -0.01965 -0.01912 
+lag 12    : 0.15641    lag 24: 0.08711 
+lag 60    : 0.01504468  -- still not zero after five years
+```
+<!-- end -->
+
 ## Exercises
 
 1. Signal + noise: random walk plus white noise. Plot $f_s$, $f_n$, and $\nu_s = f_s/f_z$. Confirm the gain is near 1 at low frequencies and near 0 at high.

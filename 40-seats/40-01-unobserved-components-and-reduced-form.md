@@ -86,6 +86,27 @@ You can — that is the Harvey/STAMP tradition, and it is a perfectly respectabl
 
 Neither dominates. SEATS's practical advantage is that fitting an ARIMA is routine, well-diagnosed, and shares all its machinery with the regARIMA preadjustment that has to happen anyway.
 
+## Numerically
+
+Step one of SEATS: split the AR side by frequency.
+
+The differencing operator factors into a trend part and a seasonal part, exactly as D4 says:
+
+<!-- run -->
+```r
+sp <- seats_ar_split(d = 1, D = 1, s = 12)
+cat("trend side (1-B)^2 :", poly_show(sp$trend), "\n")
+cat("seasonal side S(B) :", poly_show(sp$seas), "\n")
+cat("product = (1-B)(1-B^12)?",
+    isTRUE(all.equal(poly_mult(sp$trend, sp$seas), airline_ar())), "\n")
+```
+```text
+trend side (1-B)^2 : 1 - 2B + B^2 
+seasonal side S(B) : 1 + B + B^2 + B^3 + B^4 + B^5 + B^6 + B^7 + B^8 + B^9 + B^10 + B^11 
+product = (1-B)(1-B^12)? TRUE 
+```
+<!-- end -->
+
 ## Exercises
 
 1. Simulate the structural model with known $\sigma_\eta^2, \sigma_\omega^2, \sigma_\varepsilon^2$. Apply $\nabla\nabla_{12}$, fit an airline model, and check the ACF vanishes beyond lag 13.

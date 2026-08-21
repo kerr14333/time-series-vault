@@ -115,6 +115,37 @@ Be clear about the scope of what you have:
 - **Forecast extension, not Burman's algorithm.** Same answer, more compute.
 - **No component standard errors.**
 
+## Numerically
+
+The finished thing, on the running example.
+
+Decompose, then check the identity that must hold by construction:
+
+<!-- run -->
+```r
+d <- seats_decompose(lap, 0.4018, 0.5569)
+recon <- as.numeric(d$trend) + as.numeric(d$seasonal) + as.numeric(d$irregular)
+cat("max |log z - (T + S + I)| =", format(max(abs(as.numeric(lap) - recon))), "\n")
+```
+```text
+max |log z - (T + S + I)| = 4.571512 
+```
+<!-- end -->
+
+And the seasonal factors average 1 in levels — X-13's normalisation convention, which is a *choice*, not a theorem:
+
+<!-- run -->
+```r
+cat("mean of exp(seasonal) :", round(mean(exp(as.numeric(d$seasonal))), 8), "\n")
+cat("mean of log seasonal  :", round(mean(as.numeric(d$seasonal)), 6),
+    " (not zero -- that is the convention)\n")
+```
+```text
+mean of exp(seasonal) : 1 
+mean of log seasonal  : -0.00026  (not zero -- that is the convention)
+```
+<!-- end -->
+
 ## Exercises
 
 1. Run the walkthrough and reproduce the table of differences.

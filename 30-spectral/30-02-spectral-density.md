@@ -64,6 +64,54 @@ Practical note: always plot on a **log scale**. Trend power at $\omega\approx0$ 
 
 In diagnostics ([[50-02-residual-seasonality]]) you examine the spectrum of the *irregular* or the *differenced adjusted series*, and ask: **is there still a peak at a seasonal frequency?** If yes, the adjustment failed. That is the single most decisive diagnostic in the field, and it is just this note applied.
 
+## Numerically
+
+The spectrum is the autocovariances, rewritten. Nothing is added or lost.
+
+Two routes to the same function: the Fourier transform of the ACF, and the closed form. They agree to machine precision:
+
+<!-- run -->
+```r
+ar <- 0.7
+g  <- ar^(0:200) / (1 - ar^2)          # autocovariances of an AR(1)
+a <- spectrum_from_acov(g)
+b <- arma_spectrum(ar_poly = c(1, -ar))
+cat("max |definition - closed form| =", format(max(abs(a - b))), "\n")
+```
+```text
+max |definition - closed form| = 1.110223e-15 
+```
+<!-- end -->
+
+The spectrum integrates to the variance. That is the sense in which it *decomposes* the variance across frequencies:
+
+<!-- run -->
+```r
+f <- arma_spectrum(ar_poly = c(1, -0.7))
+tot <- 2 * mean(f) * 0.5 * 2 * pi       # over -pi..pi, FREQ is 0..0.5 cycles
+cat("integral of spectrum :", round(tot, 6), "\n")
+cat("gamma_0 = 1/(1-phi^2):", round(1 / (1 - 0.7^2), 6), "\n")
+```
+```text
+integral of spectrum : 1.964548 
+gamma_0 = 1/(1-phi^2): 1.960784 
+```
+<!-- end -->
+
+White noise is flat — every frequency contributes equally. That is what makes it the reference against which peaks mean something:
+
+<!-- run -->
+```r
+w <- arma_spectrum()
+cat("white noise spectrum: min", round(min(w), 6), " max", round(max(w), 6), "\n")
+cat("flat to within", format(diff(range(w))), "\n")
+```
+```text
+white noise spectrum: min 0.159155  max 0.159155 
+flat to within 0 
+```
+<!-- end -->
+
 ## Exercises
 
 1. Simulate white noise. Plot the raw periodogram, then with `spans = c(3,3)` and `c(7,7)`. Watch it settle toward the flat truth.

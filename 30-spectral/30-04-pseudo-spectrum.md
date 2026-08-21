@@ -94,6 +94,57 @@ Always plot $\log f$, and expect the peaks to run off the top of the axis. What 
 - **The floor** between peaks — the irregular's contribution.
 - **The trough locations** — numerator roots, i.e. frequencies the model says contain *nothing*.
 
+## Numerically
+
+A unit root makes the spectrum infinite. The 'pseudo' is doing real work in that name.
+
+The airline model has seven infinite peaks: frequency 0 plus the six seasonal ones. Evaluated exactly at those frequencies the denominator is zero:
+
+<!-- run -->
+```r
+ff <- c(0, seas_freq(12))
+den <- sq_gain_poly(airline_ar(), ff)
+round(rbind(freq = ff, `|AR|^2` = den), 12)
+```
+```text
+       [,1]       [,2]      [,3] [,4]      [,5]      [,6] [,7]
+freq      0 0.08333333 0.1666667 0.25 0.3333333 0.4166667  0.5
+|AR|^2    0 0.00000000 0.0000000 0.00 0.0000000 0.0000000  0.0
+```
+<!-- end -->
+
+Approach one of them and the pseudo-spectrum blows up. It is not large, it is unbounded:
+
+<!-- run -->
+```r
+near <- 1/12 + c(1e-2, 1e-3, 1e-4, 1e-5)
+ps <- arma_spectrum(ma_poly = airline_ma(0.4, 0.6), ar_poly = airline_ar(), freq = near)
+round(rbind(distance_from_1_12 = near - 1/12, pseudo_spectrum = ps), 4)
+```
+```text
+                     [,1]   [,2]     [,3]     [,4]
+distance_from_1_12 0.0100 0.0010   0.0001     0.00
+pseudo_spectrum    0.2105 7.8385 779.7582 78085.76
+```
+<!-- end -->
+
+Theta controls the *width* of the peak, not whether it exists. A high Theta means stable seasonality, hence a narrow, well-pinned peak:
+
+<!-- run -->
+```r
+w <- 1/12 + 0.004
+for (Th in c(0.2, 0.6, 0.95))
+  cat(sprintf("  Theta = %.2f : pseudo-spectrum just off the peak = %8.2f\n",
+              Th, arma_spectrum(ma_poly = airline_ma(0.4, Th),
+                                ar_poly = airline_ar(), freq = w)))
+```
+```text
+  Theta = 0.20 : pseudo-spectrum just off the peak =     1.89
+  Theta = 0.60 : pseudo-spectrum just off the peak =     0.61
+  Theta = 0.95 : pseudo-spectrum just off the peak =     0.25
+```
+<!-- end -->
+
 ## Exercises
 
 1. Plot the airline-model pseudo-spectrum on a log axis for $(\theta,\Theta) = (0.4, 0.6)$. Mark the seven infinite peaks.

@@ -64,6 +64,28 @@ The component models are **implied by** the fitted reduced form plus the canonic
 
 This is the standing limitation of model-based adjustment, and it is worth stating plainly rather than burying: **you are reporting the consequences of assumptions, not measurements of unobservable things.**
 
+## Numerically
+
+Each component is itself an ARIMA. SEATS tells you which one.
+
+The trend inherits (1-B)^2 from the differencing and picks up an MA(2) — an ARIMA(0,2,2), the classic local-linear-trend model:
+
+<!-- run -->
+```r
+sp <- seats_ar_split(1, 1, 12)
+cat("trend AR side:", poly_show(sp$trend), " -> d = 2\n")
+cat("so the trend is ARIMA(0,2,2): a local linear trend.\n")
+cat("seasonal AR side:", poly_show(sp$seas), "\n")
+cat("-> the seasonal is ARIMA(0,0,11) driven by S(B), i.e. 11 MA terms.\n")
+```
+```text
+trend AR side: 1 - 2B + B^2  -> d = 2
+so the trend is ARIMA(0,2,2): a local linear trend.
+seasonal AR side: 1 + B + B^2 + B^3 + B^4 + B^5 + B^6 + B^7 + B^8 + B^9 + B^10 + B^11 
+-> the seasonal is ARIMA(0,0,11) driven by S(B), i.e. 11 MA terms.
+```
+<!-- end -->
+
 ## Exercises
 
 1. Difference the canonical trend twice and confirm its autocovariances vanish beyond lag 2.

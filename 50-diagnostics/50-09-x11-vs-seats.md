@@ -78,6 +78,31 @@ A factor of ~660. The method choice dominates implementation precision by nearly
 
 That last point is the one that matters institutionally. A series adjusted by SEATS this month and X-11 next month has revisions that mean nothing.
 
+## Numerically
+
+Two methods, same data. How far apart do they actually land?
+
+The method difference, and for scale, the difference between our SEATS and the Census binary:
+
+<!-- run -->
+```r
+x <- AirPassengers
+a <- as.numeric(series(seas(x, x11 = ""), "d11"))
+b <- as.numeric(series(seas(x, x11 = NULL), "s11"))
+cat(sprintf("X-11 vs SEATS (method)        : %.3f%%\n",
+            100 * max(abs(a - b) / b)))
+cat("Compare 0.001%% for our SEATS vs the Census binary in 40-08:\n")
+cat("the choice of METHOD matters hundreds of times more than the\n")
+cat("choice of implementation.\n")
+```
+```text
+X-11 vs SEATS (method)        : 2.627%
+Compare 0.001%% for our SEATS vs the Census binary in 40-08:
+the choice of METHOD matters hundreds of times more than the
+choice of implementation.
+```
+<!-- end -->
+
 ## Exercises
 
 1. Reproduce the comparison table. Confirm the low-$\Theta$ pattern.

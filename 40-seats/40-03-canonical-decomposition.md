@@ -89,6 +89,33 @@ It is a choice, and worth holding at arm's length.
 
 The honest summary: the canonical decomposition is a defensible, well-defined, conservative convention — not a discovered truth about the series.
 
+## Numerically
+
+The canonical choice: give every component its own minimum away, and hand the total to the irregular.
+
+Before and after. Each component loses its floor; the irregular gains the sum of those floors:
+
+<!-- run -->
+```r
+ma <- airline_ma(0.4018, 0.5569)
+sp <- seats_ar_split(1, 1, 12)
+pf <- seats_partial_fractions(ma, sp$trend, sp$seas)
+cn <- seats_canonical(pf)
+cat(sprintf("trend minimum removed    : %.6f\n", cn$mT))
+cat(sprintf("seasonal minimum removed : %.6f\n", cn$mS))
+cat(sprintf("both handed to the irregular, whose constant term is now %.6f\n",
+            cn$Dcan[1]))
+cat("admissible:", cn$admissible,
+    " (all three component spectra stayed non-negative)\n")
+```
+```text
+trend minimum removed    : 0.051442
+seasonal minimum removed : 0.022540
+both handed to the irregular, whose constant term is now 0.297744
+admissible: TRUE  (all three component spectra stayed non-negative)
+```
+<!-- end -->
+
 ## Exercises
 
 1. Compute $m_T$ and $m_S$ for `AirPassengers` and reproduce the table above.

@@ -71,6 +71,27 @@ A leftover seasonal of even 0.3% in a monthly series is invisible in a plot and 
 
 This is the diagnostic to run every time, on every series, without exception.
 
+## Numerically
+
+The question that matters after adjusting: did any seasonality survive?
+
+QS on the adjusted series should be near zero. If it is not, the adjustment failed:
+
+<!-- run -->
+```r
+g <- function(m, k) { u <- udg(m); if (k %in% names(u)) as.numeric(u[[k]])[1] else NA }
+m <- seas(AirPassengers, x11 = "")
+cat(sprintf("  QS original : %8.2f\n", g(m, "qsori")))
+cat(sprintf("  QS adjusted : %8.2f  <- should be small\n", g(m, "qssadj")))
+cat(sprintf("  QS residual : %8.2f\n", g(m, "qsrsd")))
+```
+```text
+  QS original :   167.65
+  QS adjusted :     0.00  <- should be small
+  QS residual :     0.00
+```
+<!-- end -->
+
 ## Exercises
 
 1. Reproduce the QS table. Which series is least clean, and does its $\Theta$ explain that?

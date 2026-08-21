@@ -66,6 +66,30 @@ own spectral check, max ratio    1.10   at the seasonal frequencies
 > [!warning] Do not build a claim on an undocumented diagnostic key
 > Prefer the statistics with a stated null distribution (QS) and checks you compute yourself (the spectrum). If a `udg` key seems to contradict them, you have probably misunderstood the key — confirm before reporting it.
 
+## Numerically
+
+Before adjusting, ask whether there is anything to adjust.
+
+The QS statistic on a seasonal series and on white noise. Above 9 is significant at 1%:
+
+<!-- run -->
+```r
+set.seed(5)
+noise <- ts(rnorm(144), frequency = 12, start = c(1949, 1))
+g <- function(m, k) { u <- udg(m); if (k %in% names(u)) as.numeric(u[[k]])[1] else NA }
+for (nm in c("AirPassengers", "white noise")) {
+  x <- if (nm == "AirPassengers") AirPassengers else noise
+  m <- tryCatch(seas(x, x11 = ""), error = function(e) NULL)
+  if (!is.null(m)) cat(sprintf("  %-14s QS = %8.2f  %s\n", nm, g(m, "qsori"),
+                               if (isTRUE(g(m, "qsori") > 9)) "SEASONAL" else "no evidence"))
+}
+```
+```text
+  AirPassengers  QS =   167.65  SEASONAL
+  white noise    QS =     0.86  no evidence
+```
+<!-- end -->
+
 ## Exercises
 
 1. Reproduce the table. Confirm `sunspots` fails every test the others pass.

@@ -58,6 +58,43 @@ Rule of thumb: a few years each way. X-13 defaults to one year of forecasts for 
 3. **Do the components add back to the input?** $\hat T + \hat S + \hat I = z$ exactly, up to floating point. This is the single best end-to-end test of an implementation, and it catches most errors.
 4. **Does the interior agree with SEATS?** Ends will differ if your extension differs; the interior should not.
 
+## Numerically
+
+The theory gives an infinite two-sided filter. The data is finite. Something has to give.
+
+How far the airline WK filter actually reaches, as a function of Theta. This is not a small number:
+
+<!-- run -->
+```r
+for (Th in c(0.3, 0.557, 0.8))
+  cat(sprintf("  Theta = %.3f : %3d lags needed = %.1f years\n",
+              Th, seats_max_lag(0.4, Th), seats_max_lag(0.4, Th) / 12))
+```
+```text
+  Theta = 0.300 :  60 lags needed = 5.0 years
+  Theta = 0.557 : 331 lags needed = 27.6 years
+  Theta = 0.800 : 600 lags needed = 50.0 years
+```
+<!-- end -->
+
+Truncating instead of extending does not add noise — it adds a **constant offset**, which is far easier to miss:
+
+<!-- run -->
+```r
+x <- lap
+good <- seats_decompose(x, 0.4018, 0.5569, normalize = FALSE)
+bad  <- seats_decompose(x, 0.4018, 0.5569, max_lag = 60, extend = 72,
+                        normalize = FALSE)
+d <- as.numeric(bad$seasonal) - as.numeric(good$seasonal)
+cat(sprintf("mean offset %+.5f   sd about that mean %.5f\n", mean(d), sd(d)))
+cat("The mean dwarfs the scatter: a bias, not noise.\n")
+```
+```text
+mean offset +0.02292   sd about that mean 0.00134
+The mean dwarfs the scatter: a bias, not noise.
+```
+<!-- end -->
+
 ## Exercises
 
 1. Compute WK weights for a signal-plus-noise model and plot their decay. How many terms until they fall below $10^{-4}$?
