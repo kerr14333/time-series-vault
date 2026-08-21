@@ -30,6 +30,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-10-10-airline-model\|`10-10-airline-model.R`]] | The airline model on real data. | 72 | [[10-10-airline-model]] |
 | [[code-10-11-sign-conventions\|`10-11-sign-conventions.R`]] | Prove the sign convention to yourself. Do not take it on faith. | 34 | [[10-11-sign-conventions]] |
 | [[code-10-12-estimation\|`10-12-estimation.R`]] | ML vs CSS, and why outliers wreck an ARIMA fit. | 48 | [[10-12-estimation]] |
+| [[code-10-12b-general-estimation\|`10-12b-general-estimation.R`]] | 10-12b -- Exact ML for a GENERAL ARIMA, built from scratch. | 248 | — |
 | [[code-10-13-model-selection\|`10-13-model-selection.R`]] | AICC, Ljung-Box done right, residual spectrum. | 52 | [[10-13-model-selection]] |
 | [[code-10-14-forecasting\|`10-14-forecasting.R`]] | Forecasting, and the revision experiment that motivates everything. | 67 | [[10-14-forecasting]] |
 | [[code-20-01-moving-averages-as-filters\|`20-01-moving-averages-as-filters.R`]] | A moving average is a filter. Gain and phase. | 47 | [[20-01-moving-averages-as-filters]] |

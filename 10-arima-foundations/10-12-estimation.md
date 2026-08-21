@@ -102,6 +102,199 @@ sma1   0.5569 0.0731 7.6190
 
 Note `nobs`: differencing costs $d + D \cdot s = 1 + 12 = 13$ observations, so the likelihood is computed on 131 points, not 144. That matters when comparing models with **different** differencing — the likelihoods are not on the same footing, which is one reason $d$ and $D$ are chosen before the AICC comparison rather than inside it ([[10-13-model-selection]]).
 
+## Estimation for a general ARIMA
+
+Everything above used the airline model, where there are two parameters and the surface can be drawn. The general case is not harder, it just cannot be pictured. Code: [[code-10-12b-general-estimation|`R/10-12b-general-estimation.R`]], which implements exact ML from scratch and checks itself against `arima()`.
+
+Three ideas carry the whole thing.
+
+### 1. There is no such thing as a seasonal model
+
+Multiply $\phi(B)\Phi(B^s)$ and $\theta(B)\Theta(B^s)$ out and you have an ordinary ARMA whose coefficients happen to be mostly zero. Difference the data first, and a stationary ARMA problem is all that is left.
+
+<!-- run -->
+```r
+source("R/10-12b-general-estimation.R")
+e <- expand_seasonal(ma = -0.4018, sma = -0.5569, s = 12)
+cat("airline (0,1,1)(0,1,1)_12 becomes ARMA(0,", length(e$ma), ")\n", sep = "")
+cat("nonzero MA lags:", which(abs(e$ma) > 1e-12), "\n")
+cat("values         :", round(e$ma[abs(e$ma) > 1e-12], 4), "\n")
+```
+```text
+airline (0,1,1)(0,1,1)_12 becomes ARMA(0,13)
+nonzero MA lags: 1 12 13 
+values         : -0.4018 -0.5569 0.2238 
+```
+<!-- end -->
+
+Thirteen coefficients, three of them nonzero. The one at lag 13 is $\theta\Theta$, the cross term.
+
+### 2. Any ARMA is a state-space model
+
+With $r = \max(p, q+1)$:
+
+$$T = \begin{pmatrix}\phi_1 & 1 & 0 & \cdots \\ \phi_2 & 0 & 1 & \cdots \\ \vdots & & & \\ \phi_r & 0 & 0 & \cdots\end{pmatrix},
+\qquad
+R = \begin{pmatrix}1 \\ \theta_1 \\ \vdots \\ \theta_{r-1}\end{pmatrix},
+\qquad
+Z = (1, 0, \dots, 0)$$
+
+$$\alpha_t = T\alpha_{t-1} + Ra_t, \qquad z_t = Z\alpha_t$$
+
+The state dimension is $\max(p,q+1)$, **not** $p$ — it has to carry the MA terms still working their way through:
+
+<!-- run -->
+```r
+for (pq in list(c(1,0), c(0,1), c(2,2), c(0,13), c(3,1))) {
+  ss <- arma_ss(rep(0.1, pq[1]), rep(0.1, pq[2]))
+  cat(sprintf("  ARMA(%2d,%2d) -> r = max(p, q+1) = %2d\n", pq[1], pq[2], ss$r))
+}
+```
+```text
+  ARMA( 1, 0) -> r = max(p, q+1) =  1
+  ARMA( 0, 1) -> r = max(p, q+1) =  2
+  ARMA( 2, 2) -> r = max(p, q+1) =  3
+  ARMA( 0,13) -> r = max(p, q+1) = 14
+  ARMA( 3, 1) -> r = max(p, q+1) =  3
+```
+<!-- end -->
+
+The differenced airline model is ARMA(0,13), so $r = 14$ — large because the *MA* reaches back thirteen periods, not because of anything on the AR side.
+
+### 3. The Kalman filter turns that into one-step errors
+
+$$\begin{aligned}
+\text{predict:}\quad & a \leftarrow Ta, \qquad P \leftarrow TPT' + RR' \\
+\text{error:}\quad & v_t = z_t - Za, \qquad F_t = ZPZ' \\
+\text{gain:}\quad & K = PZ'/F_t \\
+\text{update:}\quad & a \leftarrow a + Kv_t, \qquad P \leftarrow P - KZP
+\end{aligned}$$
+
+Since $Z = (1,0,\dots,0)$, every $Z$ above means "take the first element", and $F_t$ is just $P_{11}$. Started from the stationary $P_0$ solving $P_0 = TP_0T' + RR'$, and fed into D13's formula, that is exact ML.
+
+### Working the recursions, for the airline model
+
+Here are the first eight steps on the differenced series. Read across: the filter predicts, is wrong by $v_t$, and records how surprised it should have been ($F_t$).
+
+<!-- run -->
+```r
+fitk <- arima(lap, order = c(0,1,1), seasonal = list(order = c(0,1,1), period = 12),
+              method = "ML")
+ek <- expand_seasonal(ma = coef(fitk)[1], sma = coef(fitk)[2], s = 12)
+yk <- difference(lap, 1, 1, 12)
+ss <- arma_ss(ek$ar, ek$ma); Tm <- ss$T; Rm <- ss$R
+a <- matrix(0, ss$r, 1); P <- init_P(Tm, Rm)
+cat(sprintf("r = %d,  P0[1,1] = %.6f\n\n", ss$r, P[1,1]))
+cat("  t      y_t   a_pred      v_t      F_t   cum ssq  cum logF\n")
+ssq <- 0; slF <- 0
+for (t in 1:8) {
+  a <- Tm %*% a; P <- Tm %*% P %*% t(Tm) + Rm %*% t(Rm)
+  v <- yk[t] - a[1,1]; FF <- P[1,1]
+  ssq <- ssq + v*v/FF; slF <- slF + log(FF)
+  K <- P[, 1, drop = FALSE] / FF
+  cat(sprintf(" %2d %8.5f %8.5f %8.5f %8.5f  %8.4f  %8.4f\n",
+              t, yk[t], a[1,1], v, FF, ssq, slF))
+  a <- a + K * v; P <- P - K %*% P[1, , drop = FALSE]
+}
+```
+```text
+r = 14,  P0[1,1] = 1.521739
+
+  t      y_t   a_pred      v_t      F_t   cum ssq  cum logF
+  1  0.03916  0.00000  0.03916  1.52174    0.0010    0.4199
+  2  0.00036 -0.01355  0.01391  1.33960    0.0012    0.7122
+  3 -0.02050 -0.00547 -0.01503  1.31483    0.0013    0.9859
+  4 -0.01294  0.00602 -0.01896  1.31094    0.0016    1.2567
+  5  0.06615  0.00761  0.05854  1.31031    0.0042    1.5269
+  6  0.03991 -0.02352  0.06343  1.31021    0.0073    1.7971
+  7  0.00000 -0.02549  0.02549  1.31019    0.0078    2.0673
+  8  0.01135 -0.01024  0.02160  1.31019    0.0081    2.3375
+```
+<!-- end -->
+
+Two things to notice.
+
+$F_t$ **starts high and settles.** It begins at $P_0[1,1]$ and converges within a handful of steps. Early on the filter has almost no history, so its one-step forecasts genuinely deserve less confidence, and the likelihood is told so through $\log F_t$. **That transient is the entire difference between exact ML and CSS** — CSS assumes every $F_t$ is equal and drops the $\log F_t$ term, which is fine in the middle of a long series and not fine near an MA unit root.
+
+The **prediction is not zero even though the mean is.** At $t=2$ the filter already expects $-0.0136$, because the state carries the shock from $t=1$ multiplied through the MA weights. That memory is what the state is *for*.
+
+### Does it agree with `arima()`?
+
+Evaluated at `arima()`'s own estimates, so any gap is the likelihood computation rather than the optimiser:
+
+<!-- run -->
+```r
+chk <- function(x, o, sq, s) {
+  f <- arima(x, order = o, seasonal = list(order = sq, period = s), method = "ML")
+  co <- coef(f); p <- o[1]; q <- o[3]; P <- sq[1]; Q <- sq[3]
+  ee <- expand_seasonal(if (p) co[1:p] else numeric(0),
+                        if (q) co[p + 1:q] else numeric(0),
+                        if (P) co[p+q + 1:P] else numeric(0),
+                        if (Q) co[p+q+P + 1:Q] else numeric(0), s)
+  k <- kalman_loglik(difference(x, o[2], sq[2], s), ee$ar, ee$ma)
+  c(ours = k$loglik, arima = f$loglik, diff = k$loglik - f$loglik)
+}
+round(rbind(
+  `AirPassengers (0,1,1)(0,1,1)` = chk(lap, c(0,1,1), c(0,1,1), 12),
+  `AirPassengers (2,1,1)(0,1,1)` = chk(lap, c(2,1,1), c(0,1,1), 12),
+  `log(UKgas) (0,1,1)(0,1,1)_4`  = chk(log(UKgas), c(0,1,1), c(0,1,1), 4),
+  `Nile (0,1,1)`                 = chk(Nile, c(0,1,1), c(0,0,0), 12)), 6)
+```
+```text
+                                   ours      arima      diff
+AirPassengers (0,1,1)(0,1,1)  244.69649  244.69953 -0.003044
+AirPassengers (2,1,1)(0,1,1)  246.13196  246.13613 -0.004169
+log(UKgas) (0,1,1)(0,1,1)_4    85.00469   85.00481 -0.000121
+Nile (0,1,1)                 -632.54562 -632.54562 -0.000001
+```
+<!-- end -->
+
+Nile agrees to seven decimals; the seasonal models are off in the third. That is not a bug in either — it is a real difference in method, and it is worth understanding.
+
+> [!important] `arima()` does not difference the data
+> It keeps the differencing **inside the state** and gives those elements a diffuse prior of variance $\kappa$, default $10^6$. That is an approximation of order $1/\kappa$. Differencing first and using the exact stationary $P_0$, as above, is the limit it converges to. You can watch it converge:
+
+<!-- run -->
+```r
+ours <- kalman_loglik(yk, ek$ar, ek$ma)$loglik
+cat(sprintf("ours (exact P0)   : %.8f\n", ours))
+for (kp in c(1e6, 1e8, 1e10, 1e12)) {
+  f <- arima(lap, order = c(0,1,1), seasonal = list(order = c(0,1,1), period = 12),
+             method = "ML", fixed = coef(fitk), transform.pars = FALSE, kappa = kp)
+  cat(sprintf("arima kappa = %-6.0e: %.8f   gap %+.2e\n", kp, f$loglik, f$loglik - ours))
+}
+```
+```text
+ours (exact P0)   : 244.69648682
+arima kappa = 1e+06 : 244.69953060   gap +3.04e-03
+arima kappa = 1e+08 : 244.69651727   gap +3.04e-05
+arima kappa = 1e+10 : 244.69648665   gap -1.75e-07
+arima kappa = 1e+12 : 244.69623281   gap -2.54e-04
+```
+<!-- end -->
+
+Raise $\kappa$ by 100 and the gap falls by 100 — exactly the $O(1/\kappa)$ behaviour a diffuse approximation should show. By $10^{10}$ it has landed on our value. By $10^{12}$ it is **worse again**, because an enormous prior variance costs floating-point precision when it is subtracted away. The error is U-shaped in $\kappa$, and R's default sits deliberately on the safe side of the minimum.
+
+None of this matters for a published seasonal adjustment — the differences are in the third decimal of a log-likelihood. It matters for understanding what "exact" means: it is exact *given* an initialisation, and there is more than one defensible choice.
+
+### And can we find the estimates ourselves?
+
+<!-- run -->
+```r
+own <- fit_arima_ml(lap, order = c(0,1,1), seasonal = c(0,1,1), s = 12)
+ref <- arima(lap, order = c(0,1,1), seasonal = list(order = c(0,1,1), period = 12),
+             method = "ML")
+round(rbind(ours = own$par, arima = coef(ref)), 6)
+```
+```text
+            ma1      sma1
+ours  -0.401823 -0.556936
+arima -0.401827 -0.556947
+```
+<!-- end -->
+
+Same estimates to five decimals, from an optimiser handed nothing but the likelihood above. The remaining machinery in a production fitter — parameter transformations to keep the search inside the invertible region, analytic derivatives, good starting values — buys speed and robustness, not a different answer.
+
 ## Practical failure modes
 
 | Symptom | Likely cause |

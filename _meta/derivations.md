@@ -310,6 +310,60 @@ Used by [[10-14-forecasting]], [[10-08-arma-duality]].
 
 ---
 
+## D15. Exact ML for a general ARIMA: the state-space form
+
+D13 said the likelihood is built from one-step errors. This says how to get them for *any* $(p,d,q)(P,D,Q)_s$, not just the airline model.
+
+**Step 1: there is no such thing as a seasonal model.** Multiply the polynomials out:
+
+$$\phi(B)\Phi(B^s) \quad\text{and}\quad \theta(B)\Theta(B^s)$$
+
+The result is an ordinary ARMA whose coefficients are mostly zero. The airline model becomes ARMA$(0,13)$ with nonzero MA terms only at lags 1, 12 and 13. Difference the data first ($d$ regular, $D$ seasonal) and what remains is a stationary ARMA problem. Everything below is for ARMA$(p,q)$.
+
+**Step 2: write it as a state-space model.** Let $r = \max(p,\,q+1)$ and take
+
+$$T = \begin{pmatrix}\phi_1 & 1 & 0 & \cdots \\ \phi_2 & 0 & 1 & \cdots \\ \vdots & & & \\ \phi_r & 0 & 0 & \cdots\end{pmatrix},
+\qquad
+R = \begin{pmatrix}1 \\ \theta_1 \\ \vdots \\ \theta_{r-1}\end{pmatrix},
+\qquad
+Z = (1, 0, \dots, 0)$$
+
+with $\phi_j = 0$ for $j>p$ and $\theta_j = 0$ for $j>q$, and
+
+$$\alpha_t = T\alpha_{t-1} + Ra_t, \qquad z_t = Z\alpha_t$$
+
+The dimension is $\max(p, q+1)$, not $p$: the state must carry the MA terms that have not yet worked their way out. For the differenced airline model $r = 14$ — large because the *MA* reaches back 13 periods, not because of any AR structure.
+
+**Step 3: initialise.** For a stationary ARMA the state has a stationary distribution, so $P_0$ solves the discrete Lyapunov equation
+
+$$P_0 = TP_0T' + RR' \qquad\Longrightarrow\qquad \operatorname{vec}(P_0) = (I - T\otimes T)^{-1}\operatorname{vec}(RR')$$
+
+This is the "exact" in exact maximum likelihood. Getting it right is what distinguishes exact ML from CSS, which effectively starts from zero and pretends the transient does not exist.
+
+**Step 4: filter.** For $t = 1,\dots,n$, with $a_{t|t-1}$ and $P_{t|t-1}$ the predicted state and its covariance:
+
+$$\begin{aligned}
+\text{predict:}\quad & a \leftarrow Ta, \qquad P \leftarrow TPT' + RR' \\
+\text{error:}\quad & v_t = z_t - Za, \qquad F_t = ZPZ' \\
+\text{gain:}\quad & K = PZ'/F_t \\
+\text{update:}\quad & a \leftarrow a + Kv_t, \qquad P \leftarrow P - KZP
+\end{aligned}$$
+
+Because $Z = (1,0,\dots,0)$, every $Z$ here just means "take the first element", and $F_t = P_{11}$.
+
+**Step 5: assemble the likelihood.** With $\sigma_a^2$ concentrated out as in D13,
+
+$$\hat\sigma_a^2 = \frac1n\sum_t \frac{v_t^2}{F_t}, \qquad
+\log L = -\tfrac12\left[n\log(2\pi\hat\sigma_a^2) + \sum_t \log F_t + n\right]$$
+
+Then hand $-\log L$ to a numerical optimiser over $(\phi,\theta,\Phi,\Theta)$. That is the whole algorithm, and `R/10-12b-general-estimation.R` is 90 lines of it.
+
+**A note on how R does it.** `stats::arima()` does *not* difference first. It keeps the differencing inside the state and gives those elements a diffuse prior of variance $\kappa$ (default $10^6$), which is an approximation of order $1/\kappa$. Differencing first and using the exact $P_0$ is the limit it converges to — measurably so ([[10-12-estimation]]).
+
+Used by [[10-12-estimation]], [[10-13-model-selection]].
+
+---
+
 ## Links
 
 - Back to [[00-Start-Here]] · figure appendix: [[figure-index]]
