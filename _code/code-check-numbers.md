@@ -80,7 +80,11 @@ note_files <- function() {
   f <- list.files(".", pattern = "[.]md$", recursive = TRUE, full.names = FALSE)
   # _code/ mirrors the scripts, so its numbers are the scripts' own; .obsidian
   # and .trash are the app's, and Welcome.md is Obsidian's stock file.
-  f[!grepl("^([.]|_code/|.*[.]trash/)", f) & basename(f) != "Welcome.md"]
+  # _meta/figure-index.md is generated and quotes make-figures.R verbatim, so
+  # its numbers are plotting parameters (margins, colours, line widths), not
+  # measurements -- checking them would be checking source code against output.
+  f <- f[!grepl("^([.]|_code/|.*[.]trash/)", f) & basename(f) != "Welcome.md"]
+  f[f != "_meta/figure-index.md"]
 }
 
 run_all <- function(fresh = FALSE) {

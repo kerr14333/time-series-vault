@@ -40,6 +40,8 @@ That last point is the factorisation $1-B^{12} = (1-B)S(B)$ made visible: the $(
 
 ![[30-05-differencing-gain.png]]
 
+*Drawn by [[figure-index#30-05-differencing-gain.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 ## Composition and the X-11 payoff
 
 Filters compose by multiplication, so squared gains multiply:

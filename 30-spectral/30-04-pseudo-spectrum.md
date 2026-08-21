@@ -52,6 +52,8 @@ You met exactly this in [[10-10-airline-model]] as "how much the seasonal is all
 
 ![[30-04-pseudo-spectrum.png]]
 
+*Drawn by [[figure-index#30-04-pseudo-spectrum.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 Left: all seven poles, on a log axis. Right: the annual peak alone, as $\Theta$ varies — the same coefficient you read off X-13 output, now visible as peak width.
 
 ## Why the infinities are harmless

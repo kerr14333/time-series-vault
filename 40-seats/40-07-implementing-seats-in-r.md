@@ -41,6 +41,8 @@ A from-scratch R implementation reproducing forty-year-old Fortran to within a h
 
 ![[40-07-decomposition.png]]
 
+*Drawn by [[figure-index#40-07-decomposition.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 ## The four traps
 
 I hit three of these building it. They are the note's real content, because each produces output that looks plausible.

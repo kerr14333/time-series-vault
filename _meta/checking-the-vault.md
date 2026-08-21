@@ -63,7 +63,9 @@ It is a staleness detector, not a proof of correctness.
 - Numbers with fewer than two decimals (`0.5`, `12%`) are not checked — too many false positives from prose. The counts in the sample output just above are themselves unchecked for exactly this reason, and went stale within an hour of being written.
 - It says nothing about whether the *prose* around a number still holds. When 50-06's curvature figure was corrected from 1.18× to 1.42×, the sentence calling it "almost nothing" had to change too, and no tool would have told you that.
 
-Related checks that already existed: `check_code_notes()` in `R/make-code-notes.R` verifies the `_code/` mirrors match their scripts, and re-running `R/make-figures.R` should leave `figures/` byte-identical.
+Related checks: `check_code_notes()` in `R/make-code-notes.R` verifies the `_code/` mirrors match their scripts; `check_figure_index()` in `R/make-figure-index.R` verifies the [[figure-index|figure appendix]] still matches `make-figures.R`; and re-running `R/make-figures.R` should leave `figures/` byte-identical.
+
+Note that `_meta/figure-index.md` is **excluded** from the number check. It quotes `make-figures.R` verbatim, so its numbers are plotting parameters — margins, line widths, colour indices — not measurements. Checking them would mean checking source code against its own output.
 
 ## Links
 

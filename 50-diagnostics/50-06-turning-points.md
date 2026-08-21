@@ -43,6 +43,8 @@ Nine of the fifteen worst-revised months in twenty-six years sit inside 2007–2
 
 ![[50-06-turning-points.png]]
 
+*Drawn by [[figure-index#50-06-turning-points.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 > [!note] Why the figure says 1.59x and the text says 1.79x
 > Both start from the same month (December 1997) and run the same code on the same data. The figure steps every **third** month to keep `make-figures.R` runnable; the table above steps every **second**. Only the sampling differs.
 >

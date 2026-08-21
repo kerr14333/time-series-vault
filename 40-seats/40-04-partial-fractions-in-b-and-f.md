@@ -87,6 +87,8 @@ All three are **non-negative**, so this model is admissible ([[40-02-admissible-
 
 ![[40-04-spectrum-split.png]]
 
+*Drawn by [[figure-index#40-04-spectrum-split.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 The total pseudo-spectrum (black) and its three pieces. The trend owns the pole at 0, the seasonal owns the six seasonal poles, and the irregular is the flat floor. The partial fractions are just this picture, written algebraically.
 
 ## Why the filters end up pole-free

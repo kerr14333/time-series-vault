@@ -38,6 +38,8 @@ And $\nu_T + \nu_S + \nu_I = 1$ at every frequency, verified to $\sim10^{-12}$.
 
 ![[40-06-seats-filters.png]]
 
+*Drawn by [[figure-index#40-06-seats-filters.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 Left: the three gains, summing to 1 at every frequency. Right: the seasonal filter alone as $\Theta$ varies — this is the adaptivity X-11 cannot offer.
 
 ## The filter weights

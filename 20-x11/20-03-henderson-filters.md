@@ -33,6 +33,8 @@ $$(-0.019,\ -0.028,\ 0,\ 0.066,\ 0.147,\ 0.214,\ \mathbf{0.240},\ 0.214,\ 0.147,
 
 ![[20-03-henderson.png]]
 
+*Drawn by [[figure-index#20-03-henderson.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 ## Two features worth noticing
 
 **Negative weights at the ends.** They are what allow the filter to follow curvature instead of flattening it — the filter sharpens as well as smooths. They are also why a Henderson trend can occasionally overshoot beyond the range of the data, which surprises people the first time they see it.

@@ -62,6 +62,8 @@ That is why $1 - B^{12}$ has twelve roots and not two ([[10-06-differencing]]), 
 
 ![[30-01-harmonics.png]]
 
+*Drawn by [[figure-index#30-01-harmonics.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 A pure sine and a spikier period-12 shape. Both repeat annually; only the second needs the harmonics.
 
 ## Complex exponentials, if they are rusty

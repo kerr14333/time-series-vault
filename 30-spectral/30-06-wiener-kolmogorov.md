@@ -65,6 +65,8 @@ That last point closes a loop: $\Theta$ near 1 makes the *seasonal peaks narrow*
 
 ![[30-06-wk-gain.png]]
 
+*Drawn by [[figure-index#30-06-wk-gain.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 Right-hand panel: the weights are symmetric and decay geometrically — but they never stop. That is what [[30-07-finite-samples]] has to resolve.
 
 ## The catch that motivates the canonical decomposition

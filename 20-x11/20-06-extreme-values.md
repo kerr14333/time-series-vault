@@ -34,6 +34,8 @@ A zero-weight value is **replaced**, not deleted — substituted with an average
 
 ![[20-06-extreme-values.png]]
 
+*Drawn by [[figure-index#20-06-extreme-values.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 Left: one +30% spike in January 1954, and what it does to the seasonal factor for **every other January** when the extreme-value step is switched off. Right: the spike is still plainly there in D11 — downweighting affects how the factors are *estimated*, not what gets published.
 
 ## Two graduated passes

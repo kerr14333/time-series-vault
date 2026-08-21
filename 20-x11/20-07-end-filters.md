@@ -34,6 +34,8 @@ The end filter is forced to put all its mass on the past and present. It is not 
 
 ![[20-07-end-filters.png]]
 
+*Drawn by [[figure-index#20-07-end-filters.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 > [!important] Why the failure happens *at* the turn, not before it
 > The end weights differ **sharply** from the interior weights. So the estimate for recent months is produced by a different filter than the one that will eventually be applied to them.
 >

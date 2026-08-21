@@ -44,6 +44,8 @@ Obsidian cannot open `.R` files, so every script is mirrored as a readable note 
 
 Track where you are in [[_meta/progress]]. Terms you keep forgetting go in [[_meta/glossary]].
 
+Every figure links to the block of `R/make-figures.R` that drew it; they are all collected in the [[figure-index|figure appendix]].
+
 Every number in these notes should be reproducible by running a script. `Rscript R/check-numbers.R` verifies that across the whole vault and fails loudly when it stops being true — see [[checking-the-vault]] for what it catches and, just as importantly, what it does not.
 
 ## Prerequisites already assumed

@@ -11,7 +11,7 @@ Mirror every R/*.R script into a readable note in _code/.
 > Mirror of `R/make-code-notes.R`. **Edit the script, not this note** — re-run `R/make-code-notes.R` to refresh.
 > No concept note; this is a shared helper.
 
-```r
+````r
 # make-code-notes.R -- mirror every R/*.R script into a readable note in _code/.
 #
 # The scripts in R/ stay the single source of truth. These notes are GENERATED,
@@ -53,6 +53,11 @@ CODE_DIR <- "_code"
   desc  <- .first_comment(lines)
   linked <- stem %in% stems
 
+  # A script may itself contain a ``` fence (make-figure-index.R does),
+  # which would close this block early and break the note. Use a longer one.
+  runs    <- unlist(regmatches(lines, gregexpr("`+", lines)))
+  longest <- if (length(runs)) max(nchar(runs)) else 0L
+  fence   <- strrep("`", max(3L, longest + 1L))
   out <- c(
     "---",
     sprintf("aliases: [%s.R]", stem),
@@ -67,9 +72,9 @@ CODE_DIR <- "_code"
     sprintf("> Mirror of `R/%s.R`. **Edit the script, not this note** — re-run `R/make-code-notes.R` to refresh.", stem),
     if (linked) sprintf("> Concept note: [[%s]]", stem) else "> No concept note; this is a shared helper.",
     "",
-    "```r",
+    paste0(fence, "r"),
     lines,
-    "```",
+    fence,
     "",
     "## Run it",
     "",
@@ -172,7 +177,7 @@ check_code_notes <- function() {
 # Without this, check_code_notes() could never report drift: sourcing the file
 # would have silently repaired it first.
 if (sys.nframe() == 0L) make_code_notes()
-```
+````
 
 ## Run it
 

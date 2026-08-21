@@ -43,6 +43,8 @@ Second: $\sum_j w_j = 1$ implies $G(0) = 1$ — the filter preserves the level. 
 
 ![[20-01-gain-basics.png]]
 
+*Drawn by [[figure-index#20-01-gain-basics.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 The simplest case: a 3-term average annihilates cycles of period 3 exactly (gain 0 at $\omega = 1/3$), and because it is symmetric its phase is flat zero.
 
 ## Reading a gain function

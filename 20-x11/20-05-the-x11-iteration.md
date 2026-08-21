@@ -43,6 +43,8 @@ Steps 6–13 are the same shape as 1–5, run again on better inputs. That is th
 
 ![[20-05-decomposition.png]]
 
+*Drawn by [[figure-index#20-05-decomposition.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 ## The table names
 
 X-13 prints intermediate results with letter-number codes. They look cryptic and are actually just "which pass, which quantity":
@@ -77,6 +79,8 @@ Because every step is linear (ignoring the extreme-value step, which is not), th
 Do (2) in the script. Then plot the gain and you will see the notches at the seasonal frequencies. At that point X-11 has become a single object you can compare directly with the SEATS filters of [[40-06-wk-filters-for-the-airline-model]].
 
 ![[20-05-composite-gain.png]]
+
+*Drawn by [[figure-index#20-05-composite-gain.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
 
 This is the picture to remember. The whole of X-11 — three passes, five different moving averages — collapses into **one** symmetric filter that passes everything except six narrow notches at the seasonal frequencies. Note also the negative weights at $\pm12$ in the impulse response: to remove this January's seasonality, X-11 leans on neighbouring Januaries with a *negative* sign.
 

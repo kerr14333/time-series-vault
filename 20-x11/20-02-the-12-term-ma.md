@@ -32,6 +32,8 @@ The payoff is **symmetry**, hence **zero phase** ([[20-01-moving-averages-as-fil
 
 ![[20-02-2x12-gain.png]]
 
+*Drawn by [[figure-index#20-02-2x12-gain.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
 Measured, the gain at the six seasonal frequencies is of order $10^{-16}$ — zero to machine precision, not merely small.
 
 Why: the 12-term average of a periodic-with-period-12 pattern is the average of one full cycle, which is that pattern's mean — zero, if the seasonal is centred. Algebraically, $\frac{1}{12}(1 + B + \cdots + B^{11})$ is the $S(B)$ factor from [[10-06-differencing]], and $S(z) = 0$ at every 12th root of unity except $z=1$.
