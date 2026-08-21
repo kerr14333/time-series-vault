@@ -55,6 +55,10 @@ What do sliding spans catch that nothing else does? ::: Instability. QS asks whe
 
 The awkward limitation ::: They need about 11 years of data. Short series cannot be assessed — and short series are exactly the ones most likely to be unstable.
 
+Why does X-13 sometimes report no percentage at all? ::: Three gates. **Too short** (`sspans = "failed"`); **additive adjustment** (`ssdiff = yes`, so spans are compared by differences and no percentage is computed); or the **seasonal factor range is below 10** (`s2.pct = no`, because the whole seasonal swing would be smaller than a couple of the 3% flags).
+
+Where do the numbers live when the adjustment is additive? ::: In `s2.c.per`, not `s2.a.per` — and only if you ask, with `slidingspans.additivesa = "percent"`. Slot `c` carries the **implied adjustment factors** (original ÷ adjusted), which are a ratio, so a percentage of them means something.
+
 Sliding spans vs revision history ::: Sliding spans move the whole window and ask "is this robust?". Revision history adds data at the end and asks "how much will this change?". Clean spans with large revisions means *stable but provisional*, which is normal.
 
 ## Revisions

@@ -1275,9 +1275,9 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 **Going further.**
 
-**GF1.** **Yes** — high $\Theta$ and 39 years of data. Stability is what sliding spans measure, and `co2` is the catalogue's most stable series.
+**GF1.** A trick question, and the interesting kind. Reasoning from $\Theta$ and length says **yes, comfortably** — high $\Theta$, 39 years, the catalogue's most stable series — and the hand-rolled version agrees: a mean maximum difference of $0.02$%, nothing flagged. But X-13 **reports no percentage at all**. `co2`'s seasonal factors range over 1.97 across all spans, and X-13 refuses to compute the summary when that range is below 10, because the entire seasonal swing is then smaller than two of the 3% flags it would be counting. The prediction was right and the diagnostic is still unavailable. See "When X-13 emits no percentage at all" in the note.
 
-**GF2.** The cliff is at about 5 years, below which X-13 reports `sspans = \"failed\"` — you cannot build four overlapping 8-11 year spans. `accdeaths` and `ldeaths` at 6 years both fail.
+**GF2.** The cliff is at about 5 years, below which X-13 reports `sspans = "failed"` — you cannot build four overlapping 8-11 year spans. `accdeaths` and `ldeaths` at 6 years both fail.
 
 **GF3.** **All three, but sample size dominates.** Quarterly means a quarter as many observations per span, and both series also have genuinely evolving seasonality. The frequency itself is not the problem; the data per span is.
 
@@ -1288,6 +1288,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **P2.** The series is **too short** to build four overlapping spans — about five years is the floor. Only more data fixes it.
 
 **P3.** Investigate before publishing. Sliding spans failing means the answer is not robust to which window you use, which is a different and more serious complaint than an untidy adjustment.
+
+**P4.** Gate 1: the adjustment is **additive**, so X-13 compares spans by differences and never computes a percentage summary. `slidingspans.additivesa = "percent"` reopens it — but the numbers then arrive as `s2.c.per`, the implied adjustment factors, not `s2.a.per`.
+
+**P5.** Gate 2: multiplicative, so percentages are meaningful in principle, but the **range of the seasonal factors is below 10**. Look at the third field of `ssran.all`. For `co2` it is 1.97 and for `cpi` 1.15.
+
+**P6.** Your number is arithmetically fine and nearly useless. The hand-rolled version reports `co2` as stable — a mean maximum difference of $0.02$% — which is true but says nothing, because the whole seasonal swing is smaller than the 3% flagging threshold, so the flag rate could only ever have been zero. A diagnostic that cannot return a bad answer is not testing anything. For an additive series it is worse than useless: a percentage of a factor measured in persons is not a quantity.
+
+**P7.** It conflates four distinct states — too short, additive, flat seasonal, and genuinely unstable — and only the last is a failure. Two of the other three are X-13 correctly declining to compute a meaningless number, and treating them as failures buries the real ones in noise. The script should read `sspans`, `ssdiff` and `s2.pct`, report which gate closed, and reserve "failed" for a run that produced a percentage above threshold.
 ## 50-05-revision-history
 
 **1.** The difference between concurrent and full-sample estimates, month by month, is the revision history.

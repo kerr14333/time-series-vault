@@ -24,7 +24,15 @@ Standard thresholds (Findley et al. 1990):
 | month-to-month change in the adjusted series | 3% |
 | year-to-year change | 3% |
 
-And the summary rule: if **more than 25% of months are flagged**, the adjustment is unstable and should not be published as is. For month-to-month changes the tolerance is tighter — above 40% flagged is considered a failure.
+And the summary rule, in the two tiers X-13 prints for itself:
+
+| Estimate | Too high | Much too high |
+|---|---|---|
+| seasonal factors (or implied adjustment factors) | 15% | 25% |
+| month-to-month changes in the adjusted series | 35% | 40% |
+| year-to-year changes | 10% | — |
+
+Above 25% of months flagged on the seasonal factors, the adjustment is unstable and should not be published as is. Note that the month-to-month tolerance is **looser**, not tighter: a month-to-month change is the difference of two noisy numbers, so more of them cross the 3% line by chance and a higher flag rate is unremarkable.
 
 ## Why this catches things nothing else does
 
@@ -77,6 +85,18 @@ udg(m)[["s2.a.per"]]   # c(n flagged, n tested, percent) for seasonal factors
 udg(m)[["s2.d.per"]]   # the same for month-to-month changes
 ```
 
+The five estimates are lettered `a` through `e`, and the letter is part of the key:
+
+| Key | Estimate | Flag if max difference exceeds |
+|---|---|---|
+| `s2.a.per` | seasonal factors | 3% |
+| `s2.b.per` | trading day factors | 2% |
+| `s2.c.per` | final adjusted series — carries the **implied adjustment factors** in an additive run | 3% |
+| `s2.d.per` | month-to-month changes in the adjusted series | 3% |
+| `s2.e.per` | year-to-year changes | 3% |
+
+Those five cutoffs are the `sscut` key, and they are what the `3, 2, 3, 3, 3` in every run's output means.
+
 > [!warning] The obvious grep finds the wrong thing
 > Searching `udg(m)` for keys containing `"sspan"` returns exactly one: `sspans`, whose value is the string `"yes"`. That is a yes/no that the spec ran — not a statistic. The numbers live in the **`s2.*`** keys. This vault's own script made that mistake and printed `?%` for every series in the catalogue until it was audited; the wrong key returned something truthy, so nothing looked broken.
 
@@ -92,8 +112,77 @@ Measured across the catalogue:
 
 The two quarterly series fail badly, and that is the lesson: quarterly data gives you a quarter as many observations per span, and both have seasonality that genuinely evolves. Compare their $\Theta$ in [[series-catalogue]].
 
-> [!note] It is not available for every series
-> `accdeaths` and `ldeaths` return `sspans = "failed"` — six years is too short to build four spans, the limitation described above. But `temperature`, `co2`, `unemp` and `cpi` return `sspans = "yes"` and still emit no `s2.a.per`, giving `ssa`/`sscut`/`ssdiff` instead. That is **not** the additive-versus-multiplicative split — `co2` and `cpi` are both log transformed. What rule X-13 actually applies here I did not establish; when the key is missing, read the printed S 2 tables with `out(m)`.
+Five series, out of eleven. The other six produce no percentage at all, and the reason is the subject of the next section — it is not that the diagnostic failed.
+
+## When X-13 emits no percentage at all
+
+Six of the eleven catalogue series come back with no `s2.a.per`, and none of those six is a failure. There are three separate reasons, plus a fourth wrinkle that appears once you work around one of them. They are worth knowing, because the natural response — assume the diagnostic failed, or fall back to a hand-rolled version — is wrong in two of the three cases.
+
+| Series | Mode | `ssdiff` | `s2.pct` | Seasonal factor range | Key emitted |
+|---|---|---|---|---|---|
+| `airline` | multiplicative | no | yes | 48.87 | `s2.a.per` |
+| `ukgas` | multiplicative | no | yes | 126.74 | `s2.a.per` |
+| `jj` | multiplicative | no | yes | 37.83 | `s2.a.per` |
+| `imp` | multiplicative | no | yes | 27.84 | `s2.a.per` |
+| `iip` | multiplicative | no | yes | 16.68 | `s2.a.per` |
+| `co2` | multiplicative | no | **no** | **1.97** | none |
+| `cpi` | multiplicative | no | **no** | **1.15** | none |
+| `temperature` | **additive** | **yes** | — | — | none |
+| `unemp` | **additive** | **yes** | — | — | none |
+| `accdeaths` | — | — | — | — | `sspans = "failed"` |
+| `ldeaths` | — | — | — | — | `sspans = "failed"` |
+
+### Gate 0: the series is too short
+
+`accdeaths` and `ldeaths` return `sspans = "failed"`. Six years cannot be cut into four eight-year spans. This is the limitation described above, and there is nothing to do about it.
+
+### Gate 1: the adjustment is additive
+
+`temperature` and `unemp` are fitted with no transformation, so the adjustment is additive and the seasonal factors are in the units of the series — degrees, persons. A *percentage* difference between two such factors is not a meaningful quantity, and X-13 knows it: the internal flag `Ssdiff` defaults to true and is forced false **only** when the mode is multiplicative, so an additive run compares spans by differences and never computes the percentage summary. The `s2.pct` key is not written at all.
+
+You can override it with `slidingspans.additivesa = "percent"` — see the next gate for what actually comes back.
+
+### Gate 2: the seasonal factors barely move
+
+`co2` and `cpi` are multiplicative and log transformed, so gate 1 does not apply. Their seasonal factors simply do not swing far enough. X-13 averages each calendar month's factor within each span, takes the range of those averages — highest minus lowest, pooled over all spans and all months, reported as the third field of `ssran.all` — and if it is **below 10** it prints
+
+> WARNING: Range of seasonal factors is too low for summary sliding spans measures to be reliable. Summary sliding spans statistics not printed out.
+
+writes `s2.pct: no`, and stops. `co2`'s range is 1.97 and `cpi`'s is 1.15, against a flagging threshold of 3%: the entire seasonal swing of `co2` is smaller than two flags. A percentage of months exceeding 3% would be measuring rounding noise.
+
+The cutoff is a bare literal in the Census source (`ssrng.f`), not a fraction of the threshold or of anything else, and a sweep over a synthetic series with a tunable seasonal amplitude puts it exactly there:
+
+| Seasonal amplitude | Factor range | `s2.pct` | Summary |
+|---|---|---|---|
+| 6% | 6.17 | no | suppressed |
+| 8% | 8.11 | no | suppressed |
+| 9% | 9.08 | no | suppressed |
+| 10% | 10.05 | **yes** | **printed** |
+| 11% | 11.02 | yes | printed |
+
+Same model, same seed, same noise; only the amplitude moves. The flip is between 9.08 and 10.05.
+
+### Gate 3: the letter changes
+
+Force percentages onto an additive run and the summary comes back — but not under `a`:
+
+| Series | `ssdiff` | `s2.pct` | Key | Flagged |
+|---|---|---|---|---|
+| `temperature` | no | yes | `s2.c.per` | 2.78% (4/144) |
+| `unemp` | no | yes | `s2.c.per` | 0.84% (1/119) |
+
+In an additive adjustment the seasonal-factor slot is replaced by the **implied adjustment factors** — original divided by adjusted, a ratio, so a percentage of it means something again — and those live in slot `c`. Code that greps only for `s2.a.per` still finds nothing, and still concludes the diagnostic failed.
+
+> [!warning] What this costs you if you get it wrong
+> This vault's own script printed `?%` for six of eleven series before it was audited, and the note you are reading previously said the split was *not* additive-versus-multiplicative and that the real rule was unknown. Both halves of that were wrong: it **is** the additive split for two series, and a documented range cutoff for two more. The lesson is not about sliding spans — it is that "the software returned nothing" is a claim to investigate, not a fact to write down.
+
+> [!tip] The accessor that actually works
+> ```r
+> ss_stat <- function(u) {
+>   for (k in c("s2.a.per", "s2.c.per")) if (k %in% names(u)) return(u[[k]])
+>   NULL   # then read ssdiff, s2.pct and sspans to find out which gate closed
+> }
+> ```
 
 ## Exercises
 
@@ -120,6 +209,10 @@ The two quarterly series fail badly, and that is the lesson: quarterly data give
 1. **Drill.** Report the flag rate for four series and mark which exceed 15%.
 2. **Read it.** `sspans` returns 'failed'. What does that mean and what would fix it?
 3. **Judgement.** A series fails sliding spans but passes everything else. Publish?
+4. **Read it.** A run returns `sspans = "yes"`, `ssdiff = "yes"`, and no `s2.pct` key. Which gate closed, and what one argument reopens it?
+5. **Read it.** Another run returns `sspans = "yes"`, `ssdiff = "no"`, `s2.pct = "no"`. Which gate closed this time, and which single number would you look at to confirm it?
+6. **Drill.** Take a series X-13 declines to summarise and compute the flag rate by hand anyway. Is your number wrong, or just not the number X-13 would have reported?
+7. **Judgement.** A colleague's monitoring script flags "sliding spans unavailable" for a third of the production series and treats them all as failures. What is wrong with that, and what should the script report instead?
 
 ## Links
 
