@@ -118,7 +118,7 @@ admissible: TRUE  (all three component spectra stayed non-negative)
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#40-03-canonical-decomposition|worked answers]] in the solutions appendix.*
 
 1. Compute $m_T$ and $m_S$ for `AirPassengers` and reproduce the table above.
 2. Plot each component's spectrum before and after the canonical shift. Confirm the minima move to zero.

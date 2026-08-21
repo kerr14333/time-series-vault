@@ -105,7 +105,7 @@ A factor of about **660**.
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#40-08-validating-against-x13|worked answers]] in the solutions appendix.*
 
 1. Reproduce the comparison table.
 2. Deliberately set `transform.function = "none"` and observe the failure. How large, and what shape?

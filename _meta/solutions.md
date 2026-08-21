@@ -285,6 +285,252 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 ---
 
+# Module 4 — SEATS
+
+## 40-01-unobserved-components-and-reduced-form
+
+**1.** The fitted airline model recovers the reduced form of the structural model — the two are different parameterisations of the same process, which is the whole point of "reduced form". Simulating from components and fitting an ARIMA is the cleanest way to convince yourself.
+
+**2.** Roughly: $\sigma_\eta^2$ (trend innovation) drives $\theta$, $\sigma_\omega^2$ (seasonal innovation) drives $\Theta$, and $\sigma_\varepsilon^2$ (irregular) pushes both toward 1. More noise means more smoothing is optimal, which shows up as MA roots nearer the unit circle.
+
+**3.** With $\sigma_\omega^2 = 0$ the seasonal is **fixed**, and $\Theta \to 1$ — the seasonal MA root lands on the unit circle. That is the same limiting case as [[10-10-airline-model]] exercise 3: $\Theta$ near 1 means seasonality that does not evolve.
+
+**4.** The decomposition recovers the simulated components closely but **not exactly**, and the gap is not estimation error — it is the canonical convention. The truth used whatever variances you chose; SEATS returns the *canonical* split, which makes each component as smooth as possible. Two different admissible decompositions of the same reduced form ([[derivations#D9. The canonical decomposition, and why it is a convention|D9]]).
+
+## 40-02-admissible-decompositions
+
+**1.** On a coarse grid, **25%** admissible; on a fine grid, 27.4%. `AirPassengers` at $(0.402, 0.557)$ sits comfortably inside, in the positive quadrant.
+
+**2.** Moving $\theta$ negative along $\Theta = 0.5$, the **trend** spectrum is the first to go negative. Negative $\theta$ means the model wants a trend rougher than white noise at high frequencies, which no non-negative spectrum can supply.
+
+**3.** Confirmed — `cpi` is the only catalogue failure, and it is the only series with a negative $\theta$ ($-0.086$). Three independent facts agreeing: negative $\theta$, inadmissible, and the only series where X-13 substitutes the model.
+
+**4.** `udg(m, "seatsmdl")` reports a **different** model from the one fitted. X-13 silently replaces an inadmissible model with a nearby admissible one and carries on — worth knowing, because your published factors then come from a model you did not choose.
+
+**5.** With `seats.noadmiss = "no"` you get an error instead of a substitution. Preferable when you want to know, which is most of the time.
+
+**6.** The quarterly region is the same *shape* — positive quadrant admissible, elsewhere not — but the boundary sits differently because there are two seasonal frequencies rather than six ([[30-01-frequency-domain-basics]]).
+
+## 40-03-canonical-decomposition
+
+**1.** $m_T = 0.0514$ and $m_S = 0.0225$ for `AirPassengers`; both are handed to the irregular, whose constant term rises accordingly.
+
+**2.** Each component's spectrum has its minimum shifted to exactly zero. That is the definition of the canonical choice.
+
+**3.** For the trend, the minimum is at $\omega = \pi$ — the highest frequency, where a trend should have least power. **Yes, it is $\pi$**, and that is not an accident: subtracting the minimum makes the trend as smooth as it can be while remaining a valid spectrum.
+
+**4.** The canonical trend is **smoother** — it has had a flat white-noise floor removed. The variance of its second difference is correspondingly lower. Whether that is desirable is a judgement, not a theorem.
+
+**5.** They must, and they do: the canonical shift moves power *between* components without changing the total, so $\nu_T + \nu_S + \nu_I = 1$ still holds at every frequency.
+
+**6.** The largest $m_T + m_S$ belongs to the series with the most white noise in it — the more irregular the series, the more the canonical rule has to move.
+
+## 40-04-partial-fractions-in-b-and-f
+
+**1.** $\theta(B) = 1 - 0.4B$. Its autocovariance sequence is $c_0 = 1 + 0.4^2 = 1.16$ and $c_1 = -0.4$. Hence $(1.16, -0.4)$.
+
+**2.** For $s = 4$: $\deg N = 5$ (the MA is $(1-\theta B)(1-\Theta B^4)$, degree 5), $\deg D_T = 2$, $\deg D_S = 3$. Fewer unknowns than the monthly case, and the linear system is correspondingly smaller.
+
+**3.** The QR solve returns a residual around $6\times10^{-14}$ — the system is exactly determined and well conditioned.
+
+**4.** With $\deg C$ wrong the system is **over- or under-determined** and the residual jumps by many orders of magnitude. This is the useful failure: the residual is a genuine check on your degree bookkeeping, so watch it rather than assuming.
+
+**5.** They sum to 1 and each is finite at $\omega=0$ even though $f_z$ is infinite there, because the filters are **ratios** and the infinity cancels top and bottom ([[derivations#D10. Why the WK filters have no poles|D10]]).
+
+## 40-05-component-models
+
+**1.** Differencing the canonical trend twice gives autocovariances that vanish beyond lag 2 — confirming ARIMA(0,2,2), the local linear trend.
+
+**2.** Applying $S(B)$ to the seasonal leaves autocovariances vanishing beyond lag 11, confirming the 11 MA terms.
+
+**3.** The irregular's autocovariances vanish beyond lag 0 — it is **exactly white**, which is what the canonical convention was designed to produce.
+
+**4.** The trend takes the largest share; the irregular's share is $m_T + m_S$ plus whatever was already there. The exact split depends on $(\theta,\Theta)$.
+
+**5.** Without the canonical step the trend numerator has degree **1** rather than 2 — the canonical subtraction is what raises it, and that is what makes the trend an ARIMA(0,2,2) rather than an ARIMA(0,2,1).
+
+## 40-06-wk-filters-for-the-airline-model
+
+**1.** They sum to 1 at every frequency, verified to about $10^{-12}$.
+
+**2.** $\nu_T(0) = 1.00000$, $\nu_S(2\pi/12) = 0.99993$, $\nu_S(\pi) = 1.00000$. Ownership at the poles is total.
+
+**3.** Higher $\Theta$ gives **narrower** notches. X-11's composite gain is fixed and cannot adapt — that is the deepest difference between the two methods: SEATS tunes the filter to the series, X-11 uses the same one for everybody.
+
+**4.** The seasonal weights have spikes every 12 lags with an envelope decaying roughly like $\Theta^{j/12}$ — one factor of $\Theta$ per year. That is why a high $\Theta$ needs such a long filter.
+
+**5.** 60 lags at $\Theta = 0.3$, **331** at $0.557$, 600+ at $0.9$. The run time of the brute-force implementation is governed entirely by this ([[30-07-finite-samples]]), and it is exactly the cost [[40-09-burman-algorithm]] removes.
+
+**6.** $\nu_S(\pi) = 1$ because for even $s$ the Nyquist frequency **is** a seasonal frequency ($k = s/2$) — it is genuinely seasonal, not a boundary artefact.
+
+## 40-07-implementing-seats-in-r
+
+**1.** s10 0.000%, s11 0.001%, s12 0.012%, s13 0.010% against the Census binary.
+
+**2.** With `max_lag = 60` a constant offset appears. Compare with `normalize = FALSE` on **both** sides — normalisation re-centres the seasonal and therefore *absorbs the very constant you are trying to demonstrate*. Comparing normalised runs makes the bug invisible.
+
+**3.** `co2` has $\Theta = 0.912$, so the rule demands far more lags — and it still matches X-13 once given them. The adaptive rule exists precisely so this works without hand-tuning.
+
+**4.** For $s=4$ the degree bookkeeping shrinks: two seasonal frequencies, shorter polynomials, smaller linear system. The algorithm is unchanged.
+
+**5.** `cpi` fires the admissibility check, as [[40-02-admissible-decompositions]] predicts.
+
+**6.** The cost is in the **filter**, not the forecasting: it is $O(n \times \text{max\_lag})$, and `max_lag` is in the hundreds. Burman replaces that with two $O(n)$ passes ([[40-09-burman-algorithm]]).
+
+## 40-08-validating-against-x13
+
+**1.** See the table in the note.
+
+**2.** `transform.function = "none"` runs X-13 **additive** while our code is multiplicative, producing a ~100% discrepancy that has nothing to do with the algorithm. The lesson generalises: **when a comparison fails by a lot, suspect the harness before the algorithm.**
+
+**3.** With outliers on, the months near detected outliers move. Note `coef()` returns ARIMA terms too, so filter with `grep("^(AO|LS|TC)", ...)` or you will report `MA-Nonseasonal-01` as an outlier.
+
+**4.** The identity holds against the **linearized** series, not the raw one, once regressors are active. Getting this wrong looks like a broken identity when it is a changed definition.
+
+**5.** SEATS vs X-11 differ by **0.760%**; our SEATS vs the Census binary by **0.001%**. The method choice matters roughly **660 times** more than the implementation choice.
+
+## 40-09-burman-algorithm
+
+**1.** With $W = 1$ and $\theta(B) = 1-\theta B$: matching $B^0$ gives $g_0 + \theta^2 g_0 \cdots$ — do it carefully and you get two equations, $2(g_0 - \theta g_1) = 1$ at lag 0 and $-\theta g_0 + g_1 = 0$ at lag 1, so $g_1 = \theta g_0$ and $g_0 = 1/[2(1-\theta^2)]$.
+
+**2.** The identity holds to about $7\times10^{-15}$. Perturb any $g_j$ and it fails immediately — which is why this check is worth running before trusting anything downstream.
+
+**3.** Amplitude 1 at $\omega = 2\pi/12$, amplitude 0 at $\omega=0$. The recursions reproduce $\nu_S$ exactly.
+
+**4.** Without extension the first and last few dozen observations are visibly wrong — far more than the length of $g$, because the error comes from the **recursion's zero start**, not from the filter's reach. That is precisely the gap Burman's exact starting values close.
+
+**5.** Trend and seasonal from the same machinery sum to the series minus the irregular, by construction.
+
+**6.** The brute-force cost is in applying hundreds of filter weights at every time point, not in the forecasting. Burman avoids it by replacing the convolution with two recursions.
+
+---
+
+# Module 5 — Diagnostics and practice
+
+## 50-01-is-there-seasonality
+
+**1.** `sunspots` fails every seasonality test the others pass. Its 11-year cycle is real but is **not seasonal** — it does not sit at $k/12$.
+
+**2.** SEATS mode refuses; X-11 mode **produces factors anyway**. That asymmetry matters: X-11 will happily "adjust" a series with no seasonality, and nothing in its output says so. Test first.
+
+**3.** The sunspot spectrum has a large peak at about $1/132$ cycles per month (11 years) and nothing at $k/12$. Being cyclical is not being seasonal.
+
+**4.** Adjusting noise makes it **worse** — the adjusted series has *higher* variance than the original, because you have subtracted an estimated pattern that was not there. This is the cleanest argument for testing before adjusting.
+
+**5.** Detection degrades sharply below about 5 years. Short series are exactly where you most want a diagnostic and least able to run one.
+
+## 50-02-residual-seasonality
+
+**1.** Low-$\Theta$ series are least clean — fast-evolving seasonality is hardest to remove completely.
+
+**2.** The spectrum of the adjusted series should have no peaks at $k/12$. QS is a formal version of exactly that visual check.
+
+**3.** A long, slow filter (`s3x9`) on fast-evolving seasonality leaves residual seasonality behind. This is the filter-choice failure made deliberate.
+
+**4.** A seasonal **break** is caught by sliding spans and often missed by QS, because QS asks whether seasonality remains *on average* over the whole span, not whether it changed partway through.
+
+**5.** Adjusting components separately and summing does **not** generally equal adjusting the sum — the "indirect versus direct" problem. Neither is universally right; agencies choose and document.
+
+## 50-03-m-and-q-statistics
+
+**1.** `sunspots` fails badly on the M statistics that measure the seasonal's contribution to variance — there is no seasonal to contribute.
+
+**2.** Q below 1 with significant QS on the adjusted series means **the adjustment looks well-behaved but left seasonality behind**. Q is a composite of eleven things and can average away a specific failure. Never rely on Q alone.
+
+**3.** M8–M11 (the seasonal-stability group) move most, because they are precisely what the seasonal filter choice affects.
+
+**4.** SEATS mode produces **no M or Q statistics at all** — they are X-11 diagnostics, defined in terms of X-11's tables. Comparing methods on Q is therefore impossible by construction.
+
+**5.** M7 crosses 1 as a series shortens, typically within a few years of data. Short series fail diagnostics that longer versions of the same series pass.
+
+## 50-04-sliding-spans
+
+**1.** **2.08%** of months flagged (2 of 96) for `AirPassengers` — comfortably passing the 15% threshold.
+
+**2.** `UKgas` **40.62%** and `JohnsonJohnson` **18.75%** — both fail. Both are quarterly, so each span holds a quarter as many observations, and both have genuinely evolving seasonality. The flag rate does track $\Theta$, but sample size per span matters at least as much.
+
+**3.** An outlier near a span boundary makes the flag rate jump, because it is in some spans and not others. Modelling it as an AO settles it — which is the argument for outlier detection *before* stability diagnostics.
+
+**4.** X-13 reports `sspans = "failed"` when the series is too short — `accdeaths` and `ldeaths` at 6 years both fail. The diagnostic needs enough data for four overlapping spans of 8–11 years.
+
+**5.** A series can pass Q (the adjustment looks tidy) yet fail sliding spans (the answer is not robust to which window you use). Q measures the quality of one adjustment; sliding spans measure whether that adjustment is stable.
+
+## 50-05-revision-history
+
+**1.** The difference between concurrent and full-sample estimates, month by month, is the revision history.
+
+**2.** The **tail is much bigger than the mean** — the 95th percentile is several times the average. Quoting a mean revision understates what a user will occasionally experience.
+
+**3.** 1.137% → 0.670%, a **41% reduction**, measured against a shared reference. Measure against different references and the improvement disappears into the definition.
+
+**4.** Revision size decays with extra data, most of it in the first year or two.
+
+**5.** SEATS usually revises slightly less when the model fits well, and the advantage disappears when it does not. The model-based method is only as good as the model.
+
+## 50-06-turning-points
+
+**1.** 1.112% within a year of a recession versus 0.620% elsewhere, a ratio of **1.79×**.
+
+**2.** The revisions are **systematically signed** during 2008–10 (mean $-0.313\%$ versus $+0.071\%$ elsewhere). A systematic sign means the concurrent estimate is **biased**, not merely noisy — the forecast extrapolated the old regime. That is mechanism 1, visible directly.
+
+**3.** SEATS does not rescue you at a turn. Both methods need future data they do not have.
+
+**4.** Trend curvature gives 1.42× with correlation 0.083 — much weaker than the 1.79× from actual recession dates. **A weak result can mean the effect is absent, or that your operationalisation is bad.** Check which before concluding "no effect".
+
+**5.** The false-signal rate — concurrent month-to-month change having the opposite sign to the final one — is substantial, and worse near turns. It is the practical reason not to read single months.
+
+## 50-07-outliers-and-breaks
+
+**1.** A **level shift** does most damage to the seasonal factors, because it is a permanent change that the filters try to absorb into the seasonal and trend. An AO is a single point and much easier to contain.
+
+**2.** Modelling an LS as an AO leaves the break in the trend — the level genuinely changed and a one-point correction cannot represent that. The trend after the break is wrong by roughly the size of the shift.
+
+**3.** Lowering `outlier.critical` finds more outliers; each one removed changes D11 a little. There is no free lunch: a low threshold risks removing genuine movement, a high one leaves contamination.
+
+**4.** Detection near the **end** of a series is unreliable, because there is no future data to establish that the level stayed shifted. And you may not want it to fire: an LS detected in the final months is indistinguishable from the start of a genuine turn.
+
+**5.** Sliding spans catch a seasonal break; QS does not, for the reason in 50-02 exercise 4.
+
+## 50-08-covid
+
+**1.** Untreated, a COVID-scale shock contaminates the seasonal factors for **years** in both directions — the filters are two-sided, so damage propagates backwards as well as forwards.
+
+**2.** Treating the shock as AOs removes most of the contamination. This is what statistical agencies actually did in 2020.
+
+**3.** An LS is wrong if the level recovered, and right if it did not — which was genuinely unclear in 2020 and is the reason different agencies made different choices.
+
+**4.** Excluding the shock from the estimation span while still publishing those months is often the cleanest option: the model never sees the anomaly, but the data is not hidden.
+
+**5.** The reach is measured in **years**, not months. That is the practical consequence of a symmetric filter: a single extreme point is smeared across its whole width.
+
+## 50-09-x11-vs-seats
+
+**1.** The methods differ most on **low-$\Theta$** series — fast-evolving seasonality, where SEATS adapts its filter and X-11 cannot.
+
+**2.** `imp`'s worst month is Chinese New Year: a moving holiday, not an outlier or a break ([[50-10-calendar-effects]]).
+
+**3.** For `UKgas` the difference is visible in the statistics but hard to see by eye. Most of the time the two methods agree far more than the debate between them suggests.
+
+**4.** Neither method wins on revisions in general; it depends on model fit.
+
+**5.** Fitting the correct $d=0$ model to `ldeaths` brings the methods closer. Much of the apparent method difference is really a model-specification difference wearing a disguise.
+
+## 50-10-calendar-effects
+
+**1.** Easter[1] is significant for `AirPassengers` ($+0.0234$, $t = 2.63$, $p = 0.0086$) and absent for `unemp` ($p = 0.60$).
+
+**2.** The CNY coefficient is $-0.1230$ with $t = -7.52$ — imports fall about **12%** in the run-up as factories close.
+
+**3.** AICC is best at $-3\ldots0$ (3062.97) and degrades monotonically to $-28\ldots0$ (3093.96), while the coefficient barely moves. A longer window **dilutes the same effect over more months** rather than finding a different one.
+
+**4.** Skipping `center = "calendar"` changes the published seasonal factors by up to **6.06%**. The uncentred regressor has mean $1/12$ instead of 0, overlaps the seasonal pattern, and the split between them becomes arbitrary.
+
+**5.** Diwali on `iip` is $-0.0333$, $t = -4.03$ — real, and about a quarter the size of CNY's.
+
+**6.** February and March move most, since that is where Chinese New Year lands. **Every economy has its own moving holidays** — use the one that belongs to the series, not the one you happen to know.
+
+---
+
 ## Links
 
 - Back to [[00-Start-Here]] · derivations: [[derivations]] · figures: [[figure-index]]

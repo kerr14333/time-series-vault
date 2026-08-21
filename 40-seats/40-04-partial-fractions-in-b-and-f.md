@@ -107,7 +107,7 @@ by the boxed identity. **The filters sum to 1 for the same reason the partial fr
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#40-04-partial-fractions-in-b-and-f|worked answers]] in the solutions appendix.*
 
 1. Verify `cospoly_from_poly(c(1,-0.4))` equals $(1.16,-0.4)$ by hand.
 2. Recount the degrees for a *quarterly* airline model ($s=4$): what are $\deg N$, $\deg D_T$, $\deg D_S$, and how many unknowns? Confirm the system is still square.

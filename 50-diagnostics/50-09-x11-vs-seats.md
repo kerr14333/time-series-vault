@@ -105,7 +105,7 @@ choice of implementation.
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#50-09-x11-vs-seats|worked answers]] in the solutions appendix.*
 
 1. Reproduce the comparison table. Confirm the low-$\Theta$ pattern.
 2. Investigate `imp`'s 27% month. What is happening there — an outlier, a moving holiday, a break?

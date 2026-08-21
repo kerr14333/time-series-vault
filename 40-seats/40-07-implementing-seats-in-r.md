@@ -148,7 +148,7 @@ mean of log seasonal  : -0.00026  (not zero -- that is the convention)
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#40-07-implementing-seats-in-r|worked answers]] in the solutions appendix.*
 
 1. Run the walkthrough and reproduce the table of differences.
 2. Break it deliberately: set `max_lag = 60` and confirm the 0.88%-style constant offset appears. Then set `normalize = FALSE` and confirm a *different* constant offset.

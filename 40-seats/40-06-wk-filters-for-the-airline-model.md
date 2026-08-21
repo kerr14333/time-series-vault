@@ -69,7 +69,7 @@ Whether the model-derived notch is *better* is an empirical question, and [[50-0
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#40-06-wk-filters-for-the-airline-model|worked answers]] in the solutions appendix.*
 
 1. Plot all three gains on one axis. Mark the seasonal frequencies. Confirm they sum to 1.
 2. Reproduce the ownership table above.

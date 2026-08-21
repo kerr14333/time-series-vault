@@ -96,7 +96,7 @@ Q = 0.2  -- accepted
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#50-03-m-and-q-statistics|worked answers]] in the solutions appendix.*
 
 1. Print all eleven M statistics for `AirPassengers` and for `sunspots`. Which differ most?
 2. Find a series where Q is below 1 but QS on the adjusted series is significant. What does that combination mean?

@@ -94,7 +94,7 @@ cat(sprintf("  QS residual : %8.2f\n", g(m, "qsrsd")))
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#50-02-residual-seasonality|worked answers]] in the solutions appendix.*
 
 1. Reproduce the QS table. Which series is least clean, and does its $\Theta$ explain that?
 2. Compute the spectrum of the adjusted series yourself and compare with the QS verdict.

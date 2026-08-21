@@ -109,7 +109,7 @@ round(data.frame(t = idx, concurrent = conc, final = fin[idx],
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#50-05-revision-history|worked answers]] in the solutions appendix.*
 
 1. Compute the full revision history for a series: for each month, the concurrent estimate and the full-sample estimate. Plot the difference.
 2. Report mean, mean-absolute and the 5th/95th percentiles. How much bigger is the tail than the mean?

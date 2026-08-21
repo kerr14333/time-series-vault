@@ -73,7 +73,7 @@ Sliding spans ([[50-04-sliding-spans]]) is the diagnostic that finds these, beca
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#50-07-outliers-and-breaks|worked answers]] in the solutions appendix.*
 
 1. Inject an AO, an LS and a TC of the same size into a clean series. Adjust each. Which does most damage to the seasonal factors?
 2. Model an injected LS as an AO instead. Quantify the damage to the trend after the break.

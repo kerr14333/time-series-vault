@@ -170,7 +170,7 @@ Speed is the least interesting benefit.
 
 ## Exercises
 
-*Solutions for this note are not written yet — see [[solutions]] for the modules that are covered.*
+*Solutions: [[solutions#40-09-burman-algorithm|worked answers]] in the solutions appendix.*
 
 1. Solve $W(B,F) = g(B)\theta(F) + g(F)\theta(B)$ by hand for a plain MA(1), $\theta(B) = 1-\theta B$, with $W = 1$. You should get two equations in $g_0, g_1$.
 2. Confirm the partial-fraction identity numerically on the unit circle, as the script does. Then deliberately perturb one coefficient of $g$ and watch the check fail.
