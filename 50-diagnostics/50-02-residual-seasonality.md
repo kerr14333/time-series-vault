@@ -118,6 +118,14 @@ cat(sprintf("  QS residual : %8.2f\n", g(m, "qsrsd")))
 2. **Break it.** Adjust a series, then *add back* 10% of the seasonal factors and re-test. How large a residue does QS detect?
 3. **Transfer.** Adjust two series, sum them, and test the sum. Compare with adjusting the sum directly.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Report QS on the original, adjusted and residual series for three series.
+2. **Read it.** QS on the adjusted series is 15. What are the three most likely causes?
+3. **Judgement.** You find residual seasonality one day before publication. What do you do?
+
 ## Links
 
 - Prev: [[50-01-is-there-seasonality]] · Next: [[50-03-m-and-q-statistics]]

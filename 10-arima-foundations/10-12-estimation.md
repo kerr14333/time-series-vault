@@ -372,6 +372,20 @@ n = 131   AIC = -483.4   AICC = -483.21
 2. **Break it.** Fit the airline model to 24 observations. What happens to the standard errors, and would you trust the $\Theta$?
 3. Use `R/10-12b-general-estimation.R` to evaluate the likelihood at a grid of $(\theta,\Theta)$ and find the maximum yourself, without `optim`.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Fit the airline model with `method = 'ML'` and `'CSS'` on three series and tabulate both parameters.
+2. **Drill.** Compute AIC and AICC by hand from `logLik()` and check against the built-ins.
+3. **Drill.** Report the $t$-statistic for every coefficient in an airline fit on three series. Any below 2?
+4. **Read it.** A coefficient has estimate 0.42 and standard error 0.41. What do you conclude?
+5. **Read it.** The optimiser reports `convergence = 1`. What does that mean and what would you do?
+6. **Read it.** `nobs` is 131 for a 144-point series. Where did 13 go?
+7. **Judgement.** Two models differ by 0.4 AICC. Which do you publish?
+8. **Judgement.** Your $\Theta$ moves from 0.55 to 0.71 when one observation is added. What is your first suspicion?
+9. **Connect.** Which quantity in the likelihood is *not* searched over numerically, and why does that matter for the surface you can plot?
+
 ## Links
 
 - Prev: [[10-11-sign-conventions]] · Next: [[10-13-model-selection]]

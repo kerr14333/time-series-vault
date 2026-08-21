@@ -168,6 +168,14 @@ mean of log seasonal  : -0.00026  (not zero -- that is the convention)
 2. **Break it.** Set `extend` shorter than `max_lag` and see the guard fire. Why is that guard there rather than a silent truncation?
 3. **Transfer.** Decompose a quarterly series and check the identity and the X-13 agreement both still hold.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Decompose three catalogue series and report the four X-13 agreement numbers for each.
+2. **Drill.** Report `seats_max_lag()` for each and convert to years.
+3. **Read it.** Every value comes back `NA`. What is the first thing to check?
+
 ## Links
 
 - Prev: [[40-06-wk-filters-for-the-airline-model]] · Next: [[40-08-validating-against-x13]]

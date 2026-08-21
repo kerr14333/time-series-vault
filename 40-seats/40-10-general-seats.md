@@ -201,6 +201,14 @@ Being explicit, so nothing here is oversold:
 2. **Break it.** Set `tol_trend` to 0.3 and re-run the 40-month example. Where does the cyclical pair go now, and what have you silently published?
 3. **Transfer.** Fit a model with two distinct cyclical pairs and confirm both land in the transitory component.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Run the root classification for three fitted catalogue models and tabulate the counts.
+2. **Drill.** Report the split for $(1-\Phi B^{12})$ alone and explain the trend root.
+3. **Read it.** A root sits at modulus 1.00 and frequency 0.5236. Which component, and what period?
+
 ## Links
 
 - Prev: [[40-09-burman-algorithm]] · Module map: [[40-00-seats-map]]

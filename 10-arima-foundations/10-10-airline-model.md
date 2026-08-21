@@ -109,6 +109,15 @@ all greater than 1, so the fitted model is invertible
 2. **Transfer.** Fit the airline model to every catalogue series and tabulate $(\theta, \Theta)$. Which has the most stable seasonality?
 3. Explain to someone else, in three sentences, why the airline model is the default despite being only one model among many.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Fit the airline model to three catalogue series and tabulate $(\theta, \Theta)$ in Census signs.
+2. **Read it.** $\Theta = 0.95$. Describe the seasonality in one sentence, and predict the revision behaviour.
+3. **Read it.** $\Theta = 0.15$. Same two questions.
+4. **Judgement.** The airline model fits badly and the residual ACF spikes at lag 2. What do you try next?
+
 ## Links
 
 - Prev: [[10-09-seasonal-arima]] · Next: [[10-11-sign-conventions]]

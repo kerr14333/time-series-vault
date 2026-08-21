@@ -111,6 +111,15 @@ rho1   -0.3
 2. **Break it.** Try to construct an MA(1) with $\rho_1 = 0.8$. Show why you cannot, and state the ceiling.
 3. **Transfer.** Differencing a random walk gives white noise. Difference it *twice* and identify the resulting MA order and sign of $\rho_1$.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute $\rho_1$ for $\theta = 0.1, 0.5, 1.0, 2.0$ and confirm the ceiling.
+2. **Drill.** For MA(2) with $\theta_1 = 0.4, \theta_2 = 0.2$, compute $\rho_1$, $\rho_2$, $\rho_3$.
+3. **Read it.** A sample ACF shows 0.45 at lag 1 and nothing beyond. Which model, and what is $\theta$ roughly?
+4. **Judgement.** A sample ACF shows 0.7 at lag 1 and nothing beyond. What does that rule out?
+
 ## Links
 
 - Prev: [[10-03-ar-processes]] · Next: [[10-05-invertibility]]

@@ -160,6 +160,14 @@ why inadmissibility is rare in practice but not impossible.
 2. **Break it.** Find the $\theta$ at which admissibility fails along $\Theta = 0.7$, and identify which component's spectrum goes negative first.
 3. **Transfer.** Map the admissible region for $s = 4$ and compare its shape with the monthly one.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Test admissibility at nine $(\theta,\Theta)$ points spread over the four quadrants.
+2. **Drill.** For `cpi`, report the fitted $\theta$ and say why it fails.
+3. **Read it.** `udg(m, 'seatsmdl')` differs from the model you fitted. What happened?
+
 ## Links
 
 - Prev: [[40-01-unobserved-components-and-reduced-form]] · Next: [[40-03-canonical-decomposition]]

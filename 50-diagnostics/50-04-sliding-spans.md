@@ -113,6 +113,14 @@ The two quarterly series fail badly, and that is the lesson: quarterly data give
 2. **Break it.** Shorten a passing series year by year until the diagnostic becomes unavailable. Where is the cliff?
 3. **Transfer.** Explain why the two quarterly series fail while the monthly ones pass — is it the frequency, the evolution, or the sample size?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Report the flag rate for four series and mark which exceed 15%.
+2. **Read it.** `sspans` returns 'failed'. What does that mean and what would fix it?
+3. **Judgement.** A series fails sliding spans but passes everything else. Publish?
+
 ## Links
 
 - Prev: [[50-03-m-and-q-statistics]] · Next: [[50-05-revision-history]]

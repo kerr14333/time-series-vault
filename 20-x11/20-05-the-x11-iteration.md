@@ -171,6 +171,16 @@ max |D11 - D12*D13|: 5.684342e-14
 2. **Break it.** Skip the centring step (step 4) and compare the trend after ten years. How large is the drift?
 3. **Transfer.** Run the whole iteration on a quarterly series and confirm the agreement is as good as the monthly case.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Run `x11_decompose()` on three catalogue series and tabulate the interior mean agreement with X-13.
+2. **Drill.** List the eleven steps of the loop from memory, then check.
+3. **Read it.** D10 times D11 does not equal the original series. What did you get wrong?
+4. **Judgement.** Your D11 matches X-13 to 0.5% in the middle and 5% at the ends. Ship it or debug it?
+5. **Connect.** Which two steps would change if you switched from multiplicative to additive?
+
 ## Links
 
 - Prev: [[20-04-seasonal-moving-averages]] · Next: [[20-06-extreme-values]]

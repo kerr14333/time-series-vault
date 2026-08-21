@@ -148,6 +148,14 @@ admissible: TRUE  (all three component spectra stayed non-negative)
 2. **Break it.** Skip the canonical step entirely and compare the resulting irregular. Is it still white noise?
 3. Explain to someone else why 'as smooth as possible' is a **choice** and what you would have to believe to prefer a different one.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Report $m_T$, $m_S$ and the irregular's constant before and after the canonical step.
+2. **Drill.** Confirm the canonical filters still sum to 1 at ten frequencies.
+3. **Read it.** A component's spectrum touches zero at exactly one frequency. Canonical or not?
+
 ## Links
 
 - Prev: [[40-02-admissible-decompositions]] · Next: [[40-04-partial-fractions-in-b-and-f]]

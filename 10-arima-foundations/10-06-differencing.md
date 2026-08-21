@@ -138,6 +138,17 @@ undifferenced      seasonal          both
 2. **Break it.** Difference `log(AirPassengers)` three times and look at the variance and the ACF. What are the symptoms of over-differencing?
 3. **Transfer.** Repeat the variance-at-each-stage table for a quarterly series. Does the same $d, D$ combination win?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Tabulate the variance of `log(AirPassengers)` after each of $d,D \in \{0,1\}^2$.
+2. **Drill.** Expand $(1-B)^2(1-B^{12})$ and list the nonzero lags.
+3. **Read it.** Variance rises after a difference. What does that tell you?
+4. **Read it.** An ACF decays very slowly and the PACF starts near 1. What next?
+5. **Judgement.** X-13 picks $d=0, D=1$ but you expected $d=1, D=1$. How would you decide who is right?
+6. **Connect.** How many trend roots does $(1-B)(1-B^{12})$ contain, and which module needs that count?
+
 ## Links
 
 - Prev: [[10-05-invertibility]] · Next: [[10-07-acf-and-pacf]]

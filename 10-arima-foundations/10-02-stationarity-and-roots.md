@@ -125,6 +125,17 @@ poly_roots(c(1, -1.6, 0.9))   # 1 - 1.6B + 0.9B^2, a complex pair
 2. **Transfer.** Take a quarterly series and find the roots of $1-B^4$. How many, at what frequencies, and how does the picture differ from the monthly case?
 3. Simulate an AR(1) with $\phi = 0.999$ for 500 points. Would you call it stationary from the plot alone? What does that say about testing for unit roots in practice?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** For $\phi = 0.5, 0.8, 0.95, 0.99, 1.0$, tabulate the root and its modulus.
+2. **Drill.** Find the roots of $1 - 0.6B - 0.3B^2$ and classify: real or complex, stationary or not?
+3. **Read it.** `poly_roots()` reports modulus 0.98. Stationary or not, and what will the series look like?
+4. **Read it.** An AR(2) has complex roots of modulus 1.02 and period 30. Describe the series in one sentence.
+5. **Judgement.** A fitted AR(1) gives $\phi = 0.998$ with a standard error of 0.004. Difference, or not?
+6. **Connect.** Which of the twelve roots of $1-B^{12}$ is shared with $1-B$, and which SEATS step depends on that?
+
 ## Links
 
 - Prev: [[10-01-lag-operator]] · Next: [[10-03-ar-processes]]

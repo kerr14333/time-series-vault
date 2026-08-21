@@ -109,6 +109,15 @@ round(a[c(1, 11, 12, 13, 23, 24, 25)], 3)
 2. **Transfer.** Write the quarterly airline model out in full scalar form. How many terms, and at which lags?
 3. **Break it.** Fit an *additive* seasonal model (terms at lags 1 and 12 only, no cross term) to airline-model data. How much worse is the fit, and where does it show?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Expand $(1-\theta B)(1-\Theta B^{12})$ for $\theta = 0.3, \Theta = 0.7$ and list nonzero lags with coefficients.
+2. **Drill.** Do the same for $s = 4$.
+3. **Read it.** A residual ACF shows a spike at lag 12 only. What term is missing?
+4. **Judgement.** Would you ever use an additive seasonal model (no cross term)? What would justify it?
+
 ## Links
 
 - Prev: [[10-08-arma-duality]] · Next: [[10-10-airline-model]]

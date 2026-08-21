@@ -125,6 +125,17 @@ theta=2.0  2.0 4.00 8.000 16.000 32.000 64.000 128.000 256.000
 2. **Break it.** Fit an MA(1) to a series you know is white noise, with and without an unnecessary difference. Watch $\hat\theta$ move to the boundary.
 3. Explain in two sentences, to someone who has not read this note, why invertibility is a *choice* rather than a discovery.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute the first five $\pi$-weights for $\theta = 0.2, 0.6, 0.9$.
+2. **Drill.** For each of $\theta = 0.4$ and $\theta = 2.5$, give the root and say which is invertible.
+3. **Read it.** `arima()` returns `ma1 = -0.999`. What do you suspect, and what do you check next?
+4. **Read it.** Two fits of the same data give $\theta = 0.6$ and $\theta = 1.667$ with identical log-likelihoods. Explain.
+5. **Judgement.** Your seasonal MA comes back at $\Theta = 0.98$. Is that a problem, or is that just stable seasonality?
+6. **Connect.** Which step of SEATS would fail outright if the fitted model were non-invertible?
+
 ## Links
 
 - Prev: [[10-04-ma-processes]] · Next: [[10-06-differencing]]

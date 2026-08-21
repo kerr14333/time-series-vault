@@ -77,6 +77,22 @@ helper_mtime <- function() {
   max(as.numeric(file.mtime(h)))
 }
 
+# Blank every line from a marker matching `pat` up to the next line matching
+# `stop_pat`. The stop pattern must be given explicitly: in solutions.md the
+# practice block is delimited by "**Practice set.**" and its own answers start
+# "**P1.**", so a bold-line stop pattern would end the section immediately.
+blank_section <- function(lines, pat, stop_pat = "^#{1,6} ") {
+  st <- grep(pat, lines)
+  if (!length(st)) return(lines)
+  stops <- grep(stop_pat, lines)
+  for (s in st) {
+    nxt <- stops[stops > s]
+    e <- if (length(nxt)) nxt[1] - 1L else length(lines)
+    lines[s:e] <- ""
+  }
+  lines
+}
+
 extract_numbers <- function(txt) {
   m <- gregexpr(NUM_RE, txt, perl = TRUE)
   unlist(regmatches(txt, m))
@@ -163,6 +179,14 @@ check_numbers <- function(verbose = TRUE) {
       e <- ends[ends > s]
       if (length(e)) lines[s:e[1]] <- ""
     }
+    # Blank out the practice tier. Those exercises and answers are hand-worked
+    # arithmetic (0.5^5, 2/sqrt(n), Yule-Walker by hand) and invented scenario
+    # values ("suppose t = 1.02") -- neither is derived from the code, so
+    # neither can go stale when the code changes, which is what this guard is
+    # for. See _meta/checking-the-vault.md: this IS a blind spot, and the guard
+    # caught two wrong answers in this tier before the exclusion existed.
+    lines <- blank_section(lines, "^## Practice set\\s*$")
+    lines <- blank_section(lines, "^\\*\\*Practice set[.]\\*\\*\\s*$")
     for (i in seq_along(lines)) {
       for (s in extract_numbers(lines[i])) {
         n_checked <- n_checked + 1L

@@ -78,6 +78,14 @@ That is the honest limit of the whole subject. Seasonal adjustment is an extrapo
 2. **Break it.** Treat the shock with a single AO when it actually lasted six months. How much contamination survives?
 3. Argue both sides of the LS-versus-AO choice for 2020, and say what evidence would settle it.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Simulate a 40% drop with partial recovery and report the max seasonal-factor change, untreated.
+2. **Read it.** Seasonal factors for 2017 changed after adding 2020 data. How is that possible?
+3. **Judgement.** Write the two-sentence footnote you would publish alongside 2020 figures.
+
 ## Links
 
 - Prev: [[50-07-outliers-and-breaks]] · Next: [[50-09-x11-vs-seats]]

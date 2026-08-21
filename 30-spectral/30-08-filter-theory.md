@@ -213,6 +213,16 @@ The consequence for this subject is not a technicality:
 2. **Break it.** Construct a filter with a deliberate 3-month delay and confirm the group delay reports it.
 3. **Transfer.** Apply the LTI test to X-11 *with* extreme-value replacement on. Which of the two properties fails, and at what magnitude of outlier?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute gain and phase for a symmetric and a one-sided filter at four frequencies.
+2. **Drill.** Confirm $\sum w_j = H(0)$ for four different filters.
+3. **Read it.** A filter's phase is $\pi$ at some frequency. What is it doing to that cycle?
+4. **Read it.** Group delay is $-2.2$ periods at one frequency and $-1.9$ at another. Why does that matter?
+5. **Judgement.** You are told a filter is 'ideal'. What do you ask next?
+
 ## Links
 
 - Prev: [[30-07-finite-samples]] · Module map: [[30-00-spectral-map]]

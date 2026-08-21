@@ -112,6 +112,14 @@ Q = 0.2  -- accepted
 2. **Break it.** Construct a case where Q passes but the adjustment is visibly bad. What does that say about composite statistics?
 3. Explain in two sentences why SEATS produces no M or Q statistics, and what you would use instead to compare the two methods.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Print M1–M11 and Q for two series and mark every value above 1.
+2. **Read it.** M7 is 1.4 and everything else passes. What is that telling you?
+3. **Judgement.** Q is 0.95. Do you publish without looking further?
+
 ## Links
 
 - Prev: [[50-02-residual-seasonality]] · Next: [[50-04-sliding-spans]]

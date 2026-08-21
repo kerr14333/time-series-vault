@@ -197,6 +197,17 @@ That gap between the two lines is the whole argument for Burman's algorithm. You
 2. **Break it.** Perturb one coefficient of $g$ by 1% and check both the unit-circle identity and the decomposition. Which detects it first?
 3. **Transfer.** Run the recursions on a series with an AR term in the model. Does the method care?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Report the length of $g$ and the degree of $\theta(B)$ for monthly and quarterly airline models.
+2. **Drill.** Verify the partial-fraction identity on the unit circle and report the max error.
+3. **Read it.** The identity holds to $10^{-15}$ but the decomposition is wrong. Where would you look?
+4. **Judgement.** Would you use Burman or truncation in production code, and why?
+5. **Connect.** Which property from Module 1 guarantees the recursions do not explode?
+6. **Connect.** Why does Burman need no truncation tolerance, and why is that the real advantage?
+
 ## Links
 
 - Prev: [[40-08-validating-against-x13]] · Module map: [[40-00-seats-map]]

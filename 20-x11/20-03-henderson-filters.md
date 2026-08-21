@@ -152,6 +152,16 @@ H23  0.3478 0.0107 0.0027 0.0015 0.0012 0.0011
 2. **Break it.** Apply a 13-term Henderson to raw, unadjusted data and plot the result. Is the seasonality gone? Should it be?
 3. **Transfer.** Compute the 5- and 7-term Henderson weights for quarterly data and verify they still reproduce a cubic.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute the 5-, 9-, 13- and 23-term Henderson weights and confirm each sums to 1.
+2. **Drill.** Tabulate the gain of each at the annual frequency.
+3. **Drill.** Count the negative weights in each.
+4. **Read it.** `henderson_length()` returns 23. What was the I/C ratio roughly, and what does that say about the series?
+5. **Judgement.** Your trend looks too wiggly. Longer or shorter Henderson, and what do you give up?
+
 ## Links
 
 - Prev: [[20-02-the-12-term-ma]] · Next: [[20-04-seasonal-moving-averages]]

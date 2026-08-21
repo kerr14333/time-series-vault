@@ -112,6 +112,15 @@ seasonal AR side: 1 + B + B^2 + B^3 + B^4 + B^5 + B^6 + B^7 + B^8 + B^9 + B^10 +
 2. **Break it.** Compute the irregular's autocovariances without the canonical step. Are they still zero beyond lag 0?
 3. **Transfer.** Derive the component models for $(0,1,1)(0,1,1)$ with $s=4$ and compare degrees with the monthly case.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Difference the canonical trend twice and report the autocovariances at lags 0..4.
+2. **Drill.** Apply $S(B)$ to the seasonal and report autocovariances at lags 10..13.
+3. **Read it.** The irregular's autocovariance at lag 1 is $10^{-14}$. What does that confirm?
+4. **Judgement.** Someone reports a trend that is ARIMA(0,2,1). What do you suspect they skipped?
+
 ## Links
 
 - Prev: [[40-04-partial-fractions-in-b-and-f]] · Next: [[40-06-wk-filters-for-the-airline-model]]

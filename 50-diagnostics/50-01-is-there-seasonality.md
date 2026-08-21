@@ -120,6 +120,15 @@ for (nm in c("AirPassengers", "white noise")) {
 2. **Break it.** Adjust white noise and compare variances before and after. Then explain why anyone would ever do this by accident.
 3. **Transfer.** Test a daily series with a weekly cycle for 'seasonality'. Do the monthly tools apply at all?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Report QS for four catalogue series and mark which exceed 9.
+2. **Drill.** Compare the variance of white noise before and after 'adjustment'.
+3. **Read it.** QS is 2.4. Seasonal or not?
+4. **Judgement.** A stakeholder insists a series is seasonal; every test disagrees. How do you handle it?
+
 ## Links
 
 - Next: [[50-02-residual-seasonality]] · Module map: [[50-00-diagnostics-map]]

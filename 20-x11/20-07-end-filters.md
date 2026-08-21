@@ -132,6 +132,15 @@ last point, concurrent vs final: 471.42 vs 473.58  (0.46% revision)
 2. **Break it.** Apply the symmetric filter at the end anyway, padding with zeros. What does the trend do in the final year?
 3. **Transfer.** Measure the same concurrent-versus-final gap on a quarterly series. Is it worse, given fewer observations per year?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute the concurrent-versus-final gap for the last six observations of one series.
+2. **Drill.** Compare the symmetric Henderson weights with a one-sided version and report the weight on the current observation in each.
+3. **Read it.** The last point revises by 3% and the point a year earlier by 0.2%. Is that normal?
+4. **Judgement.** A user asks why last month's figure changed. Answer in three sentences without jargon.
+
 ## Links
 
 - Prev: [[20-06-extreme-values]] · Next: [[20-08-x11-arima]]

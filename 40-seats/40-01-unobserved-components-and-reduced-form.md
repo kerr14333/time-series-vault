@@ -127,6 +127,14 @@ product = (1-B)(1-B^12)? TRUE
 2. **Break it.** Simulate components, fit the reduced form, decompose, and compare with the truth. They will not match exactly. Is that estimation error or something else?
 3. **Transfer.** Do the same for a quarterly structural model. Does the reduced form still come out as an airline model?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Write out the structural model's three equations and say which variance controls which component.
+2. **Drill.** Split $(1-B)(1-B^{12})$ into trend and seasonal factors and confirm the product.
+3. **Read it.** A fitted $\Theta$ comes back at 0.99. What does that say about $\sigma_\omega^2$?
+
 ## Links
 
 - Prev: [[40-00-seats-map]] · Next: [[40-02-admissible-decompositions]]

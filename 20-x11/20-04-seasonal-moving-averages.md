@@ -114,6 +114,15 @@ freq    0 0.1000 0.2000 0.3000 0.4000 0.5000
 2. **Break it.** Force a $3\times9$ on a fast-evolving series and check for residual seasonality afterwards.
 3. **Transfer.** Extract the Januaries from a quarterly series — there are none. What does the seasonal filter operate on instead?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Write out the $3\times3$, $3\times5$ and $3\times9$ weights and confirm each sums to 1.
+2. **Drill.** Compute each one's gain at $f = 1/4$ (i.e. a 4-year cycle in the year-over-year series).
+3. **Read it.** X-11 selected a $3\times9$. What does that say about the seasonal pattern?
+4. **Judgement.** A series' seasonality changed sharply in one year. Which filter length, and what else would you do first?
+
 ## Links
 
 - Prev: [[20-03-henderson-filters]] · Next: [[20-05-the-x11-iteration]]

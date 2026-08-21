@@ -92,6 +92,15 @@ MA root moduli: 2 3.3333
 2. **Break it.** Build an ARMA(2,2) with an *exactly* shared factor and try to fit it. What do the standard errors do?
 3. Given $\psi$-weights alone, recover $\phi$ and $\theta$. Is the answer unique?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute the first six $\psi$-weights for ARMA(1,1) with $\phi = 0.6$ and $\theta = 0.2$.
+2. **Drill.** Same model: compute the first six $\pi$-weights.
+3. **Read it.** AR and MA roots both come back near 1.43. What is wrong with the model?
+4. **Judgement.** Would you rather fit ARMA(3,0) or ARMA(1,1) to a series whose ACF and PACF both decay? Why?
+
 ## Links
 
 - Prev: [[10-07-acf-and-pacf]] · Next: [[10-09-seasonal-arima]]

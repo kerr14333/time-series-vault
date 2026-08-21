@@ -105,6 +105,15 @@ theory 0.700 0.490 0.343 0.24 0.168 0.118
 2. **Break it.** Simulate an AR(1) with $|\phi| > 1$ for 100 points. What happens, and why is the stationarity condition not merely a technicality?
 3. Fit an AR(1) to a series you simulated as AR(2). What $\phi$ comes back, and how does the residual ACF reveal the misspecification?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute $\rho_1$ through $\rho_5$ for AR(1) with $\phi = 0.3, 0.6, 0.9$.
+2. **Drill.** For AR(2) with $\phi_1 = 0.5, \phi_2 = 0.3$, compute $\rho_1$ and $\rho_2$ from Yule–Walker.
+3. **Read it.** A PACF cuts off after lag 2 and the ACF decays. What order, and which type?
+4. **Judgement.** Your AR(1) residuals still show a spike at lag 12. What do you add, and why not just a bigger $p$?
+
 ## Links
 
 - Prev: [[10-02-stationarity-and-roots]] · Next: [[10-04-ma-processes]]

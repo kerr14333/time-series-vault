@@ -132,6 +132,15 @@ flat to within 0
 2. **Break it.** Estimate a spectrum with no smoothing at all and try to identify the model from it. What goes wrong?
 3. **Transfer.** Compute the spectrum of a series with a *deterministic* seasonal (a fixed sine) and compare with a stochastic one. How do the peaks differ?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Estimate the spectrum of one series with `spans = c(3,3)`, `c(7,7)` and none, and describe the difference.
+2. **Drill.** Confirm numerically that the spectrum integrates to $\gamma_0$ for an AR(1).
+3. **Read it.** A spectrum is flat. What process?
+4. **Judgement.** How much smoothing would you use on 144 monthly points, and what is the cost of too much?
+
 ## Links
 
 - Prev: [[30-01-frequency-domain-basics]] · Next: [[30-03-spectrum-of-an-arma]]

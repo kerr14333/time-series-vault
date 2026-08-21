@@ -104,6 +104,17 @@ A polynomial in the lag operator becomes a complex-valued function of frequency.
 2. **Break it.** Read a period off a spectrum without first asking what one time unit is. Show, with the two tables in this note, how you get the wrong answer.
 3. **Transfer.** For $s = 7$ (daily data with a weekly cycle), list every seasonal frequency and its period in days.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Convert $f = 0.05, 0.0833, 0.25, 0.5$ to $\omega$ and to a period.
+2. **Drill.** List the seasonal frequencies for $s = 4, 7, 12$ and count them.
+3. **Read it.** A spectrum's axis runs to 3.14. Which unit is it in?
+4. **Read it.** A peak sits at $f = 0.0833$ on monthly data. What cycle is that?
+5. **Judgement.** You see a peak at $f = 0.09$ on monthly data. Seasonal, or not quite?
+6. **Connect.** Why does $\omega = \pi$ count as a seasonal frequency for monthly data but the analogous statement fails for $s = 7$?
+
 ## Links
 
 - Next: [[30-02-spectral-density]]

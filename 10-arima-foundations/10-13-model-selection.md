@@ -111,6 +111,15 @@ Ljung-Box Q = 26.45  df = 22  p = 0.233
 2. **Break it.** Choose a model by AIC instead of AICC on a short series. Does it pick a bigger model? By how much does the penalty differ?
 3. **Transfer.** Run the same comparison on a quarterly series. Does the ranking change?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compare four models on one series by AICC and rank them.
+2. **Drill.** Run `Box.test()` at lags 12 and 24, with and without `fitdf`, and tabulate the four p-values.
+3. **Read it.** AICC prefers the bigger model but Ljung–Box passes for both. What do you do?
+4. **Judgement.** Model A wins on AICC; model B has cleaner residuals. Which ships, and what would change your mind?
+
 ## Links
 
 - Prev: [[10-12-estimation]] · Next: [[10-14-forecasting]]

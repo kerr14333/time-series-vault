@@ -131,6 +131,14 @@ choice of implementation.
 2. **Break it.** Fit a deliberately poor model and re-compare. Does SEATS or X-11 degrade faster?
 3. **Transfer.** Compare the two methods on a quarterly series and say whether the ranking holds.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compare d11 and s11 on three series and report mean and max percentage difference.
+2. **Read it.** The two methods differ by 0.5% on average but 27% in one month. What do you look at?
+3. **Judgement.** An agency asks which method to adopt. What do you tell them?
+
 ## Links
 
 - Prev: [[50-08-covid]] · **Module 5 complete**

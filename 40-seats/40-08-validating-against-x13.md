@@ -121,6 +121,15 @@ A factor of about **660**.
 2. **Break it.** Compare against X-13 with `transform.function = 'none'` and confirm the ~100% discrepancy. What is the lesson about failed comparisons?
 3. **Transfer.** Validate a quarterly decomposition against X-13 and report the same four numbers.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Reproduce the four-number comparison table.
+2. **Drill.** List every `seas()` argument needed to force a bare airline fit, and say what each one switches off.
+3. **Read it.** Agreement is 103%. Bug in the algorithm or the harness?
+4. **Judgement.** What agreement would you consider good enough to trust an independent implementation?
+
 ## Links
 
 - Prev: [[40-07-implementing-seats-in-r]] · **Module 4 complete** → [[50-00-diagnostics-map]]

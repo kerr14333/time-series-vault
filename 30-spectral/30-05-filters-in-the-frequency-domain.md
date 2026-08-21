@@ -93,6 +93,15 @@ Everything else — Henderson lengths, 3×5 versus 3×9, canonical decomposition
 2. **Break it.** Apply a one-sided filter to a pure sine and measure how far the output is shifted in time. Compare with the group delay.
 3. **Transfer.** Compute the gain of $(1-B^4)$ and count its zeros. Compare with $(1-B^{12})$.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute the gain of $(1-B)$ at $f = 0, 0.1, 0.25, 0.5$.
+2. **Drill.** Do the same for $(1-B^{12})$ and list its zeros.
+3. **Read it.** A filter's gain exceeds 1 somewhere. What does that mean physically?
+4. **Judgement.** You need to remove a trend but keep high-frequency detail intact. Is differencing the right tool?
+
 ## Links
 
 - Prev: [[30-04-pseudo-spectrum]] · Next: [[30-06-wiener-kolmogorov]]

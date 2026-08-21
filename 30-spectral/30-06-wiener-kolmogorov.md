@@ -160,6 +160,15 @@ lag 60    : 0.01504468  -- still not zero after five years
 2. **Break it.** Construct $f_s$ and $f_n$ that are both non-negative but whose implied $\nu_s$ exceeds 1 somewhere. Can you? Why not?
 3. **Transfer.** Derive the WK filter for a trend-plus-noise model where the trend is a *double* random walk. How does the cutoff move?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute $\nu_T$, $\nu_S$, $\nu_I$ at $\omega = 0, 2\pi/12, \pi/2, \pi$ and confirm they sum to 1.
+2. **Drill.** Report the seasonal filter weight at lags 0, 12, 24, 36.
+3. **Read it.** A component filter has gain 1 at a frequency. What does that component own there?
+4. **Judgement.** Two components both want the power at some frequency. What decides, and is it a modelling choice?
+
 ## Links
 
 - Prev: [[30-05-filters-in-the-frequency-domain]] · Next: [[30-07-finite-samples]]

@@ -139,6 +139,15 @@ The transferable point: **every economy has its own moving holidays.** Use the o
 2. **Break it.** Fit Easter to a series with no Easter effect and check whether AICC correctly rejects it.
 3. **Transfer.** Build a Ramadan regressor with `genhol()` and apply it to a series from a Muslim-majority economy. What changes in the workflow?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Fit trading day on three series and report the largest $|t|$ for each.
+2. **Drill.** Build CNY and Diwali regressors and report both coefficients.
+3. **Read it.** A holiday coefficient is $-0.12$ with $t = -7.5$. Translate into plain language.
+4. **Judgement.** Your series is Australian retail. Which calendar effects would you test, and in what order?
+
 ## Links
 
 - Prev: [[50-09-x11-vs-seats]] · Module map: [[50-00-diagnostics-map]]

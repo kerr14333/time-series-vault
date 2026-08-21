@@ -90,6 +90,13 @@ Whether the model-derived notch is *better* is an empirical question, and [[50-0
 2. **Break it.** Compute the filters with a non-invertible $\Theta = 1.05$. What goes wrong, and where exactly?
 3. **Transfer.** Plot the three filters for a quarterly model. How many notches, and how wide?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Tabulate $\nu_T, \nu_S, \nu_I$ at six frequencies and confirm the sum.
+2. **Read it.** $\nu_S(\pi) = 1$. Why is that not a boundary artefact?
+
 ## Links
 
 - Prev: [[40-05-component-models]] · Next: [[40-07-implementing-seats-in-r]]

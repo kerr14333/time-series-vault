@@ -120,6 +120,15 @@ round(sapply(c(72, 144, 500, 2000), function(n) 2 / sqrt(n)), 4)
 2. **Break it.** Compute an ACF on a series with a level shift in the middle. How does the break distort it, and would you diagnose the right model?
 3. **Transfer.** Read the ACF of a *quarterly* differenced series. Where are the seasonal spikes now?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute the $\pm 2/\sqrt{n}$ band for $n = 48, 96, 144, 300$.
+2. **Read it.** ACF cuts at lag 1, PACF decays. Model?
+3. **Read it.** Both decay geometrically. Model?
+4. **Judgement.** After $\nabla\nabla_{12}$ you see spikes at 1, 12 and 13. Which model does that specify, and why the 13?
+
 ## Links
 
 - Prev: [[10-06-differencing]] · Next: [[10-08-arma-duality]]

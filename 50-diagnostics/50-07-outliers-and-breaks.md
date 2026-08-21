@@ -99,6 +99,15 @@ Note the damage propagates **backwards** as well as forwards. The filters are tw
 2. **Break it.** Put an LS in the final three months and see whether detection fires. Then argue whether you would want it to.
 3. **Transfer.** Inject the same outlier into a quarterly series. Is the contamination reach the same in years?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Inject an AO, LS and TC and report the max change in seasonal factors for each.
+2. **Drill.** Vary `outlier.critical` over three values and report how many outliers are found.
+3. **Read it.** X-13 reports `LS2008.Sep`. What does that mean and would you keep it?
+4. **Judgement.** An outlier is detected in the most recent month. Keep it, or wait?
+
 ## Links
 
 - Prev: [[50-06-turning-points]] · Next: [[50-08-covid]]

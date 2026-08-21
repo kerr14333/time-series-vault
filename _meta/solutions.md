@@ -33,6 +33,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** It does **not** vanish. $(1-B^{12})$ has zeros only at frequencies $k/12$, and a period-11 cycle is not one of them — it is attenuated, not removed. Differencing operators are tuned to *exact* frequencies, which is why a series whose period drifts (a moving holiday, say) is not fixed by seasonal differencing ([[50-10-calendar-effects]]).
 
 **GF3.** $(1-B)^3 = 1 - 3B + 3B^2 - B^3$, killing any quadratic. It annihilates $t^2$ exactly and leaves a constant from $t^3$. In general $(1-B)^d$ kills polynomials of degree $d-1$.
+
+**Practice set.**
+
+**P1.** $(1-B)(1-B^4) = 1 - B - B^4 + B^5$ (4 terms); $(1-B)^2(1-B^{12}) = 1 - 2B + B^2 - B^{12} + 2B^{13} - B^{14}$ (6); $(1-B^{12})^2 = 1 - 2B^{12} + B^{24}$ (3).
+
+**P2.** $1, 0.5, 0.25, 0.125, 0.0625, 0.03125$ — it drops below 0.05 at lag **5**.
+
+**P3.** $(1-B)(1-B^{12})$ — the airline differencing. The four-term left side is its signature.
+
+**P4.** $(1-B)(1-B^7)$. Nothing about the algebra is monthly; only the period changes.
 ## 10-02-stationarity-and-roots
 
 **1.** The discriminant is $1.44 - 4(0.5) = -0.56$, so the roots are complex: $z = (1.2 \pm i\sqrt{0.56})/1.0 \cdot \tfrac{1}{2\cdot0.5}$ — do it with `polyroot(c(1, -1.2, 0.5))` rather than by hand. Both roots have modulus $\sqrt{1/0.5} = \sqrt2 \approx 1.414 > 1$, so **yes, stationary**. The general shortcut for AR(2): the roots' modulus is $1/\sqrt{\phi_2}$ when they are complex.
@@ -49,6 +59,20 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Four roots, at frequencies $0, 1/4, 1/4, 1/2$ cycles per quarter — the trend root plus a complex pair at the annual cycle plus one at Nyquist. Two seasonal frequencies rather than six ([[30-01-frequency-domain-basics]]).
 
 **GF3.** It looks like a random walk, and no plot can separate $\phi = 0.999$ from $\phi = 1$ at $n = 500$. Unit-root tests have **low power** near the boundary, which is why $d$ is usually chosen by a mix of testing, variance comparison and judgement rather than by a test alone.
+
+**Practice set.**
+
+**P1.** Roots $1/\phi$: $2, 1.25, 1.053, 1.010, 1.000$. Moduli the same (all real). Stationary for the first four, not the last.
+
+**P2.** `polyroot(c(1,-0.6,-0.3))` gives real roots at $1.0817$ and $-3.0817$. Both moduli exceed 1, so **stationary** — but the first only just, so expect slow decay. Real roots rather than complex means decay without a cycle.
+
+**P3.** **Not stationary** — modulus below 1 means the root is inside the circle. The series will wander without returning to a mean.
+
+**P4.** Stationary but only just, so it shows a long, slowly damping 30-period cycle. Just outside the circle is where cycles look most persistent.
+
+**P5.** $\phi$ is two standard errors from 1, so you cannot reject a unit root. **Difference** — and note this is exactly the low-power situation where tests are weakest.
+
+**P6.** The root at $B = 1$, frequency zero. The SEATS AR split depends on it: $(1-B)(1-B^{12}) = (1-B)^2 S(B)$, which is why the trend gets differenced twice ([[derivations#D4. The seasonal difference contains the trend difference|D4]]).
 ## 10-03-ar-processes
 
 **1.** $\phi = 0.9$ wanders slowly, staying on one side of the mean for long stretches — the ACF decays gently. $\phi = -0.9$ **alternates**, flipping sign almost every period, and its ACF alternates too: $\rho_k = (-0.9)^k$. Same persistence in magnitude, opposite character. See the figure in [[10-03-ar-processes]].
@@ -65,6 +89,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** It **explodes** — values grow without bound. Stationarity is not a technicality but the condition under which the process has a finite variance at all ([[derivations#D1. Stationarity means roots outside the unit circle|D1]]).
 
 **GF3.** The fitted $\phi$ lands near $\rho_1 = \phi_1/(1-\phi_2)$, not near $\phi_1$. The **residual ACF still shows structure** at lag 2 — that is the diagnostic, and it is why you check residuals rather than trusting a good-looking fit.
+
+**Practice set.**
+
+**P1.** $\rho_k = \phi^k$. For 0.3: $0.3, 0.09, 0.027, 0.008, 0.002$. For 0.9: $0.9, 0.81, 0.73, 0.66, 0.59$ — still substantial at lag 5.
+
+**P2.** $\rho_1 = \phi_1/(1-\phi_2) = 0.5/0.7 = 0.714$; $\rho_2 = \phi_1\rho_1 + \phi_2 = 0.357 + 0.3 = 0.657$.
+
+**P3.** **AR(2)** — the PACF cutting off names both the order and the type.
+
+**P4.** Add a **seasonal** term ($P$ or $Q$ at lag 12). A bigger $p$ would need twelve AR coefficients to reach lag 12; the seasonal parameterisation needs one.
 ## 10-04-ma-processes
 
 **1.** $\rho_1(\theta) = -\theta/(1+\theta^2)$ — the figure in [[10-05-invertibility]] plots it. Both $\theta=0.5$ and $\theta=2$ give $\rho_1 = -0.4$, which is the whole point: they are indistinguishable from the data.
@@ -81,6 +115,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Impossible: $|\rho_1| \le 1/2$ for every MA(1), maximised at $\theta = \pm1$ ([[derivations#D2. The MA(1) autocorrelation, and why it cannot exceed one half|D2]]). A sample $\rho_1$ of 0.8 **falsifies** the MA(1) class outright.
 
 **GF3.** Differencing twice gives an MA(2) with $\theta$-structure $(1-B)^2$, i.e. an exactly non-invertible model with $\rho_1 = -2/3$ and $\rho_2 = 1/6$. The strong negative $\rho_1$ is the classic over-differencing signature.
+
+**Practice set.**
+
+**P1.** $-\theta/(1+\theta^2)$: $-0.099, -0.4, -0.5, -0.4$. The maximum magnitude is at $\theta = 1$ and equals exactly $0.5$.
+
+**P2.** Denominator $1 + 0.16 + 0.04 = 1.2$. $\rho_1 = (-0.4 + 0.08)/1.2 = -0.267$; $\rho_2 = -0.2/1.2 = -0.167$; $\rho_3 = 0$.
+
+**P3.** MA(1) with a **negative** Census $\theta$ (positive $\rho_1$), around $-0.6$: solve $-\theta/(1+\theta^2) = 0.45$.
+
+**P4.** It rules out **MA(1) entirely** — $|\rho_1| \le 0.5$ for every MA(1). Look at AR or mixed models instead.
 ## 10-05-invertibility
 
 **1.** $\pi_j = \theta^j$. For $\theta=0.5$: $0.5, 0.25, 0.125, \dots$ — dead by lag 8. For $\theta=0.95$: $0.95, 0.90, 0.86, \dots, 0.66$ — still substantial at lag 8. Near the boundary the model has very long memory, which is why estimation there is delicate.
@@ -97,6 +141,20 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Without the extra difference $\hat\theta \approx 0$; with it, $\hat\theta \approx 1$, pinned at the boundary. That pinning is the standard diagnostic for an unnecessary $d$.
 
 **GF3.** The data cannot distinguish $\theta$ from $1/\theta$ — they produce identical autocorrelations and identical likelihoods. Invertibility is the rule we adopt to pick one, chosen because it makes the distant past matter less than the recent past.
+
+**Practice set.**
+
+**P1.** $\pi_j = \theta^j$. For 0.2: $0.2, 0.04, 0.008, \dots$ (dead by lag 3). For 0.9: $0.9, 0.81, 0.73, 0.66, 0.59$ — still large.
+
+**P2.** Roots $1/0.4 = 2.5$ (outside, **invertible**) and $1/2.5 = 0.4$ (inside, **not**). The pair $\{0.4, 2.5\}$ is the classic reciprocal pair.
+
+**P3.** Over-differencing. Check whether $d$ or $D$ is one too many by comparing variances at each differencing stage ([[10-06-differencing]]).
+
+**P4.** They are reciprocals ($0.6 \times 1.667 = 1$) and give identical autocorrelations, so identical likelihoods. Only the invertible one is reported by convention.
+
+**P5.** **Just stable seasonality.** $\Theta$ near 1 means the pattern barely evolves. It becomes a problem only at exactly 1, and it does mean a very long SEATS filter.
+
+**P6.** The **WK filter derivation**: $\nu_T = A\,D_S/N$ has $N = \theta(B)\theta(F)$ in the denominator, and a non-invertible $\theta$ puts a root on the unit circle, giving the filter a genuine pole ([[derivations#D10. Why the WK filters have no poles|D10]]).
 ## 10-06-differencing
 
 **1.** After $\nabla$ alone the trend is gone but a strong annual wave remains; after $\nabla_{12}$ as well it looks stationary. The four-panel figure in [[10-06-differencing]] is exactly this experiment.
@@ -113,6 +171,20 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Variance **rises** with each excess difference, and the ACF develops a large negative spike at lag 1 approaching $-0.5$. Those two symptoms together are the over-differencing signature.
 
 **GF3.** For `UKgas` the same $d=1, D=1$ wins, but for `ldeaths` it does not — that series wants $d=0, D=1$. The rule is not universal, which is the point of checking rather than assuming.
+
+**Practice set.**
+
+**P1.** On `log(AirPassengers)`: none $0.1949$, $(1-B)$ $0.0114$, $(1-B^{12})$ $0.0038$, both $0.0021$. Every difference reduces it here, and note the **seasonal** difference alone achieves more than the regular one — the seasonal swing is the larger share of this series' variance.
+
+**P2.** $1 - 2B + B^2 - B^{12} + 2B^{13} - B^{14}$: lags 0, 1, 2, 12, 13, 14.
+
+**P3.** You have **over-differenced**. Back off, and expect an MA root pinned near 1 if you do not.
+
+**P4.** Difference. That combination is the standard visual signature of a unit root.
+
+**P5.** Compare the variance at each stage and check whether the MA coefficient pins at 1. On `ldeaths` the variance rises with the regular difference, which is X-13 being right.
+
+**P6.** **Two** — $(1-B)$ from the regular difference and one more from inside $(1-B^{12})$. Module 4 needs that count, because the trend component is ARIMA(0,**2**,2) as a direct consequence.
 ## 10-07-acf-and-pacf
 
 **1.** At $n=300$ the patterns are unmistakable; at $n=60$ they are often not, and honest people misidentify them. **That is the lesson** — identification by eye is a starting point, not a decision procedure, which is why [[10-13-model-selection]] leans on AICC.
@@ -129,6 +201,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** A level shift produces a slowly decaying ACF that mimics a **unit root**. You would very likely difference a series that did not need it — the correct fix is to model the shift as an LS regressor first ([[50-07-outliers-and-breaks]]).
 
 **GF3.** At lags 4, 8, 12 rather than 12, 24, 36. The seasonal lag is the *period*, not the number 12.
+
+**Practice set.**
+
+**P1.** $0.289, 0.204, 0.167, 0.115$. Longer series flag smaller correlations as significant.
+
+**P2.** **MA(1).** Whichever function cuts off names the type; here it is the ACF.
+
+**P3.** **ARMA(p,q)** — mixed. Neither cuts off, which is why you need AICC rather than eyes.
+
+**P4.** The **airline model**. Lag 1 from $(1-\theta B)$, lag 12 from $(1-\Theta B^{12})$, and lag 13 from the cross term $\theta\Theta B^{13}$ that the multiplication produces.
 ## 10-08-arma-duality
 
 **1.** Equating coefficients in $\phi(B)\psi(B) = \theta(B)$: $\psi_0 = 1$, $\psi_1 = \phi - \theta = 0.3$, and $\psi_j = \phi\psi_{j-1}$ thereafter, so $\psi_j = 0.3 \cdot 0.7^{j-1}$. Check with `ARMAtoMA(ar = 0.7, ma = -0.4, lag.max = 12)` — remembering R's opposite MA sign.
@@ -145,6 +227,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Standard errors inflate dramatically and the optimiser may not converge, because the likelihood has a ridge rather than a peak ([[derivations#D13. What the likelihood actually is|D13]]).
 
 **GF3.** **Not unique** — the $\psi$-weights determine the *ratio* $\theta(B)/\phi(B)$, and any common factor can be inserted or removed without changing it. Recovering $(\phi, \theta)$ requires the additional assumption that they share no root.
+
+**Practice set.**
+
+**P1.** $\psi_1 = \phi - \theta = 0.4$, then $\psi_j = \phi\psi_{j-1}$: $1, 0.4, 0.24, 0.144, 0.086, 0.052$.
+
+**P2.** $\pi_1 = \phi - \theta = 0.4$, then $\pi_j = \theta\pi_{j-1}$: $0.4, 0.08, 0.016, 0.0032, \dots$ — much faster decay, since $\theta < \phi$.
+
+**P3.** A **common factor**. The model is over-ordered; drop one AR and one MA order.
+
+**P4.** **ARMA(1,1)** — two parameters instead of three, and the mixed decay is exactly what an ARMA(1,1) produces. Parsimony, and AICC will usually agree.
 ## 10-09-seasonal-arima
 
 **1.** $(1-\phi B)(1-\Phi B^{12}) = 1 - \phi B - \Phi B^{12} + \phi\Phi B^{13}$. Nonzero at lags **1, 12 and 13** — the lag-13 cross term is the one people forget.
@@ -161,6 +253,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** $(1-B)(1-B^4)z_t = (1-\theta B)(1-\Theta B^4)a_t$, i.e. $z_t - z_{t-1} - z_{t-4} + z_{t-5} = a_t - \theta a_{t-1} - \Theta a_{t-4} + \theta\Theta a_{t-5}$. Six terms rather than eight.
 
 **GF3.** The fit is worse, and it shows in the **residual ACF at the satellite lags** (11 and 13). The cross term is not decoration — it is what makes the model multiplicative.
+
+**Practice set.**
+
+**P1.** $1 - 0.3B - 0.7B^{12} + 0.21B^{13}$: lags 1 ($-0.3$), 12 ($-0.7$), 13 ($+0.21$).
+
+**P2.** $1 - 0.3B - 0.7B^4 + 0.21B^5$: lags 1, 4, 5. Same structure, shorter reach.
+
+**P3.** A **seasonal MA** term, $\Theta$ at lag 12.
+
+**P4.** Rarely, and only if the residual ACF shows a clean lag-12 spike with **no** satellites at 11 and 13. The satellites are the evidence for multiplicative structure.
 ## 10-10-airline-model
 
 **1.** `arima()` reports roughly $-0.402$ and $-0.557$; flipping sign gives Census $\theta = 0.402$, $\Theta = 0.557$. $\Theta$ near 0.6 says the seasonal pattern **evolves moderately** — high $\Theta$ means a nearly fixed seasonal, low means a rapidly changing one. $\Theta$ is the single most consequential number for how much your published factors will revise.
@@ -177,6 +279,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** `co2` has the highest $\Theta$ and the most stable seasonality; the quarterly series the least. See [[series-catalogue]].
 
 **GF3.** It has two parameters, one controlling how fast the trend moves and one how fast the seasonal evolves — which is the minimum needed to describe most economic series. It fits an enormous range of data adequately, and when it does not, the diagnostics say so.
+
+**Practice set.**
+
+**P1.** See [[series-catalogue]]. `AirPassengers` gives $(0.402, 0.557)$; `co2` has the highest $\Theta$ at $0.912$.
+
+**P2.** Very stable seasonality that barely evolves; **small revisions**, because the forecast extension is well pinned.
+
+**P3.** Fast-evolving seasonality; **large revisions**, and a candidate to fail sliding spans.
+
+**P4.** Add an MA or AR term at lag 2, or reconsider the differencing. A spike at lag 2 is a non-seasonal structure the airline model has no parameter for.
 ## 10-12-estimation
 
 **1.** ML gives $\Theta = 0.5569$, CSS $0.5724$ — here CSS is *closer* to 1, and CSS's $\theta$ is *lower*. There is no direction to memorise; the point is that the two methods disagree, and they disagree most near the invertibility boundary where seasonal parameters live. Use ML.
@@ -193,6 +305,26 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Standard errors become enormous and $\Theta$ is essentially unidentified — two years of data cannot pin down how a seasonal pattern evolves. No, do not trust it.
 
 **GF3.** A grid search finds the same optimum, more slowly. Worth doing once: it makes concrete that `optim` is a convenience, not part of the method.
+
+**Practice set.**
+
+**P1.** They differ by a few hundredths, most visibly near the invertibility boundary. Use ML.
+
+**P2.** $\mathrm{AIC} = -2\log L + 2k$; $\mathrm{AICC} = \mathrm{AIC} + 2k(k+1)/(n-k-1)$. Both match the built-ins exactly.
+
+**P3.** For the airline model on `AirPassengers` both $|t|$ exceed 4. A $|t|$ below 2 means the data does not support that term.
+
+**P4.** $t \approx 1.02$: **not supported**. Drop the term unless theory demands it.
+
+**P5.** The optimiser hit its iteration limit without converging. Try better starting values, a simpler model, or check for a common factor.
+
+**P6.** Differencing consumed $d + D\cdot s = 1 + 12 = 13$ observations. This is why likelihoods are **not comparable** across models with different differencing.
+
+**P7.** Either — 0.4 is well inside the noise. Prefer the simpler one, and let residual diagnostics break the tie.
+
+**P8.** An **outlier or level shift near the end**. One observation should not move a seasonal parameter that far ([[50-07-outliers-and-breaks]]).
+
+**P9.** $\sigma_a^2$, which has a closed form given the other parameters and is *concentrated out*. That is why the airline search is two-dimensional and can simply be plotted.
 ## 10-13-model-selection
 
 **1.** The airline model wins or ties on AICC. The extra parameter usually does *not* earn its place — AICC's penalty is stricter than AIC's at these sample sizes, which is the reason to prefer it here.
@@ -209,6 +341,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** AIC's penalty is $2k$; AICC adds $2k(k+1)/(n-k-1)$, which at $n=60$ is substantial. AIC will tend to pick the **bigger** model, which is the over-fitting AICC was designed to prevent.
 
 **GF3.** On quarterly data the ranking can change, because there are fewer observations per seasonal parameter. Model choice is not portable across frequencies.
+
+**Practice set.**
+
+**P1.** The airline model typically wins or ties. Extra parameters rarely earn their penalty on these series.
+
+**P2.** Without `fitdf` the p-values are **too large** — the test looks more forgiving than it is. Always pass the number of estimated ARMA parameters.
+
+**P3.** Prefer the **simpler** model. AICC differences of a few units are weak evidence, and clean residuals in both means the extra parameter buys nothing you can point to.
+
+**P4.** **B.** A model whose residuals are not white has structure left in them, which will show up in the adjustment; a small AICC edge does not compensate. Change your mind if the AICC gap is large and B's residual failure is marginal.
 ## 10-14-forecasting
 
 **1.** The 95% band is already about ±7% at twelve months and keeps widening. The figure in [[10-14-forecasting]] plots it.
@@ -229,6 +371,24 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Both the trend extrapolation and the seasonal amplitude degrade, but the **seasonal** holds up better — 3 years is enough to see the pattern three times. It is the trend direction that fails first, which is exactly the turning-point problem in miniature ([[50-06-turning-points]]).
 
 **GF3.** Same structure with $B^4$: $\hat z_{n+1} = z_n + z_{n-3} - z_{n-4} - \theta\hat a_n - \Theta\hat a_{n-3} + \theta\Theta\hat a_{n-4}$. It matches `predict()` to the same precision as the monthly case.
+
+**Practice set.**
+
+**P1.** Standard error grows monotonically: roughly $0.037, 0.061, 0.082$ and larger at 24. It is a cumulative sum of squares and can never fall.
+
+**P2.** After $\psi_0 = 1$ they sit at $1-\theta = 0.598$ and stay there. Non-decay is a consequence of $d = 1$.
+
+**P3.** About $\pm 16\%$ at twelve months ($1.96 \times 0.082$ in logs). Wider than most people expect.
+
+**P4.** **Yes.** $\mathrm{Var}(e_h) = \sigma_a^2\sum_{j<h}\psi_j^2$ with non-decaying $\psi$, so the standard error grows like $\sqrt{h}$ and the width roughly doubles when $h$ quadruples.
+
+**P5.** **Bias.** Noise would change sign; a systematic direction means the model is extrapolating a regime that has ended. Test by checking the sign of the errors, exactly as 50-06 does for revisions.
+
+**P6.** A year is defensible; beyond that quote the interval, not the point. And say plainly that the interval assumes the model stays true — which is what fails at a turn.
+
+**P7.** Forecast extension in [[20-08-x11-arima]], which needs about a year so the symmetric filter has data to work with at the end.
+
+**P8.** Because non-decaying $\psi$-weights mean the *filter* weights also decay slowly, so the WK filter needs hundreds of lags and the truncation question becomes serious.
 # Module 2 — X-11
 
 ## 20-01-moving-averages-as-filters
@@ -247,6 +407,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** A flat series comes out multiplied by 1.1. You have violated **gain(0) = 1**, which is the same statement as $\sum w_j = 1$ ([[30-08-filter-theory]]). The filter now changes the level of the data.
 
 **GF3.** A 4-term average, with zeros at $f = 1/4$ and $1/2$ — the two quarterly seasonal frequencies. Being even, it also needs the centring correction.
+
+**Practice set.**
+
+**P1.** Gains fall as the filter lengthens and as frequency rises. At $f=1/3$ the 3-term average is exactly **0** (it spans one whole cycle).
+
+**P2.** A $k$-term average is zero at $f = j/k$ for $j = 1, \dots, k-1$ — that is $k-1$ zeros spread across the range.
+
+**P3.** A **seasonal** filter, or at least one designed to kill the annual cycle: gain 1 at frequency zero preserves the level, near-zero at $1/12$ removes the annual.
+
+**P4.** A **5-term** average, which is exactly zero at $f = 1/5$. It attenuates the annual cycle only mildly, which is what you want.
 ## 20-02-the-12-term-ma
 
 **1.** Multiplying $\tfrac12(1+B)$ by $\tfrac1{12}(1+B+\cdots+B^{11})$ gives 13 terms: the interior eleven each get $1/12$ and the two ends get $1/24$. The halved endpoints are the recentring correction, not a rounding artefact — the snippet in that note prints them.
@@ -263,6 +433,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** A plain 12-term average has its centre half a step off, giving a phase shift of $\pi f$ radians — half a month at every frequency. The centring is what removes it ([[derivations#D12. Why a centred $2\times s$ moving average is needed for even $s$|D12]]).
 
 **GF3.** $(1/8, 1/4, 1/4, 1/4, 1/8)$ — five weights, halved at the ends, with zeros at $f = 1/4$ and $1/2$.
+
+**Practice set.**
+
+**P1.** $1/24$ at each end and $1/12$ for the eleven interior weights: $2(1/24) + 11(1/12) = 1$.
+
+**P2.** **Exactly zero** at all six seasonal frequencies (to twelve decimals) and small but nonzero at $f=0.1$ — the side lobe.
+
+**P3.** The **$2\times12$**. The halves are the recentring correction that even-length filters need so the output sits on an observation ([[derivations#D12. Why a centred $2\times s$ moving average is needed for even $s$|D12]]).
+
+**P4.** A **plain 7-term** average. Seven is odd, so it already centres on an observation and needs no correction.
 ## 20-03-henderson-filters
 
 **1.** The closed form in `R/_x11.R` reproduces the published weights; note they go **negative** near the ends, which is what sharpens the filter relative to a plain average.
@@ -281,6 +461,18 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The seasonality is **not** gone — gain 0.846 at the annual frequency leaves most of it. And it should not be: a Henderson is a trend smoother, and removing seasonality is the seasonal filter's job. Confusing the two is a common error.
 
 **GF3.** 5-term $(-0.073, 0.294, 0.559, 0.294, -0.073)$ and 7-term as printed by the script. Both reproduce cubics exactly — the design criterion is independent of frequency.
+
+**Practice set.**
+
+**P1.** All sum to 1 — that is gain(0) = 1, the condition that a constant passes untouched.
+
+**P2.** $0.952$ (H9), $0.846$ (H13), $0.348$ (H23). Longer means more suppression.
+
+**P3.** H9 and H13 have 2 negative weights at each end; H23 more. The negatives are what sharpen the filter relative to a plain average.
+
+**P4.** A **high** I/C ratio — a noisy series relative to how fast its trend moves — so X-11 chooses a long, heavy smoother.
+
+**P5.** **Longer.** You give up responsiveness: a longer filter is slower to turn, which matters most exactly where it matters most, at the end of the sample.
 ## 20-04-seasonal-moving-averages
 
 **1.** Convolving $\tfrac13(1,1,1)$ with $\tfrac15(1,1,1,1,1)$ gives the seven weights $(1,2,3,3,3,2,1)/15$. The snippet prints them.
@@ -297,6 +489,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Residual seasonality appears, because a long filter averages away the very evolution you needed to track. This is one of the standard causes of a failed QS test ([[50-02-residual-seasonality]]).
 
 **GF3.** It operates on **quarters** — all the Q1s together, all the Q2s, and so on. Nothing about the method is monthly; only the period changes.
+
+**Practice set.**
+
+**P1.** $3\times3$: $(1,2,3,2,1)/9$. $3\times5$: $(1,2,3,3,3,2,1)/15$. $3\times9$ correspondingly longer. All sum to 1.
+
+**P2.** The longer the filter, the lower the gain — it tracks slow change and suppresses fast change, which is the whole trade-off.
+
+**P3.** Very **stable** seasonality: a long filter is appropriate only when the pattern barely evolves.
+
+**P4.** A **shorter** filter — but first check whether it is really a seasonal break, in which case model it rather than filter it ([[50-07-outliers-and-breaks]]).
 ## 20-05-the-x11-iteration
 
 **1.** About **0.52%** mean through the interior, but up to **4.6%** at the ends. Quote both: a single whole-series number will either flatter or libel the implementation depending on which you pick. The gap *is* the end-filter problem ([[20-07-end-filters]]).
@@ -315,6 +517,18 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The trend drifts, because the seasonal factors no longer average to 1 and the residue accumulates into the trend. Over ten years it is clearly visible.
 
 **GF3.** `UKgas` gives 0.75%/0.75%/1.03% for d10/d11/d12 and `JohnsonJohnson` 0.76/0.75/0.92 — as good as monthly, confirming the code is genuinely frequency-general.
+
+**Practice set.**
+
+**P1.** Around 0.5% interior mean for monthly, 0.75% for quarterly. Report interior and ends separately.
+
+**P2.** The loop is in the note's pseudocode block; the checkable part is that steps 4 and 10 both **centre** the seasonal factors, and forgetting either causes drift.
+
+**P3.** You almost certainly compared against the **extreme-value-replaced** series rather than the original. The identity holds against the original $z$.
+
+**P4.** **Ship it.** That is the expected pattern — implementations agree in the interior and diverge at the ends, because each improvises differently where the symmetric filter runs out.
+
+**P5.** The **ratios become differences**: $Z/T$ becomes $Z-T$, and the final combination changes correspondingly. Taking logs converts one to the other.
 ## 20-06-extreme-values
 
 **1.** The seasonal factors for *other* Januaries move, because they are estimated from the same calendar-month series. Down-weighting the spike limits the damage substantially — that is the entire purpose of the step.
@@ -333,6 +547,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The factors move substantially, and for *other* years' Januaries too. That measured difference is what the extreme-value step buys you.
 
 **GF3.** The weights depend on the data, so scaling the input does not scale the output and the filter is not fixed. Analytically it means you cannot write X-11 as a single transfer function — the 'composite filter' is only its linear part.
+
+**Practice set.**
+
+**P1.** Only observations beyond 1.5 sigma get weight below 1; beyond 2.5 sigma the weight is 0. A single 3-sigma point is fully excluded and its neighbours untouched.
+
+**P2.** Wider limits exclude fewer points. On a clean series this barely matters; on a contaminated one it matters a great deal.
+
+**P3.** It contributes 40% of its value when the seasonal factors are estimated — but the **original value is still divided by those factors**, so it survives in D11. Down-weighting is not deletion.
+
+**P4.** **Model it as an AO.** That removes it before the ARIMA is fitted, protecting the model parameters too; extreme-value replacement protects only the filters ([[50-07-outliers-and-breaks]]).
 ## 20-07-end-filters
 
 **1.** The end filter has **zero weight on the future** — it cannot have any, there is no future — so it redistributes that weight onto the past. It is a different filter, not a truncated one.
@@ -351,6 +575,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Padding with zeros drags the trend violently toward zero in the final year — far worse than an end filter. It shows why X-11 needs *proper* asymmetric weights rather than a truncation.
 
 **GF3.** Worse per observation, because a quarterly year is four points rather than twelve, so the end filter reaches proportionally further into the unknown.
+
+**Practice set.**
+
+**P1.** The gap is largest at the final point and shrinks moving inward, flattening after about a year.
+
+**P2.** The symmetric filter puts about 0.24 on the current observation; the one-sided version must put much more, since it has no future to spread weight over.
+
+**P3.** **Yes, entirely normal.** The last point uses the most asymmetric filter; a point a year back is already using something close to the symmetric one.
+
+**P4.** Last month's figure was an estimate made without knowing what came next. Now that another month exists, the estimate has been updated — that is expected, not an error, and the change gets smaller each month.
 ## 20-08-x11-arima
 
 **1.** The last twelve months differ visibly; the interior does not. Forecast extension only changes what happens where the symmetric filter runs out.
@@ -371,6 +605,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** A wrong model makes things **worse than no extension** — you have replaced missing data with confidently wrong data. Extension is only as good as the model behind it.
 
 **GF3.** In normal times the model's forecast is close to what happens, so the extension supplies nearly the right values. At a turn the model has only seen the old regime, so the extension is wrong in a *systematic direction* — and averaging in systematically wrong values does not help.
+
+**Practice set.**
+
+**P1.** Only the last twelve values differ; the interior is untouched. Extension changes only what the symmetric filter could not reach.
+
+**P2.** 1.137% → 0.670%, a 41% reduction — **measured against a common target**. Against separate targets the improvement vanishes into the definition.
+
+**P3.** Check whether the revisions are measured against a **shared** reference. That definition error is the single most common way this experiment goes wrong.
+
+**P4.** About a year, which is what the symmetric filter needs. More does not help, because the extra values are forecasts of forecasts and carry no new information.
 # Module 3 — Spectra and signal extraction
 
 ## 30-01-frequency-domain-basics
@@ -389,6 +633,20 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** $f = 0.25$ means four months for monthly data and a **full year** for quarterly. Reading 'period 4' off a quarterly spectrum and calling it four months is the error, and it is easy to make.
 
 **GF3.** $k/7$ for $k = 1, 2, 3$: periods 7, 3.5 and $2.33$ days. Note 7 is odd, so the highest is not the Nyquist frequency and no centring correction is needed.
+
+**Practice set.**
+
+**P1.** $\omega = 2\pi f$: $0.314, 0.524, 1.571, 3.142$; periods $20, 12, 4, 2$ time units.
+
+**P2.** $s=4$: two ($0.25, 0.5$). $s=7$: three ($1/7, 2/7, 3/7$). $s=12$: six. The rule is $\lfloor s/2 \rfloor$.
+
+**P3.** **Radians per period** — the giveaway is that the maximum is $\pi \approx 3.14$ rather than 0.5.
+
+**P4.** The **annual** cycle: $1/0.0833 = 12$ months.
+
+**P5.** **Not quite.** $0.09$ is not $k/12$, so it is not seasonal — it is a roughly 11-month cycle, which a seasonal filter will not remove and which may indicate a moving holiday.
+
+**P6.** Because $s=12$ is **even**, so $k = s/2 = 6$ gives $f = 0.5$, the Nyquist frequency, and it is genuinely seasonal. For odd $s$ there is no $k$ with $k/s = 0.5$, so Nyquist is not a seasonal frequency.
 ## 30-02-spectral-density
 
 **1.** The raw periodogram is wildly noisy and **does not settle** as $n$ grows — it is an inconsistent estimator. Smoothing with `spans` averages neighbouring ordinates and reveals the flat truth. This is the single most important practical fact about periodograms.
@@ -407,6 +665,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The raw periodogram is so noisy that spurious peaks appear everywhere and you will identify structure that is not there. Always smooth, and be honest that the bandwidth is a choice.
 
 **GF3.** A deterministic seasonal gives a spike of essentially **zero width** (infinite in the limit); a stochastic one gives a peak of finite width. Peak *width* is the visual signature of how fast seasonality evolves — the same thing $\Theta$ measures.
+
+**Practice set.**
+
+**P1.** No smoothing is unusable noise; `c(3,3)` is a reasonable compromise; `c(7,7)` is smoother but blurs adjacent peaks.
+
+**P2.** It does, to machine precision — for AR(1) the integral equals $1/(1-\phi^2)$.
+
+**P3.** **White noise.** Flat means every frequency contributes equally, which is the definition.
+
+**P4.** Something like `c(3,3)`. Too much smoothing **merges adjacent seasonal peaks** and can hide residual seasonality — the exact thing you are usually looking for.
 ## 30-03-spectrum-of-an-arma
 
 **1.** $\phi = 0.5$ and $0.9$ give power concentrated at **low** frequencies (slow wandering); $\phi = -0.9$ concentrates it at **high** frequencies (rapid alternation). The spectrum shape and the sample path are the same fact.
@@ -427,6 +695,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Substantially different, and **no, you would not notice**: a flipped-sign spectrum is a perfectly plausible-looking spectrum for a different model. That is exactly why sign conventions are dangerous — the failure is silent ([[10-11-sign-conventions]]).
 
 **GF3.** Three peaks: frequency 0 plus $k/4$ for $k = 1, 2$. Two seasonal frequencies, not six.
+
+**Practice set.**
+
+**P1.** Positive $\phi$ peaks at $\omega = 0$; negative $\phi$ peaks at $\omega = \pi$. Larger $|\phi|$ makes the peak taller and narrower.
+
+**P2.** $f(0) = (1-\theta)^2/2\pi$: $0.159, 0.0398, 0.0016, 0$. Only $\theta = 1$ gives an exact zero.
+
+**P3.** An **AR(2) with complex roots** near the unit circle at the annual frequency — a stochastic annual cycle rather than a differencing operator.
+
+**P4.** Add the term whose spectrum has a peak there — usually a seasonal AR or MA at the relevant lag. A missing peak in the model's spectrum is the frequency-domain version of a residual ACF spike.
 ## 30-04-pseudo-spectrum
 
 **1.** Seven peaks: frequency 0 plus the six seasonal frequencies. On a log axis they are visibly unbounded rather than merely large.
@@ -447,6 +725,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** R returns `Inf`, and that is correct rather than a failure — the pseudo-spectrum genuinely is unbounded there. The point of 40-06 is that the *filters* derived from it are still finite, because the infinities cancel ([[derivations#D10. Why the WK filters have no poles|D10]]).
 
 **GF3.** A unit root is a statement about the model, and no finite dataset can exhibit an infinite spectrum. The periodogram of real data shows large peaks in the same places; the infinity is what the model says those peaks are approaching.
+
+**Practice set.**
+
+**P1.** **Exactly zero** at all seven — frequency 0 and the six seasonal frequencies. That is why the pseudo-spectrum is infinite there.
+
+**P2.** Much larger for $\Theta = 0.9$: high $\Theta$ means a narrow, tall peak, so just off-centre the value is still enormous.
+
+**P3.** $\Theta$ — it sets the peak **width**, not the peak locations. Same model family, different seasonal stability.
+
+**P4.** Use a **log axis**. On a linear axis an unbounded peak dwarfs everything and the plot carries no information.
 ## 30-05-filters-in-the-frequency-domain
 
 **1.** The gain of $(1-B)$ is $2|\sin(\omega/2)|$, rising from 0 at $\omega=0$ to **2** at $\omega=\pi$. Differencing does not just remove the trend — it **amplifies** high frequencies by up to a factor of two.
@@ -467,6 +755,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The measured shift matches the group delay in months, which is what the group delay is *for* ([[30-08-filter-theory]]).
 
 **GF3.** $(1-B^4)$ has three zeros — at $0, 1/4, 1/2$ — against seven for $(1-B^{12})$. In both cases: frequency zero plus every seasonal frequency.
+
+**Practice set.**
+
+**P1.** $2|\sin(\pi f)|$: $0, 0.618, 1.414, 2$. Note it **exceeds 1** — differencing amplifies high frequencies.
+
+**P2.** Zeros at $f = 0$ and $k/12$ for $k=1..6$: seven in all.
+
+**P3.** It **amplifies** cycles at that frequency. Differencing does exactly this at high frequencies, which is why over-differencing makes a series look noisier than it is.
+
+**P4.** **No.** Differencing removes the trend but doubles the highest frequencies. If you want to keep detail, use a trend filter and subtract, or model the trend rather than differencing it away.
 ## 30-06-wiener-kolmogorov
 
 **1.** The gain is near 1 at low frequencies (where the random walk dominates) and falls toward 0 at high frequencies (where the noise does). The filter keeps the share of the power that is the signal's.
@@ -487,6 +785,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** **You cannot.** $\nu_s = f_s/(f_s+f_n)$ with both non-negative is bounded in $[0,1]$ by construction. The WK gain can never exceed 1 — a filter that amplified would not be minimum-MSE.
 
 **GF3.** A double random walk has more low-frequency power, so the cutoff moves **higher** — the filter keeps more, because more of the variation is credibly signal. That is the same trade-off as choosing a longer Henderson.
+
+**Practice set.**
+
+**P1.** They sum to 1 at every frequency, to about $10^{-12}$. Trend owns $\omega=0$ entirely; seasonal owns each seasonal frequency entirely.
+
+**P2.** Spikes at multiples of 12 with an envelope decaying roughly like $\Theta$ per year — still visibly nonzero at lag 36.
+
+**P3.** **All** of the power at that frequency. Gain 1 means everything there is assigned to that component and nothing to the others.
+
+**P4.** The **model** decides, via the relative heights of the component spectra — and yes, the split of the flat part is a **convention** (the canonical choice), not something the data determines ([[derivations#D9. The canonical decomposition, and why it is a convention|D9]]).
 ## 30-07-finite-samples
 
 **1.** Far more terms than intuition suggests. For the airline model at $\Theta = 0.557$ the filter needs **331 lags — 27.6 years** — to converge to $10^{-7}$, on a series only 12 years long.
@@ -507,6 +815,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** A **constant offset**, not noise. Without normalisation on both sides you can see it plainly; normalise either side and it is absorbed, which is how this bug hid in the vault until it was looked for deliberately.
 
 **GF3.** Fewer **lags** but a similar number of **years**, because the decay is per year in both cases. Quoting the requirement in lags rather than years makes quarterly look cheap when it is not.
+
+**Practice set.**
+
+**P1.** The requirement rises steeply with $\Theta$: 60 lags at 0.3, 331 at 0.557, 600+ at 0.9. In years: 5, 27.6, 50+.
+
+**P2.** The error falls by orders of magnitude with each increase, and is a **constant offset** rather than noise at every truncation length.
+
+**P3.** **Truncation.** A near-perfect correlation with a constant offset is the signature — it is a bias, not noise, and normalising would hide it.
+
+**P4.** Forecast-extend (which is what `seats_decompose` does), or use **Burman's algorithm**, which needs no long filter at all ([[40-09-burman-algorithm]]). Truncating and hoping is the option to avoid.
 ## 30-08-filter-theory
 
 **1.** Linearity and time-invariance both hold to machine precision ($10^{-14}$ and exactly 0). Clipping the input first **breaks linearity** immediately, because clipping is not a linear operation — and that is not a contrived example: X-11's extreme-value replacement clips, which is exactly why X-11 as a whole is not an LTI filter ([[20-06-extreme-values]]).
@@ -536,6 +854,18 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** A pure delay $w = (0,0,0,1)$ has $H = e^{-3i\omega}$, phase $-3\omega$, and group delay exactly 3 at every frequency. It is the one case where the delay *is* a constant and could be subtracted off.
 
 **GF3.** **Linearity** fails, and it fails as soon as an observation crosses the sigma limit — which for a large outlier is immediate. Time-invariance survives. So X-11 is time-invariant but non-linear, and only its linear part has a transfer function.
+
+**Practice set.**
+
+**P1.** The symmetric filter's phase is 0 or $\pi$ at every frequency; the one-sided filter's varies continuously.
+
+**P2.** All four agree to ten decimals. $\sum w_j$ and $H(0)$ are the same quantity.
+
+**P3.** **Inverting** it — multiplying by $-1$. A phase of $\pi$ is a sign flip, not a time shift, which is why symmetric filters still count as zero-phase.
+
+**P4.** Because the shift is **frequency-dependent**, so there is no single constant to subtract. A series mixes frequencies, and each is displaced differently.
+
+**P5.** 'Ideal at what?' — an ideal low-pass cannot be built with finitely many weights (Gibbs), so either the filter is infinite, or 'ideal' means 'good enough for our purposes', which is a judgement worth seeing stated.
 # Module 4 — SEATS
 
 ## 40-01-unobserved-components-and-reduced-form
@@ -556,6 +886,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** **Something else.** The gap is the canonical convention: your simulation used whatever variances you chose, while SEATS returns the canonical split. Both are admissible decompositions of the same reduced form ([[derivations#D9. The canonical decomposition, and why it is a convention|D9]]).
 
 **GF3.** Yes — a quarterly structural model reduces to a quarterly airline model, with $S(B) = 1+B+B^2+B^3$. The argument is frequency-general.
+
+**Practice set.**
+
+**P1.** Trend, seasonal and irregular each get their own innovation: $\sigma_\eta^2$ the trend, $\sigma_\omega^2$ the seasonal, $\sigma_\varepsilon^2$ the irregular.
+
+**P2.** $(1-B)^2 \times S(B)$, and the product returns $(1-B)(1-B^{12})$ exactly.
+
+**P3.** $\sigma_\omega^2 \approx 0$ — the seasonal barely evolves, so it is nearly deterministic.
 ## 40-02-admissible-decompositions
 
 **1.** On a coarse grid, **25%** admissible; on a fine grid, 27.4%. `AirPassengers` at $(0.402, 0.557)$ sits comfortably inside, in the positive quadrant.
@@ -578,6 +916,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The **trend** spectrum goes negative first. A negative $\theta$ asks for a trend rougher than white noise at high frequencies, which no non-negative spectrum can supply.
 
 **GF3.** The same shape — positive quadrant admissible, elsewhere not — but the boundary sits differently because there are two seasonal frequencies rather than six.
+
+**Practice set.**
+
+**P1.** Everything in the positive quadrant passes; essentially nothing elsewhere does.
+
+**P2.** $\theta = -0.086$ — negative, hence outside the admissible quadrant.
+
+**P3.** X-13 found your model **inadmissible** and silently substituted a nearby admissible one. Use `seats.noadmiss = 'no'` to get an error instead.
 ## 40-03-canonical-decomposition
 
 **1.** $m_T = 0.0514$ and $m_S = 0.0225$ for `AirPassengers`; both are handed to the irregular, whose constant term rises accordingly.
@@ -600,6 +946,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** **No** — without the canonical step the irregular is not white; it retains whatever floor the other components kept. Making the irregular exactly white is precisely what the step buys.
 
 **GF3.** It maximises smoothness of the trend and seasonal at the cost of a larger irregular. To prefer a different split you would have to believe the components genuinely contain some white noise of their own — perfectly defensible, and unfalsifiable from the data.
+
+**Practice set.**
+
+**P1.** $m_T = 0.0514$, $m_S = 0.0225$, and the irregular's constant rises by their sum.
+
+**P2.** They do, to about $10^{-12}$ — moving power between components cannot change the total.
+
+**P3.** **Canonical.** Touching zero somewhere is exactly what subtracting the minimum achieves.
 ## 40-04-partial-fractions-in-b-and-f
 
 **1.** $\theta(B) = 1 - 0.4B$. Its autocovariance sequence is $c_0 = 1 + 0.4^2 = 1.16$ and $c_1 = -0.4$. Hence $(1.16, -0.4)$.
@@ -620,6 +974,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** By **many** orders of magnitude — from $10^{-14}$ to something visible. That is what makes the residual a genuine check on your degree bookkeeping rather than a formality.
 
 **GF3.** It does, using `_seats_general.R`: residuals stay near $10^{-12}$ for `unemp` and `ukgas`. The least-squares formulation does not care how the denominators arose.
+
+**Practice set.**
+
+**P1.** For $(1, -0.4)$: $c_0 = 1.16$, $c_1 = -0.4$. It is the autocovariance sequence of the coefficient vector.
+
+**P2.** Around $10^{-14}$ monthly and similar quarterly — the system is exactly determined and well conditioned.
+
+**P3.** A **degree is wrong** — the system is over- or under-determined. Recount $\deg A$, $\deg C$ and $\deg D$.
+
+**P4.** Check the residual, and independently verify that $\nu_T + \nu_S + \nu_I = 1$ at every frequency. Two independent internal checks are strong evidence without any external reference.
 ## 40-05-component-models
 
 **1.** Differencing the canonical trend twice gives autocovariances that vanish beyond lag 2 — confirming ARIMA(0,2,2), the local linear trend.
@@ -640,6 +1004,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** **No** — without the canonical step the irregular carries residual autocorrelation. Whiteness is a consequence of the convention, not of the model.
 
 **GF3.** Trend unchanged at (0,2,2); seasonal drops from 11 MA terms to 3. Everything scales with $s$ except the trend.
+
+**Practice set.**
+
+**P1.** Nonzero at lags 0, 1, 2 and **zero beyond** — confirming ARIMA(0,2,2).
+
+**P2.** Nonzero up to lag 11, zero beyond — confirming the 11 MA terms.
+
+**P3.** That the irregular is **exactly white**, which is what the canonical convention was designed to produce.
+
+**P4.** The **canonical step**. Without it the trend numerator has degree 1 rather than 2, giving (0,2,1).
 ## 40-06-wk-filters-for-the-airline-model
 
 **1.** They sum to 1 at every frequency, verified to about $10^{-12}$.
@@ -662,6 +1036,12 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** $\Theta = 1.05$ puts an MA root **inside** the unit circle, so $N$ has a zero on or inside the circle and the filters acquire a genuine pole. The 'no poles' result depends on invertibility ([[derivations#D10. Why the WK filters have no poles|D10]]) — it is not automatic.
 
 **GF3.** Two notches rather than six, and correspondingly wider relative to the frequency range.
+
+**Practice set.**
+
+**P1.** Trend owns $\omega=0$; seasonal owns each $2\pi k/12$; the irregular takes the gaps. Sum is 1 to $10^{-12}$.
+
+**P2.** Because for even $s$, $k = s/2$ gives exactly $\omega = \pi$ — it is a genuine seasonal frequency, not the edge of the axis.
 ## 40-07-implementing-seats-in-r
 
 **1.** s10 0.000%, s11 0.001%, s12 0.012%, s13 0.010% against the Census binary.
@@ -684,6 +1064,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** `stopifnot(extend >= max_lag)` fires. It is there because the silent version returns **all NA** or, worse, a plausible-looking but wrong answer — this exact bug cost a debugging session and is why the guard is explicit.
 
 **GF3.** They do: `UKgas` and `JohnsonJohnson` both decompose correctly with $s=4$, which is what confirmed the code was genuinely frequency-general rather than accidentally monthly.
+
+**Practice set.**
+
+**P1.** s10 0.000%, s11 0.001%, s12 0.012%, s13 0.010% on `AirPassengers`; comparable on quarterly series.
+
+**P2.** 331 lags (27.6 years) at $\Theta = 0.557$; far more for `co2` at 0.912.
+
+**P3.** Whether `extend >= max_lag`. If the extension is shorter than the filter, every value is `NA` — which is why that guard is an explicit `stopifnot`.
 ## 40-08-validating-against-x13
 
 **1.** See the table in the note.
@@ -704,6 +1092,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** About 100%, because X-13 runs **additive** while your code is multiplicative. The lesson: *when a comparison fails by a lot, suspect the harness before the algorithm* — a 100% error is almost never a subtle bug.
 
 **GF3.** Same four numbers, same order of magnitude. See the quarterly section of 40-07.
+
+**Practice set.**
+
+**P1.** See the table in the note.
+
+**P2.** `transform.function = 'log'` (multiplicative), `arima.model` (no automatic selection), `regression.aictest = NULL` (no calendar tests), `outlier = NULL` (no outlier detection). Each removes a source of difference that is not the algorithm.
+
+**P3.** **The harness.** A 100% discrepancy is almost never a subtle algorithm bug — here it is X-13 running additive against multiplicative code.
+
+**P4.** Better than about 0.01% on the interior, with the identity holding exactly. Anything much worse means a real difference in method, not just arithmetic.
 ## 40-09-burman-algorithm
 
 **1.** With $W = 1$ and $\theta(B) = 1-\theta B$: matching $B^0$ gives $g_0 + \theta^2 g_0 \cdots$ — do it carefully and you get two equations, $2(g_0 - \theta g_1) = 1$ at lag 0 and $-\theta g_0 + g_1 = 0$ at lag 1, so $g_1 = \theta g_0$ and $g_0 = 1/[2(1-\theta^2)]$.
@@ -726,6 +1124,20 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The **unit-circle identity** detects it immediately and unambiguously; the decomposition detects it too, but as a small distortion you might rationalise. Check the identity first — it is a sharp test, and the decomposition is a blunt one.
 
 **GF3.** It does not care. The method needs only that $\theta(B)$ is invertible; the AR side lives in the numerator $W$ and changes nothing structural.
+
+**Practice set.**
+
+**P1.** $\deg\theta = 13$ and $|g| = 14$ monthly; $\deg\theta = 5$ and $|g| = 6$ quarterly.
+
+**P2.** About $7\times10^{-15}$ — the split is exact to machine precision.
+
+**P3.** The **recursions or the run-up**, not the algebra. A correct $g$ with a wrong answer means the implementation of the loops, or insufficient warm-up from the zero start.
+
+**P4.** **Burman**, because it has no truncation tolerance to choose and runs in $O(n)$. Truncation is easier to write and easier to get subtly wrong.
+
+**P5.** **Invertibility** — all roots of $\theta(B)$ outside the unit circle, so the feedback coefficients shrink what they act on ([[10-05-invertibility]]).
+
+**P6.** Because it is exact rather than approximate. A tolerance is a knob, and a badly set knob produces a *constant offset* that correlates 0.999 with the truth and is uniformly wrong ([[30-07-finite-samples]]).
 ## 40-10-general-seats
 
 **1.** The seasonal polynomial matches to $2\times10^{-14}$; the trend to only $2\times10^{-8}$. Not a bug: $(1-B)^2$ has a **double root** at $B=1$, and root-finding at a repeated root loses about half the available precision — you get $\sqrt{\varepsilon}$ rather than $\varepsilon$. The hard-coded split knows the answer algebraically; the general one has to find it numerically and cannot match that.
@@ -752,6 +1164,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** It goes to the **trend**, and you have silently published a three-year business cycle inside a series people read as 'the underlying level'. This was my own first bug, and it is invisible unless you look at the classification table.
 
 **GF3.** Both land in transitory, and the $N$-way partial fraction handles the extra denominator without modification — that is what makes it $N$-way rather than four-way.
+
+**Practice set.**
+
+**P1.** `unemp` and `ukgas` give trend=2 with the rest seasonal; `cpi` gives trend=2, seasonal=13. No transitory on any real catalogue series.
+
+**P2.** Eleven seasonal and **one trend** — the root at frequency zero. $(1-\Phi B^{12})$ is not a purely seasonal operator.
+
+**P3.** **Seasonal**, at $2\pi/12$ — the annual cycle, period 12.
 # Module 5 — Diagnostics and practice
 
 ## 50-01-is-there-seasonality
@@ -774,6 +1194,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The adjusted series has **higher** variance. It happens by accident whenever adjustment is applied as a routine pipeline step without testing first — which is common, and is why 50-01 comes before everything else in Module 5.
 
 **GF3.** The concepts transfer exactly with $s = 7$; the *tools* mostly do not, because X-13 is built around monthly and quarterly. You would need $\lfloor 7/2 \rfloor = 3$ seasonal frequencies and software that supports weekly periodicity.
+
+**Practice set.**
+
+**P1.** Most catalogue series exceed 9 comfortably; `sunspots` does not.
+
+**P2.** The adjusted series has **higher** variance — you removed a pattern that was not there.
+
+**P3.** **Not seasonal** — below the 9 threshold for $\chi^2_2$ at 1%.
+
+**P4.** Show them the spectrum. A peak away from $k/12$ means a real cycle that is not seasonal, and adjusting for it would be wrong — the distinction is visible rather than a matter of opinion.
 ## 50-02-residual-seasonality
 
 **1.** Low-$\Theta$ series are least clean — fast-evolving seasonality is hardest to remove completely.
@@ -794,6 +1224,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** QS detects it clearly — the statistic is sensitive to a residue well below what the eye picks up in a plot, which is the argument for running it rather than looking.
 
 **GF3.** Direct and indirect adjustment differ, sometimes materially. Neither is universally correct; agencies pick one and document the choice.
+
+**Practice set.**
+
+**P1.** Original high, adjusted near zero, residual near zero is the healthy pattern.
+
+**P2.** An unmodelled **calendar effect**, a seasonal filter too long for how fast the pattern evolves, or a **seasonal break** partway through.
+
+**P3.** Find the cause rather than re-running with different options. Most often it is a calendar effect, which is cheap to test and cheap to fix ([[50-10-calendar-effects]]).
 ## 50-03-m-and-q-statistics
 
 **1.** `sunspots` fails badly on the M statistics that measure the seasonal's contribution to variance — there is no seasonal to contribute.
@@ -814,6 +1252,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Take a series with strong residual seasonality but otherwise tidy behaviour: Q averages eleven statistics and can stay below 1 while QS on the adjusted series is significant. Composite statistics hide specific failures — always read the components.
 
 **GF3.** The M and Q statistics are defined in terms of X-11's own tables (D-series ratios), which SEATS never computes. To compare methods, use something both produce: revisions, residual seasonality, or sliding spans.
+
+**Practice set.**
+
+**P1.** On `AirPassengers` all pass; on a non-seasonal series the seasonal-contribution statistics fail badly.
+
+**P2.** M7 compares stable against moving seasonality — a value above 1 says the seasonal is **evolving fast** relative to how identifiable it is. Often a short-series symptom.
+
+**P3.** **No.** Q averages eleven things and can pass while a specific failure hides inside it. Always check QS on the adjusted series alongside.
 ## 50-04-sliding-spans
 
 **1.** **2.08%** of months flagged (2 of 96) for `AirPassengers` — comfortably passing the 15% threshold.
@@ -834,6 +1280,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The cliff is at about 5 years, below which X-13 reports `sspans = \"failed\"` — you cannot build four overlapping 8-11 year spans. `accdeaths` and `ldeaths` at 6 years both fail.
 
 **GF3.** **All three, but sample size dominates.** Quarterly means a quarter as many observations per span, and both series also have genuinely evolving seasonality. The frequency itself is not the problem; the data per span is.
+
+**Practice set.**
+
+**P1.** `AirPassengers` 2.08%, `imp` 5.56%, `iip` 0.00% pass; `UKgas` 40.62% and `JohnsonJohnson` 18.75% fail.
+
+**P2.** The series is **too short** to build four overlapping spans — about five years is the floor. Only more data fixes it.
+
+**P3.** Investigate before publishing. Sliding spans failing means the answer is not robust to which window you use, which is a different and more serious complaint than an untidy adjustment.
 ## 50-05-revision-history
 
 **1.** The difference between concurrent and full-sample estimates, month by month, is the revision history.
@@ -854,6 +1308,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Measured against each method's *own* final estimate, the improvement vanishes — you have changed the question. This is the mistake that made forecast extension look worthless in an early draft of 20-08.
 
 **GF3.** Larger per observation, because each quarterly point carries four times the information and the end filters reach proportionally further.
+
+**Practice set.**
+
+**P1.** The 95th percentile is several times the mean — the tail is what users notice.
+
+**P2.** Revisions are **unbiased but noisy** — they go both ways and cancel on average. That is the good case; a systematic sign would mean bias.
+
+**P3.** Quote a typical size and a tail: 'usually under 1%, occasionally 3%, and largest around turning points.' Avoid a single average, which understates what they will occasionally see.
 ## 50-06-turning-points
 
 **1.** 1.112% within a year of a recession versus 0.620% elsewhere, a ratio of **1.79×**.
@@ -874,6 +1336,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** The ratio moves a lot — 1.42 for curvature, 1.79 for recession dates, 2.53 for the 2008-10 window. **The spread is the finding**: quote 'roughly 1.5-2.5x', never three digits.
 
 **GF3.** The information about the turn does not exist yet — the filter needs future data and the model can only extrapolate the past. So the number will be revised, and by more than usual. Read three-month averages or year-on-year changes instead of single months.
+
+**Practice set.**
+
+**P1.** 1.112% within a year of a recession versus 0.620% elsewhere, ratio 1.79×.
+
+**P2.** $-0.313\%$ inside 2008–2010 against $+0.071\%$ elsewhere.
+
+**P3.** **Better.** A systematic sign means the concurrent estimate is *biased*; mean-zero means merely noisy. Bias is the harder failure because it cannot be averaged away.
+
+**P4.** The latest figure is a real estimate, but it is the least settled one in the series, and it is least settled precisely when the economy is turning. It will be revised, probably by more than usual. Read the three-month average rather than the single month.
 ## 50-07-outliers-and-breaks
 
 **1.** A **level shift** does most damage to the seasonal factors, because it is a permanent change that the filters try to absorb into the seasonal and trend. An AO is a single point and much easier to contain.
@@ -894,6 +1366,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** Detection is unreliable there, and arguably **should not** fire: an LS in the final months is statistically indistinguishable from the beginning of a genuine turn. Treating a real turn as an outlier would erase exactly the signal you most need.
 
 **GF3.** Similar in **years**, which means fewer observations affected — the filters are the same length in years regardless of frequency.
+
+**Practice set.**
+
+**P1.** The **LS** does the most damage by a wide margin; the AO the least.
+
+**P2.** A lower threshold finds more; each removal changes D11 a little. There is no free setting.
+
+**P3.** A **level shift** detected in September 2008. Keep it if the level genuinely changed permanently — which in that case it did.
+
+**P4.** **Wait**, if you can. Detection at the end is unreliable, and an LS in the final months is indistinguishable from the start of a genuine turn.
 ## 50-08-covid
 
 **1.** Untreated, a COVID-scale shock contaminates the seasonal factors for **years** in both directions — the filters are two-sided, so damage propagates backwards as well as forwards.
@@ -914,6 +1396,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** A great deal survives. A single AO cannot represent a six-month disruption; you need one per affected month, or a span exclusion.
 
 **GF3.** For an LS: the level genuinely may not have returned to trend. Against: much of the 2020 drop did recover, and an LS would permanently displace the trend. What settles it is *later data* — which is precisely what was unavailable when the decision had to be made, and is the turning-point problem in its sharpest form.
+
+**Practice set.**
+
+**P1.** Untreated, seasonal factors move by well over 1% for **years** either side.
+
+**P2.** Because the filters are **two-sided**. An event in 2020 enters the estimation of factors before 2020 as well — the contamination runs backwards.
+
+**P3.** 'Figures from 2020 onward are affected by pandemic-related disruption; outlier terms have been included so that the seasonal pattern is estimated from unaffected periods. Seasonal factors for earlier years may also have changed as a result.'
 ## 50-09-x11-vs-seats
 
 **1.** The methods differ most on **low-$\Theta$** series — fast-evolving seasonality, where SEATS adapts its filter and X-11 cannot.
@@ -934,6 +1424,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** **SEATS**, because it derives its filter from the model — a bad model gives a bad filter. X-11's fixed filters are more robust to misspecification, which is a real argument in its favour.
 
 **GF3.** The ranking holds, but both are noisier on quarterly data for the sample-size reason.
+
+**Practice set.**
+
+**P1.** Mean around 0.53% and max around 2.63% on `AirPassengers`; larger on low-$\Theta$ series.
+
+**P2.** That **one month**. A single large difference usually means an outlier, a moving holiday, or a break — on `imp` it is Chinese New Year.
+
+**P3.** Either is defensible. What matters far more is the **model and the outlier treatment**: the method difference is 0.5%, and a misspecified model or an untreated level shift will cost you more than that. Pick one, document it, and stay consistent.
 ## 50-10-calendar-effects
 
 **1.** Easter[1] is significant for `AirPassengers` ($+0.0234$, $t = 2.63$, $p = 0.0086$) and absent for `unemp` ($p = 0.60$).
@@ -958,6 +1456,16 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **GF2.** It does: on `unemp` the Easter coefficient has $p = 0.60$, and `regression.aictest` drops it. Fitting a term that is not there is cheap to test and easy to over-believe.
 
 **GF3.** Nothing changes structurally — `genhol()` takes any vector of dates. What changes is that you must **know the calendar**: Ramadan moves through the solar year rather than oscillating within a season, so the window and the centring need more care.
+
+**Practice set.**
+
+**P1.** Trading day matters most where activity depends on the day of the week; on `imp` it is not significant at all (max $|t| = 1.27$).
+
+**P2.** CNY on `imp`: $-0.1230$, $t = -7.52$. Diwali on `iip`: $-0.0333$, $t = -4.03$.
+
+**P3.** Activity falls about **12%** in the window before the holiday, and the effect is far too large to be chance.
+
+**P4.** **Trading day first** (retail depends on weekend counts), then **Easter**, then check for anything local. Test trading day before holidays — analysts usually do it the other way round and it is usually the wrong order.
 ## Links
 
 - Back to [[00-Start-Here]] · derivations: [[derivations]] · figures: [[figure-index]]

@@ -96,6 +96,15 @@ The result is a spectrum that is **infinite** at 0 and at the six seasonal frequ
 2. **Break it.** Compute an ARMA spectrum with the MA sign flipped. How different is it, and would you notice without the correct version beside it?
 3. **Transfer.** Plot the spectrum of a quarterly airline model and count its peaks.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Plot the AR(1) spectrum for $\phi = \pm0.5, \pm0.9$ and note where each peaks.
+2. **Drill.** Compute $f(0)$ for MA(1) with $\theta = 0, 0.5, 0.9, 1$.
+3. **Read it.** A spectrum has a sharp peak at $f=1/12$ and is otherwise flat. What model?
+4. **Judgement.** Your fitted model's spectrum misses a peak the data clearly shows. What do you change?
+
 ## Links
 
 - Prev: [[30-02-spectral-density]] · Next: [[30-04-pseudo-spectrum]]

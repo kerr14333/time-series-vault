@@ -125,6 +125,14 @@ round(data.frame(t = idx, concurrent = conc, final = fin[idx],
 2. **Break it.** Measure revisions against *different* targets for the two methods and show how the 41% improvement disappears.
 3. **Transfer.** Compute the revision history for a quarterly series. Are revisions larger per observation?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Report mean, mean-absolute and 95th-percentile revision for one series.
+2. **Read it.** Mean revision is near zero but mean-absolute is large. What does that mean?
+3. **Judgement.** How would you communicate expected revision size to a non-technical user?
+
 ## Links
 
 - Prev: [[50-04-sliding-spans]] · Next: [[50-06-turning-points]]

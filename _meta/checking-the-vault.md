@@ -61,6 +61,7 @@ It is a staleness detector, not a proof of correctness.
 
 - A number that is **wrong in both the note and the script** passes. The guard checks agreement, not truth.
 - Numbers with fewer than two decimals (`0.5`, `12%`) are not checked — too many false positives from prose. The counts in the sample output just above are themselves unchecked for exactly this reason, and went stale within an hour of being written.
+- The **practice tier** is excluded. Those exercises and answers are hand-worked arithmetic ($0.5^5$, $2/\sqrt{n}$, Yule–Walker by hand) and invented scenario values ("suppose $t = 1.02$"), none of it derived from the code, so none of it can go stale when the code changes. That is a real blind spot and worth stating plainly: before the exclusion existed, the guard caught **two wrong answers** in that tier — invented polynomial roots, and a variance table whose ordering was backwards. Hand arithmetic in that tier is verified once, by hand, and then trusted.
 - It says nothing about whether the *prose* around a number still holds. When 50-06's curvature figure was corrected from 1.18× to 1.42×, the sentence calling it "almost nothing" had to change too, and no tool would have told you that.
 
 Related checks: `check_code_notes()` in `R/make-code-notes.R` verifies the `_code/` mirrors match their scripts; `check_figure_index()` in `R/make-figure-index.R` verifies the [[figure-index|figure appendix]] still matches `make-figures.R`; and re-running `R/make-figures.R` should leave `figures/` byte-identical.

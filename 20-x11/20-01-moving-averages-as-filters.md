@@ -118,6 +118,15 @@ length 13  sum = 1.0000000000  gain(0) = 1.0000000000
 2. **Break it.** Build a filter whose weights sum to 1.1 and apply it to a flat series. What happens, and which property have you violated?
 3. **Transfer.** What length of simple average annihilates a quarterly seasonal? Confirm its gain at $k/4$.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute the gain of a 3-, 5- and 7-term average at $f = 1/12$ and at $f = 1/3$.
+2. **Drill.** For each, list the frequencies where the gain is exactly zero.
+3. **Read it.** A filter has gain 1 at $f=0$ and 0.02 at $f=1/12$. Trend filter or seasonal filter?
+4. **Judgement.** You need to suppress a 5-month cycle without touching the annual one. What length do you choose?
+
 ## Links
 
 - Next: [[20-02-the-12-term-ma]]

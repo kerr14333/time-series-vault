@@ -123,6 +123,15 @@ by the boxed identity. **The filters sum to 1 for the same reason the partial fr
 2. **Break it.** Set one numerator degree wrong and watch the residual. How many orders of magnitude does it move?
 3. **Transfer.** Solve the system for a model with an AR term and confirm the residual stays near $10^{-12}$.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Compute `cospoly_from_poly()` for three short polynomials and check by hand.
+2. **Drill.** Report the residual for monthly and quarterly airline models.
+3. **Read it.** The residual comes back at $10^{-3}$ instead of $10^{-13}$. What is wrong?
+4. **Judgement.** How would you convince yourself the solve is right without comparing to X-13?
+
 ## Links
 
 - Prev: [[40-03-canonical-decomposition]] · Next: [[40-05-component-models]]

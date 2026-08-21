@@ -135,6 +135,15 @@ gain 0.00  0.0
 2. **Break it.** Use a plain 12-term average instead of the centred one. Measure the phase shift it introduces at the annual frequency.
 3. **Transfer.** Build the $2\times4$ filter for quarterly data from scratch and confirm its zeros.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Write out all 13 weights of the $2\times12$ and confirm they sum to 1.
+2. **Drill.** Evaluate its gain at $k/12$ for $k = 1..6$ and at $f = 0.1$.
+3. **Read it.** A 13-weight filter has endpoints of $1/24$. What is it, and why the halves?
+4. **Judgement.** For $s = 7$ (daily data, weekly cycle) do you need a $2\times7$ or a plain 7-term average? Why?
+
 ## Links
 
 - Prev: [[20-01-moving-averages-as-filters]] · Next: [[20-03-henderson-filters]]

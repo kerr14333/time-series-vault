@@ -113,6 +113,15 @@ The mean dwarfs the scatter: a bias, not noise.
 2. **Break it.** Truncate at 24 lags and compare against the correct answer *without* normalising either. What is the shape of the error?
 3. **Transfer.** Repeat the lag-requirement calculation for a quarterly model. Fewer lags, or fewer *years*?
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Tabulate `seats_max_lag()` for $\Theta = 0.3, 0.5, 0.7, 0.9$ in lags and in years.
+2. **Drill.** Truncate at 30, 60 and 120 lags and report the max error against the correct answer each time.
+3. **Read it.** A truncated decomposition correlates 0.999 with the correct one but is uniformly 0.07 higher. Diagnosis?
+4. **Judgement.** You have 8 years of data and the filter wants 27. What are your options?
+
 ## Links
 
 - Prev: [[30-06-wiener-kolmogorov]] · **Module 3 complete** → [[40-00-seats-map]]

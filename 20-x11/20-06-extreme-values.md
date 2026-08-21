@@ -110,6 +110,15 @@ max difference in seasonal factors: 1.146%
 2. **Break it.** Set the sigma limits so wide that nothing is down-weighted, then inject a large outlier. How much do the seasonal factors move?
 3. Explain in two sentences why extreme-value replacement makes X-11 a **non-linear** procedure, and what that costs you analytically.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Apply `extreme_weights()` to a series with one 3-sigma point and report how many observations get weight below 1.
+2. **Drill.** Vary the sigma limits over three settings and tabulate the number fully excluded.
+3. **Read it.** An observation has weight 0.4. What does that mean operationally?
+4. **Judgement.** A genuine one-off event (a strike) shows as a 4-sigma irregular. Down-weight it, or model it as an AO?
+
 ## Links
 
 - Prev: [[20-05-the-x11-iteration]] · Next: [[20-07-end-filters]]

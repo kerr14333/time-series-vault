@@ -166,6 +166,15 @@ for (Th in c(0.2, 0.6, 0.95))
 2. **Break it.** Evaluate the pseudo-spectrum exactly at $\omega = 0$ numerically. What does R return, and why is that the right answer?
 3. Explain in two sentences why the infinities are a property of the model rather than of any dataset.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Evaluate $|AR|^2$ for the airline model at $f = 0$ and at each $k/12$.
+2. **Drill.** Compute the pseudo-spectrum at $1/12 \pm 10^{-3}$ for $\Theta = 0.3$ and $0.9$.
+3. **Read it.** Two pseudo-spectra have peaks at the same places but different widths. What differs?
+4. **Judgement.** Someone plots a pseudo-spectrum on a linear axis and it looks like a single spike. Advice?
+
 ## Links
 
 - Prev: [[30-03-spectrum-of-an-arma]] · Next: [[30-05-filters-in-the-frequency-domain]]

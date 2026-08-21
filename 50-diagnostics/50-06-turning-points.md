@@ -112,6 +112,15 @@ Curvature is dominated by many small wiggles, so the proxy is swamped by ordinar
 2. **Break it.** Try three more proxies for 'near a turning point' and see how much the measured ratio moves. What does the spread tell you?
 3. Explain to a non-specialist, in three sentences, why no method can fix this and what they should do instead.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Reproduce the recession split and report both means and the ratio.
+2. **Drill.** Report the mean signed revision inside and outside 2008–2010.
+3. **Read it.** Revisions during a recession are large but mean **zero**. Better or worse than a systematic sign?
+4. **Judgement.** A journalist asks whether the latest unemployment figure can be trusted. Answer honestly in three sentences.
+
 ## Links
 
 - Prev: [[50-05-revision-history]] · Next: [[50-07-outliers-and-breaks]]

@@ -105,6 +105,15 @@ $B c = c$ for a constant $c$, so $(1-B)c = 0$. Differencing kills a constant. An
 2. **Break it.** Apply $(1-B^{12})$ to a series with period 11 instead of 12. Does it vanish? What does that tell you about how precisely a differencing operator is tuned?
 3. Write $(1-B)^3$ as a recipe on $z_t$ and say which polynomial trend it annihilates. Confirm on $t^2$ and on $t^3$.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Expand $(1-B)(1-B^4)$, $(1-B)^2(1-B^{12})$ and $(1-B^{12})^2$. How many terms each?
+2. **Drill.** Write $1/(1-0.5B)$ to six terms. At which lag does the weight first fall below 0.05?
+3. **Read it.** A colleague writes $z_t = z_{t-1} + z_{t-12} - z_{t-13} + a_t$. Which operator have they applied?
+4. **Judgement.** You need to remove a trend and a 7-day weekly cycle from daily data. Write the operator.
+
 ## Links
 
 - Next: [[10-02-stationarity-and-roots]]

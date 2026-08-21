@@ -250,6 +250,19 @@ round(data.frame(horizon = c(1, 3, 6, 12),
 2. **Break it.** Forecast from a model fitted to only the first 3 years. Compare with the full-sample forecast. Which part of the model degrades fastest?
 3. **Transfer.** Hand-roll the forecast recursion for a *quarterly* airline model and check it against `predict()`.
 
+## Practice set
+
+*Drills, output-reading and judgement calls. Short answers; the point is fluency and knowing what you are looking at.*
+
+1. **Drill.** Forecast 1, 6, 12 and 24 months ahead and tabulate the standard error at each.
+2. **Drill.** Compute the $\psi$-weights to lag 24 and confirm they do not decay.
+3. **Drill.** Convert the 12-month interval to a percentage of the point forecast.
+4. **Read it.** The interval width doubles between month 3 and month 18. Is that expected?
+5. **Read it.** A forecast is systematically 5% low over twelve months. Noise or bias, and how do you tell?
+6. **Judgement.** How far ahead would you publish a forecast from this model, and what would you say about the uncertainty?
+7. **Connect.** Which X-11 step consumes these forecasts, and how many months does it need?
+8. **Connect.** Why does the non-decay of $\psi_j$ matter for [[30-07-finite-samples]]?
+
 ## Links
 
 - Prev: [[10-13-model-selection]] · **Module 1 complete** → [[20-00-x11-map]]
