@@ -51,6 +51,15 @@ That last row is worth pausing on. The operator you difference with, viewed as a
 
 ![[30-03-arma-spectra.png]]
 
+**Left — poles.** An AR(2) whose complex root pair sits at the annual frequency, drawn for three moduli. The nearer the roots to the unit circle, the taller and narrower the peak: heights **4.91**, **26.98**, **404.02** for moduli 0.80, 0.92 and 0.98. The vertical scale is logarithmic — on a linear one the third curve would flatten the other two onto the axis. At modulus exactly 1 the peak is infinite and this stops being a spectrum at all, which is [[30-04-pseudo-spectrum]].
+
+**Right — zeros.** An MA(1), $\theta(B) = 1 - \theta B$, on a linear scale. Its value at frequency 0 is $(1-\theta)^2/2\pi$: **0.0398** at $\theta = 0.5$, **0.0016** at $\theta = 0.9$, and exactly **0** at $\theta = 1$. Near the circle is not on it — 0.0016 is small, but only the root *on* the circle gives a true zero.
+
+Read together: **denominators make peaks, numerators make zeros.** AR roots push the spectrum up, MA roots pull it down, and the unit-modulus cases are the two extremes — an infinite peak and an exact zero. Note that $\theta = 1$ *is* the operator $1 - B$, so the right panel is ordinary differencing viewed as a filter: gain exactly zero at frequency 0, the trend. The same statement as the paragraph above, at one frequency instead of six.
+
+> [!warning] The peak is not quite at the root's frequency
+> The dashed line marks $f = 1/12$, the root's angle. The measured peaks are at **0.0760**, **0.0825** and **0.0835** — the first sits 0.0073 *below* the line, and the gap closes only as the modulus approaches 1. A broad spectral peak is a biased estimate of the cycle's period, which is one reason eyeballing peaks is a weaker diagnostic than the tests in [[50-01-is-there-seasonality]].
+
 ## Why "rational" matters
 
 $f$ is a ratio of two polynomials in $e^{-i\omega}$ — a **rational** function. Two consequences that Module 4 lives on:

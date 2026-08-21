@@ -42,7 +42,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-20-08-x11-arima\|`20-08-x11-arima.R`]] | X-11-ARIMA: extend with forecasts, then filter symmetrically. | 98 | [[20-08-x11-arima]] |
 | [[code-30-01-frequency-domain-basics\|`30-01-frequency-domain-basics.R`]] | Frequencies, periods, harmonics, aliasing. | 74 | [[30-01-frequency-domain-basics]] |
 | [[code-30-02-spectral-density\|`30-02-spectral-density.R`]] | The spectral density: variance distributed over frequency. | 58 | [[30-02-spectral-density]] |
-| [[code-30-03-spectrum-of-an-arma\|`30-03-spectrum-of-an-arma.R`]] | The central formula: f(w) = (sigma^2/2pi) \|theta\|^2 / \|phi\|^2. | 78 | [[30-03-spectrum-of-an-arma]] |
+| [[code-30-03-spectrum-of-an-arma\|`30-03-spectrum-of-an-arma.R`]] | The central formula: f(w) = (sigma^2/2pi) \|theta\|^2 / \|phi\|^2. | 92 | [[30-03-spectrum-of-an-arma]] |
 | [[code-30-04-pseudo-spectrum\|`30-04-pseudo-spectrum.R`]] | The pseudo-spectrum: unit roots as infinite peaks. | 110 | [[30-04-pseudo-spectrum]] |
 | [[code-30-05-filters-in-the-frequency-domain\|`30-05-filters-in-the-frequency-domain.R`]] | Filtering multiplies the spectrum by the squared gain. | 68 | [[30-05-filters-in-the-frequency-domain]] |
 | [[code-30-06-wiener-kolmogorov\|`30-06-wiener-kolmogorov.R`]] | Wiener-Kolmogorov: keep the share of the power that is yours. | 75 | [[30-06-wiener-kolmogorov]] |

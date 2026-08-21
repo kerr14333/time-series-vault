@@ -35,7 +35,17 @@ abline(v = 1/12, lty = 2)
 legend("topright", paste("modulus", c(0.80, 0.92, 0.98)), col = cols, lwd = 2, bty = "n", cex = 0.8)
 par(op)
 cat("AR roots near the unit circle => PEAKS. The closer to the circle, the\n")
-cat("sharper. At modulus exactly 1 the peak becomes infinite (see 30-04).\n\n")
+cat("sharper. At modulus exactly 1 the peak becomes infinite (see 30-04).\n")
+# Where exactly is the peak? NOT at the root angle unless the modulus -> 1.
+for (r in c(0.80, 0.92, 0.98)) {
+  s <- arma_spectrum(ar_poly = c(1, -2 * r * cos(2*pi/12), r^2))
+  i <- which.max(s)
+  cat(sprintf("  modulus %.2f: peak at f = %.4f (%+.4f from 1/12), height %7.2f\n",
+              r, FREQ[i], FREQ[i] - 1/12, s[i]))
+}
+cat("The peak sits BELOW the root frequency and climbs onto it as r -> 1,\n")
+cat("while its height grows without bound. Read a period off a broad peak\n")
+cat("and you will read it slightly wrong.\n\n")
 
 # EXERCISE 3: MA roots => troughs, and unit MA root => exact zero ---------
 op <- par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
@@ -46,7 +56,11 @@ for (i in seq_along(c(0.5, 0.9, 1.0))) {
   lines(FREQ, arma_spectrum(ma_poly = c(1, -th)), col = cols[i], lwd = 2)
 }
 legend("topleft", paste("theta =", c(0.5, 0.9, 1.0)), col = cols, lwd = 2, bty = "n", cex = 0.8)
-cat("spectrum at freq 0 for theta = 1:", signif(arma_spectrum(ma_poly = c(1,-1), freq = 0), 3), "\n")
+# Near the circle is NOT on it: f(0) = (1-theta)^2 / 2pi, zero only at theta = 1.
+for (th in c(0.5, 0.9, 1.0))
+  cat(sprintf("  theta = %.1f : spectrum at freq 0 = %.4f  (theory (1-th)^2/2pi = %.4f)\n",
+              th, arma_spectrum(ma_poly = c(1, -th), freq = 0), (1 - th)^2 / (2*pi)))
+cat("Only theta = 1 -- the root ON the circle -- gives an EXACT zero.\n")
 
 # (1 - B^12) AS A FILTER: zeros at all six seasonal freqs AND at 0 --------
 s12 <- arma_spectrum(ma_poly = c(1, rep(0, 11), -1))
