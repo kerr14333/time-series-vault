@@ -119,6 +119,14 @@ product = (1-B)(1-B^12)? TRUE
 > [!abstract] Derivation
 > - [[derivations#D4. The seasonal difference contains the trend difference|the AR-side split]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** If you double every component variance, what happens to the fitted $(\theta,\Theta)$? Predict, then simulate and check.
+2. **Break it.** Simulate components, fit the reduced form, decompose, and compare with the truth. They will not match exactly. Is that estimation error or something else?
+3. **Transfer.** Do the same for a quarterly structural model. Does the reduced form still come out as an airline model?
+
 ## Links
 
 - Prev: [[40-00-seats-map]] · Next: [[40-02-admissible-decompositions]]

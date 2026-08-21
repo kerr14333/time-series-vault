@@ -189,6 +189,14 @@ That gap between the two lines is the whole argument for Burman's algorithm. You
 5. Apply the same machinery to the **trend** filter (`which = "trend"`). Confirm the trend and seasonal estimates sum to the series minus the irregular.
 6. Time both methods on a long series. Where does the brute-force cost actually go — the filter, or the forecasting?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** How long must $g$ be for a quarterly airline model? Reason from the MA degree before computing.
+2. **Break it.** Perturb one coefficient of $g$ by 1% and check both the unit-circle identity and the decomposition. Which detects it first?
+3. **Transfer.** Run the recursions on a series with an AR term in the model. Does the method care?
+
 ## Links
 
 - Prev: [[40-08-validating-against-x13]] · Module map: [[40-00-seats-map]]

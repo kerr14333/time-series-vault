@@ -104,6 +104,14 @@ Curvature is dominated by many small wiggles, so the proxy is swamped by ordinar
 4. Repeat the curvature proxy and confirm it fails. Then try other proxies — the magnitude of the trend's first difference, or a rolling variance. Does any recover the effect?
 5. Compute the false-signal rate directly: how often does the sign of the concurrent month-to-month change differ from the sign of the final one?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will the sign of revisions during a *boom* be opposite to that during a recession? Predict, then measure on 1990s data.
+2. **Break it.** Try three more proxies for 'near a turning point' and see how much the measured ratio moves. What does the spread tell you?
+3. Explain to a non-specialist, in three sentences, why no method can fix this and what they should do instead.
+
 ## Links
 
 - Prev: [[50-05-revision-history]] · Next: [[50-07-outliers-and-breaks]]

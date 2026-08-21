@@ -112,6 +112,14 @@ for (nm in c("AirPassengers", "white noise")) {
 4. Simulate white noise, "adjust" it, and compare the variance of the adjusted series with the original. Adjusting noise makes it *worse* — by how much?
 5. Take a seasonal series and progressively shorten it. At what length do the diagnostics stop detecting the seasonality you know is there?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will a series with a *deterministic* seasonal (a fixed sine plus noise) pass the seasonality tests? Predict, then test.
+2. **Break it.** Adjust white noise and compare variances before and after. Then explain why anyone would ever do this by accident.
+3. **Transfer.** Test a daily series with a weekly cycle for 'seasonality'. Do the monthly tools apply at all?
+
 ## Links
 
 - Next: [[50-02-residual-seasonality]] · Module map: [[50-00-diagnostics-map]]

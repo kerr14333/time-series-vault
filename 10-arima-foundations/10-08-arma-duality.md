@@ -84,6 +84,14 @@ MA root moduli: 2 3.3333
 > [!abstract] Derivation
 > - [[derivations#D14. Forecasting, from the difference equation|where the psi-weights get used]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** For ARMA(1,1) with $\phi = 0.9, \theta = 0.9$ (Census sign), predict the $\psi$-weights before computing. Why is the answer so simple?
+2. **Break it.** Build an ARMA(2,2) with an *exactly* shared factor and try to fit it. What do the standard errors do?
+3. Given $\psi$-weights alone, recover $\phi$ and $\theta$. Is the answer unique?
+
 ## Links
 
 - Prev: [[10-07-acf-and-pacf]] · Next: [[10-09-seasonal-arima]]

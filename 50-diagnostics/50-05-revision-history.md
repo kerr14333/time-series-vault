@@ -117,6 +117,14 @@ round(data.frame(t = idx, concurrent = conc, final = fin[idx],
 4. Plot revision size against the horizon (1, 2, 3, 5 years of extra data). Does it decay like Maravall's figures?
 5. Compare X-11 and SEATS revisions on the same series. Which is smaller, and does it depend on how well the model fits?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will revisions be larger for a high-$\Theta$ or low-$\Theta$ series? Reason it out, then measure across the catalogue.
+2. **Break it.** Measure revisions against *different* targets for the two methods and show how the 41% improvement disappears.
+3. **Transfer.** Compute the revision history for a quarterly series. Are revisions larger per observation?
+
 ## Links
 
 - Prev: [[50-04-sliding-spans]] · Next: [[50-06-turning-points]]

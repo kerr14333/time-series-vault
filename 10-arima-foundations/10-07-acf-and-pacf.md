@@ -112,6 +112,14 @@ round(sapply(c(72, 144, 500, 2000), function(n) 2 / sqrt(n)), 4)
 > [!abstract] Derivation
 > - [[derivations#D2. The MA(1) autocorrelation, and why it cannot exceed one half|why an MA ACF cuts off]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Sketch the ACF and PACF you expect from an ARMA(1,1) before simulating. Which one cuts off? (Trick question.)
+2. **Break it.** Compute an ACF on a series with a level shift in the middle. How does the break distort it, and would you diagnose the right model?
+3. **Transfer.** Read the ACF of a *quarterly* differenced series. Where are the seasonal spikes now?
+
 ## Links
 
 - Prev: [[10-06-differencing]] · Next: [[10-08-arma-duality]]

@@ -160,6 +160,14 @@ mean of log seasonal  : -0.00026  (not zero -- that is the convention)
 > [!abstract] Derivation
 > - [[derivations#D10. Why the WK filters have no poles|why no special case is needed at the unit roots]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** For `co2` ($\Theta = 0.912$), how many lags will the rule demand? Guess, then run `seats_max_lag()`.
+2. **Break it.** Set `extend` shorter than `max_lag` and see the guard fire. Why is that guard there rather than a silent truncation?
+3. **Transfer.** Decompose a quarterly series and check the identity and the X-13 agreement both still hold.
+
 ## Links
 
 - Prev: [[40-06-wk-filters-for-the-airline-model]] · Next: [[40-08-validating-against-x13]]

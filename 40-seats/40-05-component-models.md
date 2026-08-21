@@ -104,6 +104,14 @@ seasonal AR side: 1 + B + B^2 + B^3 + B^4 + B^5 + B^6 + B^7 + B^8 + B^9 + B^10 +
 4. Compare the variance of the canonical trend's innovation with $\sigma_a^2$. What fraction of the total innovation variance goes to each component?
 5. Without the canonical step, what is the trend's numerator degree? Confirm it is 1 rather than 2.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** What ARIMA order will the seasonal component have for a *quarterly* airline model? Reason from $S(B)$ before computing.
+2. **Break it.** Compute the irregular's autocovariances without the canonical step. Are they still zero beyond lag 0?
+3. **Transfer.** Derive the component models for $(0,1,1)(0,1,1)$ with $s=4$ and compare degrees with the monthly case.
+
 ## Links
 
 - Prev: [[40-04-partial-fractions-in-b-and-f]] · Next: [[40-06-wk-filters-for-the-airline-model]]

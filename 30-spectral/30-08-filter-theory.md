@@ -205,6 +205,14 @@ The consequence for this subject is not a technicality:
 6. Take the X-11 composite gain from [[20-05-the-x11-iteration]] and compare its ripple with the truncated ideal filter's. Which trade-off did X-11's designers choose?
 7. Explain, in one sentence each, why a symmetric filter has zero phase and why an end filter cannot.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will cascading two zero-phase filters give a zero-phase filter? Argue it from the algebra before testing.
+2. **Break it.** Construct a filter with a deliberate 3-month delay and confirm the group delay reports it.
+3. **Transfer.** Apply the LTI test to X-11 *with* extreme-value replacement on. Which of the two properties fails, and at what magnitude of outlier?
+
 ## Links
 
 - Prev: [[30-07-finite-samples]] · Module map: [[30-00-spectral-map]]

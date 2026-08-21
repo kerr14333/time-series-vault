@@ -158,6 +158,14 @@ for (Th in c(0.2, 0.6, 0.95))
 > [!abstract] Derivation
 > - [[derivations#D7. Why differencing is a filter with zeros where the seasonal lives|why unit roots give infinite peaks]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** How many infinite peaks does a *quarterly* airline model have? Answer before computing.
+2. **Break it.** Evaluate the pseudo-spectrum exactly at $\omega = 0$ numerically. What does R return, and why is that the right answer?
+3. Explain in two sentences why the infinities are a property of the model rather than of any dataset.
+
 ## Links
 
 - Prev: [[30-03-spectrum-of-an-arma]] · Next: [[30-05-filters-in-the-frequency-domain]]

@@ -242,6 +242,14 @@ round(data.frame(horizon = c(1, 3, 6, 12),
 > [!abstract] Derivation
 > - [[derivations#D14. Forecasting, from the difference equation|the recursion and the psi-weight variance]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** How many months ahead before the 95% interval is $\pm 10\%$? Guess, then compute.
+2. **Break it.** Forecast from a model fitted to only the first 3 years. Compare with the full-sample forecast. Which part of the model degrades fastest?
+3. **Transfer.** Hand-roll the forecast recursion for a *quarterly* airline model and check it against `predict()`.
+
 ## Links
 
 - Prev: [[10-13-model-selection]] · **Module 1 complete** → [[20-00-x11-map]]

@@ -124,6 +124,14 @@ last point, concurrent vs final: 471.42 vs 473.58  (0.46% revision)
 > [!abstract] Derivation
 > - [[derivations#D11. Why a symmetric filter has zero phase, and an end filter does not|why dropping the future half creates phase shift]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will the revision to the *last* observation be larger or smaller than to the second-to-last? By how much? Guess, then measure.
+2. **Break it.** Apply the symmetric filter at the end anyway, padding with zeros. What does the trend do in the final year?
+3. **Transfer.** Measure the same concurrent-versus-final gap on a quarterly series. Is it worse, given fewer observations per year?
+
 ## Links
 
 - Prev: [[20-06-extreme-values]] · Next: [[20-08-x11-arima]]

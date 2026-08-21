@@ -97,6 +97,14 @@ $B c = c$ for a constant $c$, so $(1-B)c = 0$. Differencing kills a constant. An
 > [!abstract] Derivation
 > - [[derivations#D1. Stationarity means roots outside the unit circle|why inverting the operator is the stationarity condition]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Before computing, say what $(1-B)(1+B)$ should do to a series that alternates $+1, -1, +1, \dots$. Then apply it and check.
+2. **Break it.** Apply $(1-B^{12})$ to a series with period 11 instead of 12. Does it vanish? What does that tell you about how precisely a differencing operator is tuned?
+3. Write $(1-B)^3$ as a recipe on $z_t$ and say which polynomial trend it annihilates. Confirm on $t^2$ and on $t^3$.
+
 ## Links
 
 - Next: [[10-02-stationarity-and-roots]]

@@ -152,6 +152,14 @@ why inadmissibility is rare in practice but not impossible.
 > [!abstract] Derivation
 > - [[derivations#D9. The canonical decomposition, and why it is a convention|the one-parameter family and admissibility]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will a model with $\theta$ slightly negative and $\Theta = 0.9$ be admissible? Guess from the region map, then test.
+2. **Break it.** Find the $\theta$ at which admissibility fails along $\Theta = 0.7$, and identify which component's spectrum goes negative first.
+3. **Transfer.** Map the admissible region for $s = 4$ and compare its shape with the monthly one.
+
 ## Links
 
 - Prev: [[40-01-unobserved-components-and-reduced-form]] · Next: [[40-03-canonical-decomposition]]

@@ -144,6 +144,14 @@ H23  0.3478 0.0107 0.0027 0.0015 0.0012 0.0011
 3. Plot gains for the 9-, 13- and 23-term filters on one axis. Where do they differ most, and what does that imply about the smoothness/responsiveness trade-off?
 4. Compute the gain at the six seasonal frequencies and confirm the 0.85 at the fundamental. Then apply a 13-term Henderson directly to raw `AirPassengers` and look at the "trend" you get.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which will pass more of the annual cycle, a 9-term or a 23-term Henderson? By roughly how much? Guess, then compute.
+2. **Break it.** Apply a 13-term Henderson to raw, unadjusted data and plot the result. Is the seasonality gone? Should it be?
+3. **Transfer.** Compute the 5- and 7-term Henderson weights for quarterly data and verify they still reproduce a cubic.
+
 ## Links
 
 - Prev: [[20-02-the-12-term-ma]] · Next: [[20-04-seasonal-moving-averages]]

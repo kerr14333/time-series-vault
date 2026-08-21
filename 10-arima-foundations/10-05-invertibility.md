@@ -117,6 +117,14 @@ theta=2.0  2.0 4.00 8.000 16.000 32.000 64.000 128.000 256.000
 > [!abstract] Derivation
 > - [[derivations#D3. Why $\theta$ and $1/\theta$ are indistinguishable|the algebra of the non-identification]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which of $\theta = 0.3$ and $\theta = 3.33$ will `arima()` report? Say why before checking.
+2. **Break it.** Fit an MA(1) to a series you know is white noise, with and without an unnecessary difference. Watch $\hat\theta$ move to the boundary.
+3. Explain in two sentences, to someone who has not read this note, why invertibility is a *choice* rather than a discovery.
+
 ## Links
 
 - Prev: [[10-04-ma-processes]] · Next: [[10-06-differencing]]

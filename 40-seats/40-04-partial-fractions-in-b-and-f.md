@@ -115,6 +115,14 @@ by the boxed identity. **The filters sum to 1 for the same reason the partial fr
 4. Deliberately mis-set $\deg C$ to 11 instead of 10. What happens to the residual, and why?
 5. Confirm $\nu_T+\nu_S+\nu_I=1$ numerically, and that each is finite at $\omega=0$ despite $f_z$ being infinite there.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** How many unknowns will the quarterly system have, against the monthly one? Count before solving.
+2. **Break it.** Set one numerator degree wrong and watch the residual. How many orders of magnitude does it move?
+3. **Transfer.** Solve the system for a model with an AR term and confirm the residual stays near $10^{-12}$.
+
 ## Links
 
 - Prev: [[40-03-canonical-decomposition]] · Next: [[40-05-component-models]]

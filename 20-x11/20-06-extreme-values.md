@@ -102,6 +102,14 @@ max difference in seasonal factors: 1.146%
 3. Vary the sigma limits from (1.5, 2.5) to (2.5, 4.0). How much does D11 change on a clean series? On a contaminated one?
 4. Handle the same spike instead as an AO regressor in regARIMA. Compare.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will down-weighting an extreme January change the seasonal factor for *July*? Predict, then measure.
+2. **Break it.** Set the sigma limits so wide that nothing is down-weighted, then inject a large outlier. How much do the seasonal factors move?
+3. Explain in two sentences why extreme-value replacement makes X-11 a **non-linear** procedure, and what that costs you analytically.
+
 ## Links
 
 - Prev: [[20-05-the-x11-iteration]] · Next: [[20-07-end-filters]]

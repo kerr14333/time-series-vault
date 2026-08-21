@@ -82,6 +82,14 @@ Whether the model-derived notch is *better* is an empirical question, and [[50-0
 > - [[derivations#D10. Why the WK filters have no poles|why the infinite peaks cancel]]
 > - [[derivations#D8. The Wiener–Kolmogorov filter|the filter itself]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** At $\omega$ halfway between two seasonal frequencies, roughly what share does the irregular take? Guess, then compute.
+2. **Break it.** Compute the filters with a non-invertible $\Theta = 1.05$. What goes wrong, and where exactly?
+3. **Transfer.** Plot the three filters for a quarterly model. How many notches, and how wide?
+
 ## Links
 
 - Prev: [[40-05-component-models]] · Next: [[40-07-implementing-seats-in-r]]

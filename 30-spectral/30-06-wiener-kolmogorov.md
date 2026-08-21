@@ -152,6 +152,14 @@ lag 60    : 0.01504468  -- still not zero after five years
 > [!abstract] Derivation
 > - [[derivations#D8. The Wiener–Kolmogorov filter|the orthogonality argument for $f_s/f_z$]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** As the noise variance goes to zero, what should $\nu_s$ become at every frequency? Predict, then verify numerically.
+2. **Break it.** Construct $f_s$ and $f_n$ that are both non-negative but whose implied $\nu_s$ exceeds 1 somewhere. Can you? Why not?
+3. **Transfer.** Derive the WK filter for a trend-plus-noise model where the trend is a *double* random walk. How does the cutoff move?
+
 ## Links
 
 - Prev: [[30-05-filters-in-the-frequency-domain]] · Next: [[30-07-finite-samples]]

@@ -97,6 +97,14 @@ theory 0.700 0.490 0.343 0.24 0.168 0.118
 2. AR(2) with $\phi_1 = 1.6,\ \phi_2 = -0.9$: find the roots, the implied period, and confirm it in a simulation.
 3. Derive $\rho_1$ for AR(2) from the Yule–Walker equations. (Use $\rho_0 = 1$, $\rho_{-1} = \rho_1$.)
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Sketch what you expect the ACF of an AR(2) with $\phi_1 = 0, \phi_2 = 0.8$ to look like, then compute it. Why does it have that shape?
+2. **Break it.** Simulate an AR(1) with $|\phi| > 1$ for 100 points. What happens, and why is the stationarity condition not merely a technicality?
+3. Fit an AR(1) to a series you simulated as AR(2). What $\phi$ comes back, and how does the residual ACF reveal the misspecification?
+
 ## Links
 
 - Prev: [[10-02-stationarity-and-roots]] · Next: [[10-04-ma-processes]]

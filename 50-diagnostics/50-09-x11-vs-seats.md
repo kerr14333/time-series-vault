@@ -123,6 +123,14 @@ choice of implementation.
 4. Compare revisions rather than levels: which method revises less at the end of the sample?
 5. Fit a better model to `ldeaths` (the $d=0$ one) and re-compare. Do the methods converge?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which method will differ more from the other on a *high*-$\Theta$ series? Reason it out, then measure.
+2. **Break it.** Fit a deliberately poor model and re-compare. Does SEATS or X-11 degrade faster?
+3. **Transfer.** Compare the two methods on a quarterly series and say whether the ranking holds.
+
 ## Links
 
 - Prev: [[50-08-covid]] · **Module 5 complete**

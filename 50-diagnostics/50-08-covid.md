@@ -70,6 +70,14 @@ That is the honest limit of the whole subject. Seasonal adjustment is an extrapo
 4. Exclude the shock period from the estimation span but keep publishing it. Compare all three strategies.
 5. Quantify the reach: how many years either side of the shock have seasonal factors that moved by more than 1%?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** How many years either side of a 2020 shock will seasonal factors move by more than 1%? Guess, then measure.
+2. **Break it.** Treat the shock with a single AO when it actually lasted six months. How much contamination survives?
+3. Argue both sides of the LS-versus-AO choice for 2020, and say what evidence would settle it.
+
 ## Links
 
 - Prev: [[50-07-outliers-and-breaks]] · Next: [[50-09-x11-vs-seats]]

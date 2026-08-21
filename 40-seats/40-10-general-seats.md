@@ -193,6 +193,14 @@ Being explicit, so nothing here is oversold:
 6. Decompose a series with a genuine business cycle (try `sunspots` with an appropriate model) and see whether the cycle lands in the transitory component.
 7. Compare the general decomposition of `AirPassengers` with X-13's `s10` directly. How much of the $1.3\times10^{-5}$ gap is the repeated-root problem?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Where will the roots of $(1 - 0.9B^{12})$ be classified? All seasonal? Predict, then check — the answer surprises most people.
+2. **Break it.** Set `tol_trend` to 0.3 and re-run the 40-month example. Where does the cyclical pair go now, and what have you silently published?
+3. **Transfer.** Fit a model with two distinct cyclical pairs and confirm both land in the transitory component.
+
 ## Links
 
 - Prev: [[40-09-burman-algorithm]] · Module map: [[40-00-seats-map]]

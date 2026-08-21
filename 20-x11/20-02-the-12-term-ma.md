@@ -127,6 +127,14 @@ gain 0.00  0.0
 > [!abstract] Derivation
 > - [[derivations#D12. Why a centred $2\times s$ moving average is needed for even $s$|why the endpoints get half weight]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will the $2\times12$ filter remove a period-12 cycle whose *amplitude grows* over time? Predict, then test on a growing sinusoid.
+2. **Break it.** Use a plain 12-term average instead of the centred one. Measure the phase shift it introduces at the annual frequency.
+3. **Transfer.** Build the $2\times4$ filter for quarterly data from scratch and confirm its zeros.
+
 ## Links
 
 - Prev: [[20-01-moving-averages-as-filters]] · Next: [[20-03-henderson-filters]]

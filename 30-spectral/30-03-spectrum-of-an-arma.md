@@ -88,6 +88,14 @@ The result is a spectrum that is **infinite** at 0 and at the six seasonal frequ
 > [!abstract] Derivation
 > - [[derivations#D6. The spectral density, and the ARMA formula|where $|\theta|^2/|\phi|^2$ comes from]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** For an AR(1) with $\phi = -0.9$, will the spectral peak be at low or high frequency? Say why before plotting.
+2. **Break it.** Compute an ARMA spectrum with the MA sign flipped. How different is it, and would you notice without the correct version beside it?
+3. **Transfer.** Plot the spectrum of a quarterly airline model and count its peaks.
+
 ## Links
 
 - Prev: [[30-02-spectral-density]] · Next: [[30-04-pseudo-spectrum]]

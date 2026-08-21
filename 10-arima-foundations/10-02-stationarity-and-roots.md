@@ -117,6 +117,14 @@ poly_roots(c(1, -1.6, 0.9))   # 1 - 1.6B + 0.9B^2, a complex pair
 > [!abstract] Derivation
 > - [[derivations#D1. Stationarity means roots outside the unit circle|the geometric-series argument behind the root rule]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** For $\phi(B) = 1 - 1.9B + 0.9B^2$, guess whether it is stationary before computing. (One root is very close to 1 — where exactly?) Then check.
+2. **Transfer.** Take a quarterly series and find the roots of $1-B^4$. How many, at what frequencies, and how does the picture differ from the monthly case?
+3. Simulate an AR(1) with $\phi = 0.999$ for 500 points. Would you call it stationary from the plot alone? What does that say about testing for unit roots in practice?
+
 ## Links
 
 - Prev: [[10-01-lag-operator]] · Next: [[10-03-ar-processes]]

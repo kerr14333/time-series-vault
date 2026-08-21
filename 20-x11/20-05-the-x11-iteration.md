@@ -163,6 +163,14 @@ max |D11 - D12*D13|: 5.684342e-14
 3. Plot the composite gain. Mark the seasonal frequencies. How deep are the notches, and how wide?
 4. Run the loop for 1, 2 and 3 passes. How much does the answer move each time? Is a fourth pass worth it?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Before running, guess whether your D11 will agree with X-13 better in the interior or at the ends, and by roughly what factor.
+2. **Break it.** Skip the centring step (step 4) and compare the trend after ten years. How large is the drift?
+3. **Transfer.** Run the whole iteration on a quarterly series and confirm the agreement is as good as the monthly case.
+
 ## Links
 
 - Prev: [[20-04-seasonal-moving-averages]] · Next: [[20-06-extreme-values]]

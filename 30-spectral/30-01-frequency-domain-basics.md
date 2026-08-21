@@ -96,6 +96,14 @@ A polynomial in the lag operator becomes a complex-valued function of frequency.
 2. Sample a cycle of period 1.5 months at monthly intervals. What period does it appear to have? (Aliasing.)
 3. Confirm numerically that $|1 - 0.8e^{-i\omega}|^2 = (1-0.8e^{-i\omega})(1-0.8e^{i\omega})$ is real for every $\omega$.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** How many seasonal frequencies does weekly data ($s = 52$) have? And daily ($s = 7$)? Answer before computing $\lfloor s/2 \rfloor$.
+2. **Break it.** Read a period off a spectrum without first asking what one time unit is. Show, with the two tables in this note, how you get the wrong answer.
+3. **Transfer.** For $s = 7$ (daily data with a weekly cycle), list every seasonal frequency and its period in days.
+
 ## Links
 
 - Next: [[30-02-spectral-density]]

@@ -85,6 +85,14 @@ Everything else — Henderson lengths, 3×5 versus 3×9, canonical decomposition
 > - [[derivations#D11. Why a symmetric filter has zero phase, and an end filter does not|the zero-phase proof]]
 > - [[derivations#D7. Why differencing is a filter with zeros where the seasonal lives|the gain of $1-B^s$]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Does differencing amplify or attenuate high frequencies? By what factor at $\omega=\pi$? Guess, then compute.
+2. **Break it.** Apply a one-sided filter to a pure sine and measure how far the output is shifted in time. Compare with the group delay.
+3. **Transfer.** Compute the gain of $(1-B^4)$ and count its zeros. Compare with $(1-B^{12})$.
+
 ## Links
 
 - Prev: [[30-04-pseudo-spectrum]] · Next: [[30-06-wiener-kolmogorov]]

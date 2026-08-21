@@ -110,6 +110,14 @@ cat(sprintf("  QS residual : %8.2f\n", g(m, "qsrsd")))
 4. Introduce a seasonal break — shift the pattern by adding a constant to every January after the midpoint — and see which diagnostics catch it.
 5. Adjust two series separately, add them, and test the sum for residual seasonality. Compare with adjusting the sum directly.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which catalogue series will have the worst residual seasonality? Reason from $\Theta$, then check the QS values.
+2. **Break it.** Adjust a series, then *add back* 10% of the seasonal factors and re-test. How large a residue does QS detect?
+3. **Transfer.** Adjust two series, sum them, and test the sum. Compare with adjusting the sum directly.
+
 ## Links
 
 - Prev: [[50-01-is-there-seasonality]] · Next: [[50-03-m-and-q-statistics]]

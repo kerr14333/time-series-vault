@@ -101,6 +101,14 @@ round(a[c(1, 11, 12, 13, 23, 24, 25)], 3)
 > [!abstract] Derivation
 > - [[derivations#D4. The seasonal difference contains the trend difference|where the seasonal roots come from]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which lags get nonzero coefficients in $(1-\phi B)(1-\Phi B^{12})(1-\theta B)$? List them before expanding.
+2. **Transfer.** Write the quarterly airline model out in full scalar form. How many terms, and at which lags?
+3. **Break it.** Fit an *additive* seasonal model (terms at lags 1 and 12 only, no cross term) to airline-model data. How much worse is the fit, and where does it show?
+
 ## Links
 
 - Prev: [[10-08-arma-duality]] · Next: [[10-10-airline-model]]

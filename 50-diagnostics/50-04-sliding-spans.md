@@ -105,6 +105,14 @@ The two quarterly series fail badly, and that is the lesson: quarterly data give
 4. Shorten a series until sliding spans become unavailable. How much data does the diagnostic actually need?
 5. Find a series that passes Q but fails sliding spans, and explain what Q missed.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will `co2` pass sliding spans? Reason from its $\Theta$ and its length, then check.
+2. **Break it.** Shorten a passing series year by year until the diagnostic becomes unavailable. Where is the cliff?
+3. **Transfer.** Explain why the two quarterly series fail while the monthly ones pass — is it the frequency, the evolution, or the sample size?
+
 ## Links
 
 - Prev: [[50-03-m-and-q-statistics]] · Next: [[50-05-revision-history]]

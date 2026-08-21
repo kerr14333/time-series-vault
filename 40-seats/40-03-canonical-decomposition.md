@@ -140,6 +140,14 @@ admissible: TRUE  (all three component spectra stayed non-negative)
 > [!abstract] Derivation
 > - [[derivations#D9. The canonical decomposition, and why it is a convention|subtracting the minimum, and why]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which will have the larger minimum removed, the trend or the seasonal? Guess, then compute $m_T$ and $m_S$.
+2. **Break it.** Skip the canonical step entirely and compare the resulting irregular. Is it still white noise?
+3. Explain to someone else why 'as smooth as possible' is a **choice** and what you would have to believe to prefer a different one.
+
 ## Links
 
 - Prev: [[40-02-admissible-decompositions]] · Next: [[40-04-partial-fractions-in-b-and-f]]

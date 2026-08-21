@@ -364,6 +364,14 @@ n = 131   AIC = -483.4   AICC = -483.21
 > [!abstract] Derivation
 > - [[derivations#D13. What the likelihood actually is|the prediction-error decomposition, and concentrating the variance]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will adding an AR(1) term to the airline model raise or lower the log-likelihood? Will it raise or lower AICC? Answer both before fitting.
+2. **Break it.** Fit the airline model to 24 observations. What happens to the standard errors, and would you trust the $\Theta$?
+3. Use `R/10-12b-general-estimation.R` to evaluate the likelihood at a grid of $(\theta,\Theta)$ and find the maximum yourself, without `optim`.
+
 ## Links
 
 - Prev: [[10-11-sign-conventions]] · Next: [[10-13-model-selection]]

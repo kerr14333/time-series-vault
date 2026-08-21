@@ -106,6 +106,14 @@ freq    0 0.1000 0.2000 0.3000 0.4000 0.5000
 2. Take the SI ratios from a decomposition, extract just the Januaries, and smooth them with a 3×3 and a 3×5. Plot both. Which tracks the evolution, which is steadier?
 3. Skip the centring step and compare the resulting trend to the centred version. How large is the drift after 10 years?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** For a series whose seasonality changes fast, will X-11 want a $3\times3$ or a $3\times9$? Reason it out before checking the moving seasonality ratio.
+2. **Break it.** Force a $3\times9$ on a fast-evolving series and check for residual seasonality afterwards.
+3. **Transfer.** Extract the Januaries from a quarterly series — there are none. What does the seasonal filter operate on instead?
+
 ## Links
 
 - Prev: [[20-03-henderson-filters]] · Next: [[20-05-the-x11-iteration]]

@@ -103,6 +103,14 @@ rho1   -0.3
 > [!abstract] Derivation
 > - [[derivations#D2. The MA(1) autocorrelation, and why it cannot exceed one half|the ACF, the cut-off, and the 0.5 ceiling]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** An MA(2) has $\theta_1 = \theta_2 = 0.5$. Before computing, is $\rho_1$ positive or negative? Now compute both $\rho_1$ and $\rho_2$.
+2. **Break it.** Try to construct an MA(1) with $\rho_1 = 0.8$. Show why you cannot, and state the ceiling.
+3. **Transfer.** Differencing a random walk gives white noise. Difference it *twice* and identify the resulting MA order and sign of $\rho_1$.
+
 ## Links
 
 - Prev: [[10-03-ar-processes]] · Next: [[10-05-invertibility]]

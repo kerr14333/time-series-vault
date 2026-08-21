@@ -105,6 +105,14 @@ The mean dwarfs the scatter: a bias, not noise.
 4. Vary the extension length from 1 to 5 years and watch the estimate for the final observation converge.
 5. Confirm the three-way equivalence: extension length $\to\infty$, truncation tolerance $\to0$, and Burman's exact answer all coincide.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** How many years of filter will a $\Theta = 0.99$ model need? Guess before computing — most people are badly wrong.
+2. **Break it.** Truncate at 24 lags and compare against the correct answer *without* normalising either. What is the shape of the error?
+3. **Transfer.** Repeat the lag-requirement calculation for a quarterly model. Fewer lags, or fewer *years*?
+
 ## Links
 
 - Prev: [[30-06-wiener-kolmogorov]] · **Module 3 complete** → [[40-00-seats-map]]

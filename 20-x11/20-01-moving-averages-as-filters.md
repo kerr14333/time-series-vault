@@ -110,6 +110,14 @@ length 13  sum = 1.0000000000  gain(0) = 1.0000000000
 2. Plot the gain of a 12-term *uncentred* MA. Notice the phase is nonzero — confirm it, and confirm centring fixes it.
 3. Convolve a 3-term and a 5-term MA. Verify the gain of the product equals the product of the gains.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Where will a 5-term average have its zeros? Say so before plotting, then confirm.
+2. **Break it.** Build a filter whose weights sum to 1.1 and apply it to a flat series. What happens, and which property have you violated?
+3. **Transfer.** What length of simple average annihilates a quarterly seasonal? Confirm its gain at $k/4$.
+
 ## Links
 
 - Next: [[20-02-the-12-term-ma]]

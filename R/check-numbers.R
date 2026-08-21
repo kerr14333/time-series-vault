@@ -33,17 +33,23 @@ ALLOW <- data.frame(
   file  = c("50-diagnostics/50-10-calendar-effects.md",
             "40-seats/40-03-canonical-decomposition.md",
             "_meta/checking-the-vault.md",
-            "_meta/checking-the-vault.md"),
+            "_meta/checking-the-vault.md",
+            "_meta/solutions.md",
+            "_meta/solutions.md"),
   value = c("0.00001",
             "0.2977",
             "1.82",
-            "1.18"),
+            "1.18",
+            "1.111",
+            "2.33"),
   why   = c("a significance threshold ('p < 0.00001'), not a measured value",
             "a sum worked in the text (0.2238 + 0.0514 + 0.0225); the three
              addends are each checked against script output",
             "the superseded 50-06 ratio, quoted as the error this check exists
              to catch -- it is meant not to match any script",
-            "the superseded 50-06 curvature figure, quoted for the same reason"),
+            "the superseded 50-06 curvature figure, quoted for the same reason",
+            "1/0.9, arithmetic worked in a solution's text",
+            "7/3, arithmetic worked in a solution's text"),
   stringsAsFactors = FALSE
 )
 

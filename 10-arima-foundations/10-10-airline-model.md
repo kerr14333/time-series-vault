@@ -101,6 +101,14 @@ all greater than 1, so the fitted model is invertible
 2. Simulate the airline model at $(\theta,\Theta) = (0.4, 0.6)$ and at $(0.9, 0.95)$. Plot both. Which looks more like real economic data?
 3. Set $\Theta = 1$ in a simulation. Confirm the seasonal pattern stops evolving.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** For a series whose seasonal pattern you can see is very stable, predict whether $\Theta$ will be near 0 or near 1. Then fit and check.
+2. **Transfer.** Fit the airline model to every catalogue series and tabulate $(\theta, \Theta)$. Which has the most stable seasonality?
+3. Explain to someone else, in three sentences, why the airline model is the default despite being only one model among many.
+
 ## Links
 
 - Prev: [[10-09-seasonal-arima]] · Next: [[10-11-sign-conventions]]

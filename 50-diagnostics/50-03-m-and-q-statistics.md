@@ -104,6 +104,14 @@ Q = 0.2  -- accepted
 4. Confirm that SEATS mode produces no M or Q statistics at all.
 5. Shorten a series until M7 crosses 1. How many years does it take?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which M statistic will fail first as you shorten a series? Guess, then find out empirically.
+2. **Break it.** Construct a case where Q passes but the adjustment is visibly bad. What does that say about composite statistics?
+3. Explain in two sentences why SEATS produces no M or Q statistics, and what you would use instead to compare the two methods.
+
 ## Links
 
 - Prev: [[50-02-residual-seasonality]] · Next: [[50-04-sliding-spans]]

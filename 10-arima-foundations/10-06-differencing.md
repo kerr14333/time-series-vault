@@ -130,6 +130,14 @@ undifferenced      seasonal          both
 > - [[derivations#D4. The seasonal difference contains the trend difference|the factorisation of $1-B^s$]]
 > - [[derivations#D5. A constant in a differenced model is a drift|why the constant is a slope]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** For `co2`, which differencing do you expect X-13 to choose, and why? Then check with `seas()`.
+2. **Break it.** Difference `log(AirPassengers)` three times and look at the variance and the ACF. What are the symptoms of over-differencing?
+3. **Transfer.** Repeat the variance-at-each-stage table for a quarterly series. Does the same $d, D$ combination win?
+
 ## Links
 
 - Prev: [[10-05-invertibility]] · Next: [[10-07-acf-and-pacf]]

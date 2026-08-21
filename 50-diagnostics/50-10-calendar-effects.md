@@ -131,6 +131,14 @@ The transferable point: **every economy has its own moving holidays.** Use the o
 5. Do the same for Diwali on `iip`. Is the effect as large as CNY's?
 6. Adjust `imp` with and without the holiday, and compare the March and February seasonal factors specifically.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will trading day matter more for a retail series or an unemployment series? Reason from the mechanism, then test.
+2. **Break it.** Fit Easter to a series with no Easter effect and check whether AICC correctly rejects it.
+3. **Transfer.** Build a Ramadan regressor with `genhol()` and apply it to a series from a Muslim-majority economy. What changes in the workflow?
+
 ## Links
 
 - Prev: [[50-09-x11-vs-seats]] · Module map: [[50-00-diagnostics-map]]

@@ -113,6 +113,14 @@ A factor of about **660**.
 4. Verify the `s10`/`s11` identity, then re-run with `regression.aictest = "td"` and check whether it still holds against the raw series.
 5. Compare SEATS `s11` with your X-11 `d11` from Module 2 on the same series. How large is the method difference relative to the implementation error you just measured? Which dominates?
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will turning outliers on change s10 more, or s12 more? Reason about which component absorbs an outlier, then measure.
+2. **Break it.** Compare against X-13 with `transform.function = 'none'` and confirm the ~100% discrepancy. What is the lesson about failed comparisons?
+3. **Transfer.** Validate a quarterly decomposition against X-13 and report the same four numbers.
+
 ## Links
 
 - Prev: [[40-07-implementing-seats-in-r]] · **Module 4 complete** → [[50-00-diagnostics-map]]

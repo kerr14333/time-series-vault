@@ -124,6 +124,14 @@ flat to within 0
 > [!abstract] Derivation
 > - [[derivations#D6. The spectral density, and the ARMA formula|from autocovariances to the ARMA ratio]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Will the periodogram of a *longer* white-noise series be smoother? Predict, then test at $n = 100$ and $n = 10000$.
+2. **Break it.** Estimate a spectrum with no smoothing at all and try to identify the model from it. What goes wrong?
+3. **Transfer.** Compute the spectrum of a series with a *deterministic* seasonal (a fixed sine) and compare with a stochastic one. How do the peaks differ?
+
 ## Links
 
 - Prev: [[30-01-frequency-domain-basics]] · Next: [[30-03-spectrum-of-an-arma]]

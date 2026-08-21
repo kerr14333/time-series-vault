@@ -103,6 +103,14 @@ Ljung-Box Q = 26.45  df = 22  p = 0.233
 > [!abstract] Derivation
 > - [[derivations#D13. What the likelihood actually is|what AICC is comparing]]
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Between $(0,1,1)(0,1,1)$ and $(0,1,2)(0,1,1)$, which wins on AICC and by roughly how much? Guess, then compute.
+2. **Break it.** Choose a model by AIC instead of AICC on a short series. Does it pick a bigger model? By how much does the penalty differ?
+3. **Transfer.** Run the same comparison on a quarterly series. Does the ranking change?
+
 ## Links
 
 - Prev: [[10-12-estimation]] · Next: [[10-14-forecasting]]

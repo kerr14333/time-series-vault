@@ -91,6 +91,14 @@ Note the damage propagates **backwards** as well as forwards. The filters are tw
 4. Put an LS in the final six months and see whether detection finds it. Then ask whether you would want it to.
 5. Simulate a seasonal break and confirm sliding spans catch it while QS does not.
 
+## Going further
+
+*Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
+
+1. **Predict first.** Which will contaminate more *neighbouring years*, an AO or an LS? Predict, then measure the reach of each.
+2. **Break it.** Put an LS in the final three months and see whether detection fires. Then argue whether you would want it to.
+3. **Transfer.** Inject the same outlier into a quarterly series. Is the contamination reach the same in years?
+
 ## Links
 
 - Prev: [[50-06-turning-points]] · Next: [[50-08-covid]]
