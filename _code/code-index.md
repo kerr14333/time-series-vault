@@ -48,6 +48,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-30-05-filters-in-the-frequency-domain\|`30-05-filters-in-the-frequency-domain.R`]] | Filtering multiplies the spectrum by the squared gain. | 68 | [[30-05-filters-in-the-frequency-domain]] |
 | [[code-30-06-wiener-kolmogorov\|`30-06-wiener-kolmogorov.R`]] | Wiener-Kolmogorov: keep the share of the power that is yours. | 75 | [[30-06-wiener-kolmogorov]] |
 | [[code-30-07-finite-samples\|`30-07-finite-samples.R`]] | Applying a doubly-infinite filter to 144 observations. | 87 | [[30-07-finite-samples]] |
+| [[code-30-08-filter-theory\|`30-08-filter-theory.R`]] | What a filter IS, and why frequency is its natural language. | 142 | [[30-08-filter-theory]] |
 | [[code-40-01-unobserved-components-and-reduced-form\|`40-01-unobserved-components-and-reduced-form.R`]] | A structural model has an ARIMA reduced form. SEATS runs it backwards. | 73 | [[40-01-unobserved-components-and-reduced-form]] |
 | [[code-40-02-admissible-decompositions\|`40-02-admissible-decompositions.R`]] | Which models can be decomposed at all? | 76 | [[40-02-admissible-decompositions]] |
 | [[code-40-03-canonical-decomposition\|`40-03-canonical-decomposition.R`]] | The canonical rule: give the irregular as much variance as possible. | 96 | [[40-03-canonical-decomposition]] |

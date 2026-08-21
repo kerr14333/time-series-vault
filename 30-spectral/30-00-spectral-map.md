@@ -24,6 +24,7 @@ This is the module that makes SEATS possible. It is also the one people skip, an
   $$\hat s_t = \frac{f_s(\omega)}{f_z(\omega)}\,z_t \quad\text{(in filter form: } \nu_s(B,F) = \frac{f_s}{f_z}\text{)}$$
   Read it as: **at each frequency, keep the share of the power that belongs to the component.** This is the single formula SEATS is built on.
 - [[30-07-finite-samples]] — the WK filter is doubly infinite; real data is not. Burman's algorithm and the forecast-extension approach.
+- [[30-08-filter-theory]] — the general theory under Modules 2 and 4: linearity plus time-invariance forces a convolution; complex exponentials are eigenfunctions; gain, phase and group delay; cascades multiply; FIR versus IIR; and Gibbs' phenomenon, which is why no seasonal filter is ideal
 
 ## Why the WK formula is intuitive
 

@@ -283,6 +283,25 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 **5.** All three coincide, which is the reassuring result: forecast extension, tight truncation and Burman's exact algorithm are three routes to the same filter.
 
+## 30-08-filter-theory
+
+**1.** Linearity and time-invariance both hold to machine precision ($10^{-14}$ and exactly 0). Clipping the input first **breaks linearity** immediately, because clipping is not a linear operation — and that is not a contrived example: X-11's extreme-value replacement clips, which is exactly why X-11 as a whole is not an LTI filter ([[20-06-extreme-values]]).
+
+**2.** The output/input ratio is constant along the entire series (standard deviation around $10^{-15}$) and equals $H(f)$ exactly. That constancy *is* the eigenfunction property — it is what makes frequency the natural coordinate system for filters.
+
+**3.** The one-sided Henderson delays by $2.24$ months at period 60 and $1.98$ at period 18. **No single constant correction works**, because a real series mixes frequencies and each is displaced differently. That is the precise reason a concurrent trend estimate lags in a way you cannot simply subtract off.
+
+**4.** Gain of the cascade equals the product of the gains, to six decimals. The cascade is exactly zero wherever *either* filter is zero — so a 3-term and 5-term average in series annihilates periods 3 **and** 5.
+
+**5.** The transition width halves each time $L$ doubles ($0.0357 \to 0.0178 \to 0.0091 \to 0.0047 \to 0.0023 \to 0.0012$), a clean $1/L$. The overshoot does **not** shrink: it settles near **9%** and stays there. Length buys sharpness, never a clean edge.
+
+> [!warning] A measurement trap worth repeating
+> Measure the overshoot over the **whole** passband. My first attempt excluded a fixed window around the cutoff, which measures the wrong thing — as $L$ grows the ripple narrows *into* that window, so the overshoot appears to shrink when it does not. The numbers looked like $11, 6.4, 9.9, 3.2, 1.9$ and flatly contradicted the claim beside them.
+
+**6.** X-11's composite gain has shallower, wider notches than a truncated ideal filter, and less ripple. Its designers chose **robustness over sharpness** — a filter that tracks evolving seasonality and does not ring, at the cost of not removing a fixed seasonal perfectly.
+
+**7.** A symmetric filter has zero phase because the sine terms cancel in conjugate pairs, leaving $H$ real. An end filter cannot, because it has no future weights to pair with the past ones — and the cancellation was the whole source of the realness ([[derivations#D11. Why a symmetric filter has zero phase, and an end filter does not|D11]]).
+
 ---
 
 # Module 4 — SEATS

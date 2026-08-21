@@ -46,6 +46,7 @@ Tick a note when you can explain it out loud without looking. That is a harsher 
 - [ ] [[30-05-filters-in-the-frequency-domain]]
 - [ ] [[30-06-wiener-kolmogorov]]
 - [ ] [[30-07-finite-samples]]
+- [ ] [[30-08-filter-theory]]
 
 ## Module 4 — SEATS
 - [ ] [[40-01-unobserved-components-and-reduced-form]]
