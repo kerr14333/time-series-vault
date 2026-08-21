@@ -49,13 +49,15 @@ ALLOW <- data.frame(
             "_meta/checking-the-vault.md",
             "_meta/checking-the-vault.md",
             "_meta/solutions.md",
-            "_meta/solutions.md"),
+            "_meta/solutions.md",
+            "_meta/checking-the-vault.md"),
   value = c("0.00001",
             "0.2977",
             "1.82",
             "1.18",
             "1.111",
-            "2.33"),
+            "2.33",
+            "1.02"),
   why   = c("a significance threshold ('p < 0.00001'), not a measured value",
             "a sum worked in the text (0.2238 + 0.0514 + 0.0225); the three
              addends are each checked against script output",
@@ -63,7 +65,9 @@ ALLOW <- data.frame(
              to catch -- it is meant not to match any script",
             "the superseded 50-06 curvature figure, quoted for the same reason",
             "1/0.9, arithmetic worked in a solution's text",
-            "7/3, arithmetic worked in a solution's text"),
+            "7/3, arithmetic worked in a solution's text",
+            "an example of an invented practice-tier scenario value, quoted in the
+             prose that explains why the practice tier is excluded"),
   stringsAsFactors = FALSE
 )
 
