@@ -56,6 +56,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-40-06-wk-filters-for-the-airline-model\|`40-06-wk-filters-for-the-airline-model.R`]] | The three WK filters: gains, weights, and X-11 side by side. | 88 | [[40-06-wk-filters-for-the-airline-model]] |
 | [[code-40-07-implementing-seats-in-r\|`40-07-implementing-seats-in-r.R`]] | The build, walked through, plus the traps that produce plausible output. | 103 | [[40-07-implementing-seats-in-r]] |
 | [[code-40-08-validating-against-x13\|`40-08-validating-against-x13.R`]] | Prove it against the Census Bureau binary. | 88 | [[40-08-validating-against-x13]] |
+| [[code-40-09-burman-algorithm\|`40-09-burman-algorithm.R`]] | Burman's algorithm, built from scratch. | 174 | [[40-09-burman-algorithm]] |
 | [[code-50-01-is-there-seasonality\|`50-01-is-there-seasonality.R`]] | Should this series be adjusted at all? | 68 | [[50-01-is-there-seasonality]] |
 | [[code-50-02-residual-seasonality\|`50-02-residual-seasonality.R`]] | Did any seasonality survive? | 57 | [[50-02-residual-seasonality]] |
 | [[code-50-03-m-and-q-statistics\|`50-03-m-and-q-statistics.R`]] | The M and Q statistics, and their limits. | 58 | [[50-03-m-and-q-statistics]] |

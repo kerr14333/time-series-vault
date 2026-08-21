@@ -54,6 +54,7 @@ where $\delta(B)$ collects the differencing operators (the nonstationary AR fact
 - [[40-06-wk-filters-for-the-airline-model]] — derive and plot the gain functions
 - [[40-07-implementing-seats-in-r]] — **the build**
 - [[40-08-validating-against-x13]] — match `seasonal::seas()` table by table
+- [[40-09-burman-algorithm]] — how SEATS actually computes the filter: partial fractions into two one-sided recursions, worked slowly
 
 ## The build target
 
