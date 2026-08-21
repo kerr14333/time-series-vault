@@ -57,6 +57,42 @@ The airline model is such a good default that it is easy to apply without checki
 
 Not every $(\theta, \Theta)$ pair yields a valid decomposition. There is an **admissible region** in the parameter space; outside it, SEATS cannot produce non-negative component spectra and falls back to an approximating model. You will map that region yourself in [[40-00-seats-map]] — it is one of the more satisfying exercises in the sequence.
 
+## Numerically
+
+The model this whole vault is built on, fitted.
+
+Fit $(0,1,1)(0,1,1)_{12}$ to log `AirPassengers`. Remember R's MA sign is the opposite of Census's:
+
+<!-- run -->
+```r
+fit <- arima(lap, order = c(0, 1, 1),
+             seasonal = list(order = c(0, 1, 1), period = 12))
+round(coef(fit), 4)
+cat("Census convention: theta =", round(-coef(fit)[1], 4),
+    " Theta =", round(-coef(fit)[2], 4), "\n")
+```
+```text
+Census convention: theta = 0.4018  Theta = 0.5569 
+```
+<!-- end -->
+
+Both MA roots sit outside the unit circle, so the fitted model is invertible — the condition SEATS needs later:
+
+<!-- run -->
+```r
+th <- -coef(fit)[1]; Th <- -coef(fit)[2]
+cat("|root| of 1 - theta B    :", poly_roots(c(1, -th))$modulus, "\n")
+cat("|roots| of 1 - Theta B^12:",
+    unique(poly_roots(c(1, rep(0, 11), -Th))$modulus), "\n")
+cat("all greater than 1, so the fitted model is invertible\n")
+```
+```text
+|root| of 1 - theta B    : 2.4886 
+|roots| of 1 - Theta B^12: 1.05 
+all greater than 1, so the fitted model is invertible
+```
+<!-- end -->
+
 ## Exercises
 
 1. Fit the airline model to `log(AirPassengers)` with `arima()`. Convert the reported MA coefficients to Census sign. What do $\theta$ and $\Theta$ say about this series?

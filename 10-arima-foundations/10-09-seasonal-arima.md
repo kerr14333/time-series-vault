@@ -53,6 +53,35 @@ For monthly series, the overwhelmingly common models are:
 - $(0,1,2)(0,1,1)_{12}$, $(2,1,0)(0,1,1)_{12}$ — mild variants
 - $(0,1,1)(0,1,1)_{12}$ **with regressors** — trading day, Easter, outliers: that is **regARIMA**, and it is what X-13 actually fits before handing anything to SEATS.
 
+## Numerically
+
+The seasonal part multiplies, and multiplication is where the extra terms come from.
+
+$(1-\theta B)(1-\Theta B^{12})$ expanded. Note the $B^{13}$ term nobody writes down by hand:
+
+<!-- run -->
+```r
+poly_show(airline_ma(theta = 0.4, Theta = 0.6))
+```
+```text
+[1] "1 - 0.4B - 0.6B^12 + 0.24B^13"
+```
+<!-- end -->
+
+Seasonal dependence shows up at multiples of 12 in the ACF, not at lag 1:
+
+<!-- run -->
+```r
+set.seed(4)
+x <- arima.sim(list(ma = c(rep(0, 11), -0.7)), n = 3000)
+a <- acf(x, lag.max = 26, plot = FALSE)$acf[-1]
+round(a[c(1, 11, 12, 13, 23, 24, 25)], 3)
+```
+```text
+[1] -0.020  0.009 -0.474  0.005  0.009  0.012 -0.010
+```
+<!-- end -->
+
 ## Exercises
 
 1. Expand $(1 - \phi B)(1 - \Phi B^{12})$ fully. Which lags get nonzero coefficients?

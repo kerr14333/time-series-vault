@@ -38,6 +38,41 @@ If $\phi(B)$ and $\theta(B)$ share a root, cancel it. ARMA(2,2) with a shared ro
 
 Symptom: near-identical AR and MA roots in the fitted output, or standard errors much larger than the coefficients. Fix: drop the order. X-13's automatic model selection has explicit guards against this.
 
+## Numerically
+
+Every stationary AR is an infinite MA, and vice versa. Here are the weights.
+
+Inverting $1-0.8B$ gives the $\psi$-weights $0.8^j$. `ARMAtoMA` does it numerically — compare:
+
+<!-- run -->
+```r
+round(rbind(ARMAtoMA = ARMAtoMA(ar = 0.8, lag.max = 8),
+            theory   = 0.8^(1:8)), 4)
+```
+```text
+         [,1] [,2]  [,3]   [,4]   [,5]   [,6]   [,7]   [,8]
+ARMAtoMA  0.8 0.64 0.512 0.4096 0.3277 0.2621 0.2097 0.1678
+theory    0.8 0.64 0.512 0.4096 0.3277 0.2621 0.2097 0.1678
+```
+<!-- end -->
+
+A shared root is the trap: an ARMA(2,2) with a common factor *is* an ARMA(1,1), and the likelihood goes flat along a ridge:
+
+<!-- run -->
+```r
+p <- poly_mult(c(1, -0.5), c(1, -0.7))     # AR side
+q <- poly_mult(c(1, -0.5), c(1, -0.3))     # MA side, shares (1 - 0.5B)
+cat("AR root moduli:", poly_roots(p)$modulus, "\n")
+cat("MA root moduli:", poly_roots(q)$modulus, "\n")
+cat("2 appears on both sides -- a shared root, so the model is over-ordered\n")
+```
+```text
+AR root moduli: 1.4286 2 
+MA root moduli: 2 3.3333 
+2 appears on both sides -- a shared root, so the model is over-ordered
+```
+<!-- end -->
+
 ## Exercises
 
 1. Compute the first 12 $\psi$-weights of ARMA(1,1), $\phi=0.7$, $\theta=0.4$ (Census sign), by equating coefficients in $\phi(B)\psi(B) = \theta(B)$. Check with `ARMAtoMA()`.

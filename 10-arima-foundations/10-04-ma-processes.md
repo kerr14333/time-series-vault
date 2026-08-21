@@ -54,6 +54,44 @@ That rule is invertibility: [[10-05-invertibility]]. Read it next; this is the s
 
 Differencing a series usually *creates* MA structure. Concretely: if $z_t$ is a random walk plus independent noise (a signal-plus-noise model, exactly the situation in seasonal adjustment), then $(1-B)z_t$ is an MA(1) with negative $\rho_1$. So the "difference-then-MA" shape of the airline model is not an arbitrary choice — it is what unobserved-components structure looks like after differencing. That equivalence *is* the bridge to SEATS. See [[10-10-airline-model]] and [[40-00-seats-map]].
 
+## Numerically
+
+The defining feature of an MA is that the ACF **stops**.
+
+An MA(1) has exactly one nonzero autocorrelation, $\rho_1 = -\theta/(1+\theta^2)$ in Census sign. Everything past lag 1 is zero:
+
+<!-- run -->
+```r
+set.seed(2)
+x <- arima.sim(list(ma = -0.6), n = 4000)     # R sign; Census theta = +0.6
+th <- 0.6
+round(rbind(sample = acf(x, lag.max = 5, plot = FALSE)$acf[-1],
+            theory = c(-th / (1 + th^2), 0, 0, 0, 0)), 3)
+```
+```text
+         [,1]  [,2]   [,3]  [,4]   [,5]
+sample -0.442 0.014 -0.024 0.026 -0.031
+theory -0.441 0.000  0.000 0.000  0.000
+```
+<!-- end -->
+
+The ceiling nobody expects: an MA(1) autocorrelation can never exceed 0.5 in magnitude, whatever $\theta$ is.
+
+<!-- run -->
+```r
+th <- seq(-3, 3, by = 0.5)
+round(rbind(theta = th, rho1 = -th / (1 + th^2)), 3)
+```
+```text
+      [,1]   [,2] [,3]   [,4] [,5] [,6] [,7] [,8] [,9]  [,10] [,11]  [,12]
+theta -3.0 -2.500 -2.0 -1.500 -1.0 -0.5    0  0.5  1.0  1.500   2.0  2.500
+rho1   0.3  0.345  0.4  0.462  0.5  0.4    0 -0.4 -0.5 -0.462  -0.4 -0.345
+      [,13]
+theta   3.0
+rho1   -0.3
+```
+<!-- end -->
+
 ## Exercises
 
 1. Plot $\rho_1(\theta)$ for $\theta \in [-3, 3]$. Mark the pair $(0.5, 2)$.

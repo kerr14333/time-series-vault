@@ -43,6 +43,42 @@ The output that matters downstream is the **linearized series**: $z_t$ minus the
 > [!warning] Exception worth remembering
 > The **constant/mean term is not removed** the way trading-day and outlier effects are. SEATS keeps the mean inside the series it decomposes, centres the differenced series by it, and folds it back so the **trend** carries the drift. Getting this wrong produces a trend error that grows toward the sample ends — a distinctive diagnostic signature. Revisit in [[40-00-seats-map]].
 
+## Numerically
+
+What the fitting routine actually reports.
+
+Coefficients, standard errors and $t$-statistics from the airline fit. A $|t|$ under 2 is a term the data does not support:
+
+<!-- run -->
+```r
+fit <- arima(lap, order = c(0, 1, 1),
+             seasonal = list(order = c(0, 1, 1), period = 12))
+se <- sqrt(diag(fit$var.coef))
+round(cbind(estimate = coef(fit), se = se, t = coef(fit) / se), 4)
+```
+```text
+     estimate     se       t
+ma1   -0.4018 0.0896 -4.4825
+sma1  -0.5569 0.0731 -7.6190
+```
+<!-- end -->
+
+AICC rather than AIC, because the correction matters at these sample sizes:
+
+<!-- run -->
+```r
+aicc <- function(f) {
+  k <- length(coef(f)) + 1; n <- f$nobs
+  AIC(f) + 2 * k * (k + 1) / (n - k - 1)
+}
+cat("n =", fit$nobs, "  AIC =", round(AIC(fit), 2),
+    "  AICC =", round(aicc(fit), 2), "\n")
+```
+```text
+n = 131   AIC = -483.4   AICC = -483.21 
+```
+<!-- end -->
+
 ## Exercises
 
 1. Fit the airline model to `log(AirPassengers)` with `method="ML"` and `method="CSS"`. Compare $\Theta$. Which is closer to 1?

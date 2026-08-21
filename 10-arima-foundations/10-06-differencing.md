@@ -75,6 +75,41 @@ Before differencing, decide on logs. If the seasonal swing grows with the level 
 
 X-13 automates this as the **log/level test** (AICC comparison between the two). In SEATS, working in logs means the components multiply: $Z = T \times S \times I$, and the printed seasonal factors are ratios around 1 rather than deviations around 0.
 
+## Numerically
+
+Differencing is a choice with a cost. The numbers make both visible.
+
+The factorisation that the whole SEATS split rests on — $(1-B^{12})$ contains the trend root $(1-B)$:
+
+<!-- run -->
+```r
+S <- diff_poly(D = 1)                      # 1 - B^12
+cat("1 - B^12          =", poly_show(S), "\n")
+cat("(1-B)(1+B+...+B^11) =", poly_show(poly_mult(c(1, -1), rep(1, 12))), "\n")
+cat("identical:", isTRUE(all.equal(S, poly_mult(c(1, -1), rep(1, 12)))), "\n")
+```
+```text
+1 - B^12          = 1 - B^12 
+(1-B)(1+B+...+B^11) = 1 - B^12 
+identical: TRUE 
+```
+<!-- end -->
+
+Over-differencing inflates the variance. On `ldeaths` the regular difference makes things *worse*, which is the model telling you to stop:
+
+<!-- run -->
+```r
+ld <- log(ldeaths)
+round(c(undifferenced = var(ld),
+        seasonal      = var(diff(ld, 12)),
+        both          = var(diff(diff(ld, 12)))), 5)
+```
+```text
+undifferenced      seasonal          both 
+      0.08117       0.01890       0.03492 
+```
+<!-- end -->
+
 ## Exercises
 
 1. Take logs of AirPassengers, apply $\nabla$, then $\nabla_{12}$, and plot at each stage. At which stage does it start to look stationary?

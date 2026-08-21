@@ -127,6 +127,15 @@ check_numbers <- function(verbose = TRUE) {
   n_checked <- 0L
   for (rel in note_files()) {
     lines <- readLines(rel, warn = FALSE, encoding = "UTF-8")
+    # Blank out <!-- run --> ... <!-- end --> blocks. Those snippets and their
+    # printed output are executed and verified by run_inline(check = TRUE) in
+    # R/inline.R -- a stricter test than this one, since it re-runs the code.
+    runs <- grep("^<!--\\s*run\\s*-->\\s*$", lines)
+    ends <- grep("^<!--\\s*end\\s*-->\\s*$", lines)
+    for (s in runs) {
+      e <- ends[ends > s]
+      if (length(e)) lines[s:e[1]] <- ""
+    }
     for (i in seq_along(lines)) {
       for (s in extract_numbers(lines[i])) {
         n_checked <- n_checked + 1L

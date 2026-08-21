@@ -64,6 +64,40 @@ Three independent diagnostics agree:
 
 Worth internalising, because the airline model is such a reliable default that it is easy to apply it without looking. `ldeaths` is the case where the default is wrong and says so clearly — if you check.
 
+## Numerically
+
+Two different MA(1) models can produce the *same* autocorrelations. That is the problem invertibility solves.
+
+$\theta$ and $1/\theta$ give an identical ACF, so the data cannot tell them apart:
+
+<!-- run -->
+```r
+rho <- function(th) -th / (1 + th^2)
+for (th in c(0.5, 2, 0.8, 1.25))
+  cat(sprintf("theta = %5.2f  rho1 = %7.4f\n", th, rho(th)))
+```
+```text
+theta =  0.50  rho1 = -0.4000
+theta =  2.00  rho1 = -0.4000
+theta =  0.80  rho1 = -0.4878
+theta =  1.25  rho1 = -0.4878
+```
+<!-- end -->
+
+The tie-break is the $\pi$-weights: writing the MA back as an infinite AR. For $|\theta|<1$ they die; for $|\theta|>1$ they explode:
+
+<!-- run -->
+```r
+pi_w <- function(th, n = 8) th^(1:n)
+round(rbind(`theta=0.5` = pi_w(0.5), `theta=2.0` = pi_w(2)), 3)
+```
+```text
+          [,1] [,2]  [,3]   [,4]   [,5]   [,6]    [,7]    [,8]
+theta=0.5  0.5 0.25 0.125  0.062  0.031  0.016   0.008   0.004
+theta=2.0  2.0 4.00 8.000 16.000 32.000 64.000 128.000 256.000
+```
+<!-- end -->
+
 ## Exercises
 
 1. Compute the first 8 $\pi$-weights for $\theta = 0.5$ and for $\theta = 0.95$. Plot both.

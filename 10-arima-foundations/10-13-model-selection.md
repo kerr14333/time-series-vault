@@ -49,6 +49,49 @@ Both are good. Neither excuses you from looking at the residual diagnostics — 
 
 For official statistics the model is often **fixed at the airline model** and reviewed annually, even when a search would find something marginally better. Reason: **stability**. A model that changes each month produces seasonal factors that change for reasons unrelated to the data, and users of the published series cannot tell the two apart. Parsimony and stability beat in-sample fit here. Keep this in mind — it explains a lot of what looks like inertia in agency practice.
 
+## Numerically
+
+Selection is a numerical comparison, so do it numerically.
+
+Four candidates on the same series. Lower AICC wins, but note how close the top two are:
+
+<!-- run -->
+```r
+aicc <- function(f) { k <- length(coef(f)) + 1; n <- f$nobs
+                      AIC(f) + 2 * k * (k + 1) / (n - k - 1) }
+cand <- list("(0,1,1)(0,1,1)" = c(0,1,1),
+             "(1,1,0)(0,1,1)" = c(1,1,0),
+             "(1,1,1)(0,1,1)" = c(1,1,1),
+             "(2,1,0)(0,1,1)" = c(2,1,0))
+for (nm in names(cand)) {
+  f <- arima(lap, order = cand[[nm]],
+             seasonal = list(order = c(0, 1, 1), period = 12))
+  cat(sprintf("%-16s AICC = %8.3f\n", nm, aicc(f)))
+}
+```
+```text
+(0,1,1)(0,1,1)   AICC = -483.210
+(1,1,0)(0,1,1)   AICC = -481.301
+(1,1,1)(0,1,1)   AICC = -481.582
+(2,1,0)(0,1,1)   AICC = -479.706
+```
+<!-- end -->
+
+Ljung-Box on the residuals: a model that wins on AICC must still leave white noise behind:
+
+<!-- run -->
+```r
+f <- arima(lap, order = c(0, 1, 1),
+           seasonal = list(order = c(0, 1, 1), period = 12))
+bt <- Box.test(residuals(f), lag = 24, type = "Ljung-Box", fitdf = 2)
+cat("Ljung-Box Q =", round(bt$statistic, 2),
+    " df =", bt$parameter, " p =", round(bt$p.value, 4), "\n")
+```
+```text
+Ljung-Box Q = 26.45  df = 22  p = 0.233 
+```
+<!-- end -->
+
 ## Exercises
 
 1. Fit $(0,1,1)(0,1,1)$, $(0,1,2)(0,1,1)$, $(1,1,1)(0,1,1)$ to `log(AirPassengers)`. Compare AICC. Does the extra parameter earn its place?

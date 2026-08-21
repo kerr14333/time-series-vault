@@ -49,6 +49,40 @@ An AR(2) with complex roots produces a damped oscillation of period $2\pi/\arcco
 
 Play with this in the script — it is the most useful intuition in the note.
 
+## Numerically
+
+Watch the memory decay.
+
+For an AR(1), the weight on a shock $j$ periods back is $\phi^j$. That is the whole model:
+
+<!-- run -->
+```r
+psi <- function(phi, n = 10) phi^(0:n)
+round(rbind(`phi=0.5` = psi(0.5), `phi=0.9` = psi(0.9)), 4)
+```
+```text
+        [,1] [,2] [,3]  [,4]   [,5]   [,6]   [,7]   [,8]   [,9]  [,10]  [,11]
+phi=0.5    1  0.5 0.25 0.125 0.0625 0.0312 0.0156 0.0078 0.0039 0.0020 0.0010
+phi=0.9    1  0.9 0.81 0.729 0.6561 0.5905 0.5314 0.4783 0.4305 0.3874 0.3487
+```
+<!-- end -->
+
+The theoretical ACF of an AR(1) is also $\phi^k$. Simulate and compare — this is the sanity check to build the habit of:
+
+<!-- run -->
+```r
+set.seed(1)
+x <- arima.sim(list(ar = 0.7), n = 2000)
+round(rbind(sample = acf(x, lag.max = 6, plot = FALSE)$acf[-1],
+            theory = 0.7^(1:6)), 3)
+```
+```text
+        [,1]  [,2]  [,3] [,4]  [,5]  [,6]
+sample 0.693 0.488 0.344 0.25 0.190 0.138
+theory 0.700 0.490 0.343 0.24 0.168 0.118
+```
+<!-- end -->
+
 ## Exercises
 
 1. Simulate AR(1) with $\phi = 0.9$ and with $\phi = -0.9$. Describe both series in words before looking at the ACFs, then look.

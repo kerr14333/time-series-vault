@@ -64,6 +64,40 @@ Hold that thought until [[40-00-seats-map]]. It is the whole plot.
 
 $|\phi| > 1$ gives an explosive process — theoretically nonstationary too, but never used in this field. In practice "nonstationary" means unit roots, which is why differencing (not detrending by regression) is the standard fix.
 
+## Numerically
+
+Roots, on the machine. The rule is *modulus greater than 1*, and it is worth watching a series cross the line.
+
+Three AR(1) polynomials $1-\phi B$. The root is $1/\phi$, so the root leaves the unit circle exactly when $|\phi|<1$:
+
+<!-- run -->
+```r
+for (phi in c(0.5, 0.95, 1.01)) {
+  pr <- poly_roots(c(1, -phi))      # returns a data.frame: root, modulus, period
+  cat(sprintf("phi = %5.2f  |root| = %6.3f  %s\n", phi, pr$modulus,
+              if (all(pr$modulus > 1)) "stationary" else "NOT stationary"))
+}
+```
+```text
+phi =  0.50  |root| =  2.000  stationary
+phi =  0.95  |root| =  1.053  stationary
+phi =  1.01  |root| =  0.990  NOT stationary
+```
+<!-- end -->
+
+An AR(2) with complex roots — a cycle rather than a decay. Modulus and angle together give the period:
+
+<!-- run -->
+```r
+poly_roots(c(1, -1.6, 0.9))   # 1 - 1.6B + 0.9B^2, a complex pair
+```
+```text
+                  root modulus freq_rad period
+1 0.8888889+0.5665577i  1.0541   0.5675 11.073
+2 0.8888889-0.5665577i  1.0541  -0.5675 11.073
+```
+<!-- end -->
+
 ## Exercises
 
 1. Is $\phi(B) = 1 - 1.2B + 0.5B^2$ stationary? Find the roots by hand ($z = \frac{1.2 \pm \sqrt{1.44 - 2}}{1}$… careful, do it properly) and check with `polyroot(c(1, -1.2, 0.5))`. Note the roots are complex — what does that imply about the ACF?

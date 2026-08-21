@@ -29,6 +29,34 @@ $$z_t - z_{t-1} - z_{t-12} + z_{t-13}$$
 
 So "difference, then seasonally difference" is a four-term recipe, and — because polynomial multiplication commutes — **the order does not matter**. Seasonally differencing first gives the identical series. That commutativity is not obvious from the recipe; it is obvious from the algebra. That is why we use the algebra.
 
+Do not take that on faith — expand it:
+
+<!-- run -->
+```r
+# (1 - B)(1 - B^12), multiplied out
+poly_show(poly_mult(c(1, -1), diff_poly(D = 1)))
+```
+```text
+[1] "1 - B - B^12 + B^13"
+```
+<!-- end -->
+
+And check the commutativity claim on real data, both orders:
+
+<!-- run -->
+```r
+a <- diff(diff(lap, lag = 1),  lag = 12)   # difference, then seasonally difference
+b <- diff(diff(lap, lag = 12), lag = 1)    # the other way round
+c(same_length = length(a) == length(b), max_gap = max(abs(a - b)))
+```
+```text
+same_length     max_gap 
+          1           0 
+```
+<!-- end -->
+
+Identical to the last bit, which is what "commutes" buys you.
+
 > [!tip] The habit to build
 > Whenever an expression in $B$ confuses you, expand it and apply it to $z_t$ term by term. Every polynomial in $B$ is a weighted sum of past values. Nothing more.
 

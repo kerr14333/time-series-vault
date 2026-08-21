@@ -47,6 +47,54 @@ Module 5 makes this the main event: [[50-00-diagnostics-map]].
 
 If the model is on $\log z_t$ and you want a forecast of $z_t$, $\exp$ of the forecast is the **median**, not the mean. Mean requires $\exp(\hat z + \sigma^2/2)$. For seasonal adjustment this rarely matters (factors are ratios), but it matters for published forecasts.
 
+## Numerically
+
+Forecasts and, more importantly, how fast the uncertainty grows.
+
+Twelve months ahead, back on the original scale:
+
+<!-- run -->
+```r
+f <- arima(lap, order = c(0, 1, 1),
+           seasonal = list(order = c(0, 1, 1), period = 12))
+p <- predict(f, n.ahead = 12)
+round(cbind(forecast = exp(p$pred), lo95 = exp(p$pred - 1.96 * p$se),
+            hi95 = exp(p$pred + 1.96 * p$se)), 1)
+```
+```text
+         forecast  lo95  hi95
+Jan 1961    450.4 419.1 484.0
+Feb 1961    425.7 391.5 463.0
+Mar 1961    479.0 435.9 526.4
+Apr 1961    492.4 443.9 546.2
+May 1961    509.1 455.0 569.5
+Jun 1961    583.3 517.3 657.8
+Jul 1961    670.0 589.7 761.2
+Aug 1961    667.1 583.0 763.3
+Sep 1961    558.2 484.6 643.0
+Oct 1961    497.2 428.9 576.4
+Nov 1961    429.9 368.5 501.4
+Dec 1961    477.2 406.7 560.0
+```
+<!-- end -->
+
+The interval widens with horizon because the $\psi$-weights accumulate. This is exactly why forecast-extension helps least at the end of a series:
+
+<!-- run -->
+```r
+round(data.frame(horizon = c(1, 3, 6, 12),
+                 se = p$se[c(1, 3, 6, 12)],
+                 width_pct = 100 * (exp(1.96 * p$se[c(1, 3, 6, 12)]) - 1)), 3)
+```
+```text
+  horizon    se width_pct
+1       1 0.037     7.462
+2       3 0.048     9.884
+3       6 0.061    12.770
+4      12 0.082    17.337
+```
+<!-- end -->
+
 ## Exercises
 
 1. Forecast `log(AirPassengers)` 24 months ahead from the airline model. Plot with intervals on the original scale. How fast do the bands widen?

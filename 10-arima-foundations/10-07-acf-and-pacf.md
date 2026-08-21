@@ -55,6 +55,44 @@ The multiplicative model creates **satellite spikes** at $12 \pm 1$ — that is,
 
 Honest caveat: for real data these plots are often ambiguous, and reasonable people pick different models. That ambiguity is exactly why automatic identification (`automdl` in X-13, Hyndman–Khandakar in R) exists — and it is also why SEATS output can differ between analysts who both did nothing wrong.
 
+## Numerically
+
+The identification table, generated rather than memorised.
+
+AR cuts off in the **PACF**; MA cuts off in the **ACF**. Simulate one of each and read the two columns:
+
+<!-- run -->
+```r
+set.seed(3)
+ar1 <- arima.sim(list(ar = 0.8), n = 3000)
+ma1 <- arima.sim(list(ma = -0.8), n = 3000)
+tab <- rbind(
+  `AR(1) acf`  = acf(ar1,  lag.max = 5, plot = FALSE)$acf[-1],
+  `AR(1) pacf` = pacf(ar1, lag.max = 5, plot = FALSE)$acf,
+  `MA(1) acf`  = acf(ma1,  lag.max = 5, plot = FALSE)$acf[-1],
+  `MA(1) pacf` = pacf(ma1, lag.max = 5, plot = FALSE)$acf)
+round(tab, 3)
+```
+```text
+             [,1]   [,2]   [,3]   [,4]   [,5]
+AR(1) acf   0.795  0.620  0.481  0.374  0.296
+AR(1) pacf  0.795 -0.032 -0.006  0.003  0.014
+MA(1) acf  -0.484 -0.019  0.043 -0.029  0.002
+MA(1) pacf -0.484 -0.331 -0.190 -0.151 -0.118
+```
+<!-- end -->
+
+The significance band is $\pm 2/\sqrt{n}$ — it narrows with the square root of the sample, so long series flag tiny correlations:
+
+<!-- run -->
+```r
+round(sapply(c(72, 144, 500, 2000), function(n) 2 / sqrt(n)), 4)
+```
+```text
+[1] 0.2357 0.1667 0.0894 0.0447
+```
+<!-- end -->
+
 ## Exercises
 
 1. Simulate AR(2), MA(2) and ARMA(1,1) at n=300. Print ACF/PACF for each without labels, shuffle them, and identify them cold. Repeat at n=60 and notice how much harder it gets — that is the real-data regime.
