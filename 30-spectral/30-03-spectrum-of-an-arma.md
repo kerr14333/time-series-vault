@@ -83,6 +83,9 @@ The result is a spectrum that is **infinite** at 0 and at the six seasonal frequ
 4. Overlay the theoretical airline-model spectrum on a smoothed periodogram of $\nabla\nabla_{12}\log(\text{AirPassengers})$.
 5. Verify the formula numerically: compute $\gamma_k$ from `ARMAacf`, sum the definition in [[30-02-spectral-density]], and compare to the closed form.
 
+> [!abstract] Derivation
+> - [[derivations#D6. The spectral density, and the ARMA formula|where $|\theta|^2/|\phi|^2$ comes from]]
+
 ## Links
 
 - Prev: [[30-02-spectral-density]] · Next: [[30-04-pseudo-spectrum]]

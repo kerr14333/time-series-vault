@@ -102,6 +102,9 @@ Always plot $\log f$, and expect the peaks to run off the top of the axis. What 
 4. Plot the pseudo-spectrum of $(1-B)$ alone and of $(1-B^{12})$ alone. Confirm the peak locations against the root table in [[10-06-differencing]].
 5. Overlay a smoothed periodogram of the *undifferenced* `log(AirPassengers)`. It cannot show infinities, but the peaks should line up.
 
+> [!abstract] Derivation
+> - [[derivations#D7. Why differencing is a filter with zeros where the seasonal lives|why unit roots give infinite peaks]]
+
 ## Links
 
 - Prev: [[30-03-spectrum-of-an-arma]] · Next: [[30-05-filters-in-the-frequency-domain]]

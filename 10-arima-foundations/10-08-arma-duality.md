@@ -79,6 +79,9 @@ MA root moduli: 2 3.3333
 2. Same model, get the $\pi$-weights from $\theta(B)\pi(B) = \phi(B)$.
 3. Fit ARMA(2,2) to data simulated from ARMA(1,1) and inspect the roots. Find the common factor.
 
+> [!abstract] Derivation
+> - [[derivations#D14. Forecasting, from the difference equation|where the psi-weights get used]]
+
 ## Links
 
 - Prev: [[10-07-acf-and-pacf]] · Next: [[10-09-seasonal-arima]]

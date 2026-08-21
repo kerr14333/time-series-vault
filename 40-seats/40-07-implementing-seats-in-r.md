@@ -124,6 +124,9 @@ Be clear about the scope of what you have:
 5. Feed it `cpi` and confirm the admissibility check fires ([[40-02-admissible-decompositions]]).
 6. Time it as a function of `max_lag`. Where is the cost, and how would Burman's algorithm avoid it?
 
+> [!abstract] Derivation
+> - [[derivations#D10. Why the WK filters have no poles|why no special case is needed at the unit roots]]
+
 ## Links
 
 - Prev: [[40-06-wk-filters-for-the-airline-model]] · Next: [[40-08-validating-against-x13]]

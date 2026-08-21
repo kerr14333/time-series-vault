@@ -25,6 +25,145 @@ mark_seasonal <- function() abline(v = SEAS_FREQ, col = "firebrick", lty = 3)
 
 f <- seq(0, 0.5, length.out = 1001)
 
+# ===== MODULE 1: ARIMA foundations =========================================
+colsM1 <- c("steelblue", "firebrick", "darkgreen")
+
+# --- 10-02: roots and the unit circle --------------------------------------
+png_("10-02-unit-circle.png")
+par(mfrow = c(1, 2))
+unit_circle <- function(main) {
+  th <- seq(0, 2 * pi, length.out = 400)
+  plot(cos(th), sin(th), type = "l", asp = 1, col = "grey55", lwd = 2,
+       xlim = c(-2.3, 2.3), ylim = c(-2.3, 2.3), xlab = "Re", ylab = "Im", main = main)
+  abline(h = 0, v = 0, col = "grey88")
+}
+unit_circle("AR(1): the root is 1/phi")
+phis <- c(0.5, 0.95, 1.01)
+for (i in seq_along(phis)) {
+  points(1 / phis[i], 0, pch = 19, col = colsM1[i], cex = 1.6)
+  text(1 / phis[i], 0.3, sprintf("phi=%.2f", phis[i]), col = colsM1[i], cex = 0.8)
+}
+legend("bottomleft", "inside the circle = NOT stationary", bty = "n", cex = 0.75)
+unit_circle("AR(2): a complex pair")
+rr <- polyroot(c(1, -1.6, 0.9))
+points(Re(rr), Im(rr), pch = 19, col = "firebrick", cex = 1.6)
+segments(0, 0, Re(rr[1]), Im(rr[1]), col = "firebrick", lty = 2)
+text(0, -1.9, "modulus 1.054, just outside: stationary but nearly not", cex = 0.75)
+dev.off()
+
+# --- 10-03: persistence you can see ----------------------------------------
+png_("10-03-ar-paths.png", h = 1250)
+par(mfrow = c(3, 1), mar = c(2.6, 4, 2.4, 1))
+set.seed(7)
+for (i in seq_along(c(0.5, 0.9, 0.99))) {
+  phi <- c(0.5, 0.9, 0.99)[i]
+  plot(arima.sim(list(ar = phi), n = 300), type = "l", col = colsM1[i], lwd = 1.5,
+       ylab = "", main = sprintf("AR(1), phi = %.2f", phi))
+  abline(h = 0, col = "grey70")
+}
+dev.off()
+
+# --- 10-05: two models, one ACF --------------------------------------------
+png_("10-05-invertibility.png")
+par(mfrow = c(1, 2))
+rho1 <- function(th) -th / (1 + th^2)
+th <- seq(-3, 3, length.out = 400)
+plot(th, rho1(th), type = "l", lwd = 2, xlab = "theta", ylab = "rho(1)",
+     main = "theta and 1/theta give the SAME rho(1)")
+abline(h = 0, v = c(-1, 1), col = "grey80", lty = c(1, 2, 2))
+points(c(0.5, 2), rho1(c(0.5, 2)), pch = 19, col = "firebrick", cex = 1.4)
+text(0.5, rho1(0.5) + 0.06, "0.5", col = "firebrick", cex = 0.8)
+text(2, rho1(2) - 0.06, "2", col = "firebrick", cex = 0.8)
+j <- 1:10
+plot(j, 0.5^j, type = "b", pch = 19, lwd = 2, col = "steelblue", log = "y",
+     ylim = c(1e-3, 1e3), xlab = "lag j", ylab = "|pi weight|",
+     main = "pi weights: only one choice dies out")
+lines(j, 2^j, type = "b", pch = 19, lwd = 2, col = "firebrick")
+legend("left", c("theta = 0.5 (invertible)", "theta = 2 (not)"),
+       col = c("steelblue", "firebrick"), lwd = 2, bty = "n", cex = 0.8)
+dev.off()
+
+# --- 10-06: the differencing ladder ----------------------------------------
+png_("10-06-differencing-ladder.png", h = 1500)
+par(mfrow = c(4, 1), mar = c(2.6, 4.2, 2.4, 1))
+plot(lap, lwd = 1.6, ylab = "log", main = "log AirPassengers: trend AND seasonal")
+plot(diff(lap), col = "steelblue", lwd = 1.4, ylab = "",
+     main = "(1-B): trend gone, seasonal still there")
+abline(h = 0, col = "grey70")
+plot(diff(lap, 12), col = "darkgreen", lwd = 1.4, ylab = "",
+     main = "(1-B^12): seasonal gone, trend still there")
+abline(h = 0, col = "grey70")
+plot(diff(diff(lap, 12)), col = "firebrick", lwd = 1.4, ylab = "",
+     main = "(1-B)(1-B^12): both gone -- this is what gets modelled")
+abline(h = 0, col = "grey70")
+dev.off()
+
+# --- 10-07: the identification grid ----------------------------------------
+png_("10-07-acf-pacf-grid.png", h = 1250)
+par(mfrow = c(2, 2), mar = c(4, 4.2, 3, 1))
+set.seed(3)
+ar1 <- as.numeric(arima.sim(list(ar = 0.8), n = 3000))
+ma1 <- as.numeric(arima.sim(list(ma = -0.8), n = 3000))
+acf(ar1,  lag.max = 20, main = "AR(1): ACF DECAYS")
+pacf(ar1, lag.max = 20, main = "AR(1): PACF CUTS OFF at lag 1")
+acf(ma1,  lag.max = 20, main = "MA(1): ACF CUTS OFF at lag 1")
+pacf(ma1, lag.max = 20, main = "MA(1): PACF DECAYS")
+dev.off()
+
+# --- 10-09: seasonality in the ACF -----------------------------------------
+png_("10-09-seasonal-acf.png")
+par(mfrow = c(1, 2), mar = c(4, 4.2, 3, 1))
+a1 <- acf(as.numeric(diff(lap)), lag.max = 40, plot = FALSE)
+plot(a1, main = "after (1-B): spikes at 12, 24, 36")
+abline(v = c(12, 24, 36), col = "firebrick", lty = 3)
+a2 <- acf(as.numeric(diff(diff(lap, 12))), lag.max = 40, plot = FALSE)
+plot(a2, main = "after (1-B)(1-B^12): only 1 and 12 survive")
+abline(v = c(1, 12), col = "firebrick", lty = 3)
+dev.off()
+
+# --- 10-14: the forecast fan -----------------------------------------------
+png_("10-14-forecast-fan.png")
+fitM1 <- arima(lap, order = c(0, 1, 1),
+               seasonal = list(order = c(0, 1, 1), period = 12))
+pM1 <- predict(fitM1, n.ahead = 24)
+hi <- exp(pM1$pred + 1.96 * pM1$se); lo <- exp(pM1$pred - 1.96 * pM1$se)
+ts.plot(exp(lap), lo, hi, exp(pM1$pred),
+        col = c("black", "grey65", "grey65", "firebrick"),
+        lty = c(1, 2, 2, 1), lwd = c(1.6, 1.2, 1.2, 2),
+        ylab = "passengers", main = "airline model, 24 months ahead (95% interval)")
+legend("topleft", c("observed", "forecast", "95% interval"),
+       col = c("black", "firebrick", "grey65"), lty = c(1, 1, 2), lwd = 2,
+       bty = "n", cex = 0.8)
+dev.off()
+
+# --- 10-12: the likelihood surface the optimiser climbs --------------------
+png_("10-12-likelihood-surface.png")
+par(mfrow = c(1, 2))
+ll_at <- function(ma1, sma1) {
+  f <- try(arima(lap, order = c(0, 1, 1),
+                 seasonal = list(order = c(0, 1, 1), period = 12),
+                 fixed = c(ma1, sma1), transform.pars = FALSE,
+                 method = "ML"), silent = TRUE)
+  if (inherits(f, "try-error")) NA_real_ else f$loglik
+}
+g1 <- seq(-0.85, 0.05, length.out = 30)     # R sign for theta
+g2 <- seq(-0.95, -0.05, length.out = 30)    # R sign for Theta
+Z  <- outer(g1, g2, Vectorize(ll_at))
+mle <- arima(lap, order = c(0, 1, 1),
+             seasonal = list(order = c(0, 1, 1), period = 12), method = "ML")
+contour(g1, g2, Z, nlevels = 28, xlab = "theta (R sign)", ylab = "Theta (R sign)",
+        main = "log-likelihood surface")
+points(coef(mle)[1], coef(mle)[2], pch = 19, col = "firebrick", cex = 1.6)
+text(coef(mle)[1], coef(mle)[2] + 0.06, "MLE", col = "firebrick", cex = 0.85)
+prof <- vapply(g2, function(s) ll_at(coef(mle)[1], s), numeric(1))
+plot(-g2, prof, type = "l", lwd = 2, col = "steelblue",
+     xlab = "Theta (Census sign)", ylab = "log-likelihood",
+     main = "profile through the MLE")
+abline(v = -coef(mle)[2], col = "firebrick", lty = 2)
+text(-coef(mle)[2], min(prof, na.rm = TRUE),
+     sprintf(" Theta = %.3f", -coef(mle)[2]), col = "firebrick", cex = 0.8, adj = 0)
+dev.off()
+
 # --- 20-01: what a gain function is ----------------------------------------
 png_("20-01-gain-basics.png")
 par(mfrow = c(1, 2))

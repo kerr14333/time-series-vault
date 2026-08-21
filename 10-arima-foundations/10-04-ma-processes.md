@@ -98,6 +98,9 @@ rho1   -0.3
 2. Simulate MA(2) and confirm the ACF dies after lag 2 while the PACF does not.
 3. Simulate a random walk plus white noise, difference it, and look at the ACF. Which MA order does it look like? Is $\rho_1$ positive or negative? Why must it be that sign?
 
+> [!abstract] Derivation
+> - [[derivations#D2. The MA(1) autocorrelation, and why it cannot exceed one half|the ACF, the cut-off, and the 0.5 ceiling]]
+
 ## Links
 
 - Prev: [[10-03-ar-processes]] · Next: [[10-05-invertibility]]

@@ -86,6 +86,9 @@ The irregular is the usual casualty, and there is an intuition for it. The irreg
 5. Set `seats.noadmiss = "no"` on `cpi` and observe the error instead of the substitution.
 6. Quarterly: is the admissible region for $s=4$ the same shape?
 
+> [!abstract] Derivation
+> - [[derivations#D9. The canonical decomposition, and why it is a convention|the one-parameter family and admissibility]]
+
 ## Links
 
 - Prev: [[40-01-unobserved-components-and-reduced-form]] · Next: [[40-03-canonical-decomposition]]

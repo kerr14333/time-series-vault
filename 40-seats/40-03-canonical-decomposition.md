@@ -98,6 +98,9 @@ The honest summary: the canonical decomposition is a defensible, well-defined, c
 5. Confirm the canonical filters still sum to 1.
 6. Across the catalogue, which series has the largest $m_T + m_S$ — i.e. for which does the canonical rule move the most variance?
 
+> [!abstract] Derivation
+> - [[derivations#D9. The canonical decomposition, and why it is a convention|subtracting the minimum, and why]]
+
 ## Links
 
 - Prev: [[40-02-admissible-decompositions]] · Next: [[40-04-partial-fractions-in-b-and-f]]

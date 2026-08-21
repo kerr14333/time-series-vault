@@ -91,6 +91,9 @@ SEATS takes the second. That convention is [[40-03-canonical-decomposition]], an
 4. Confirm $\nu_s(\omega) + \nu_n(\omega) = 1$ at every frequency.
 5. Show two different $(f_s, f_n)$ pairs giving the same $f_z$ — the identification problem, made concrete.
 
+> [!abstract] Derivation
+> - [[derivations#D8. The Wiener–Kolmogorov filter|the orthogonality argument for $f_s/f_z$]]
+
 ## Links
 
 - Prev: [[30-05-filters-in-the-frequency-domain]] · Next: [[30-07-finite-samples]]

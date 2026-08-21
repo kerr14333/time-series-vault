@@ -53,6 +53,14 @@ For monthly series, the overwhelmingly common models are:
 - $(0,1,2)(0,1,1)_{12}$, $(2,1,0)(0,1,1)_{12}$ — mild variants
 - $(0,1,1)(0,1,1)_{12}$ **with regressors** — trading day, Easter, outliers: that is **regARIMA**, and it is what X-13 actually fits before handing anything to SEATS.
 
+![[10-09-seasonal-acf.png]]
+
+*Drawn by [[figure-index#10-09-seasonal-acf.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Left:** after removing the trend with $(1-B)$, the seasonal structure is unmistakable — spikes at 12, 24 and 36, decaying slowly. Seasonal dependence lives at multiples of the period, not at lag 1.
+
+**Right:** after the seasonal difference as well, almost everything is gone. What survives is a negative spike at lag 1 and another at lag 12 — precisely the two MA terms the airline model provides. The picture is the model specification.
+
 ## Numerically
 
 The seasonal part multiplies, and multiplication is where the extra terms come from.
@@ -87,6 +95,9 @@ round(a[c(1, 11, 12, 13, 23, 24, 25)], 3)
 1. Expand $(1 - \phi B)(1 - \Phi B^{12})$ fully. Which lags get nonzero coefficients?
 2. Write $(0,1,1)(1,0,0)_{12}$ out in full scalar form.
 3. Simulate an airline model with $\theta=0.4,\Theta=0.6$; plot its ACF after $\nabla\nabla_{12}$ and locate the satellite spikes.
+
+> [!abstract] Derivation
+> - [[derivations#D4. The seasonal difference contains the trend difference|where the seasonal roots come from]]
 
 ## Links
 

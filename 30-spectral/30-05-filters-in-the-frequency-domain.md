@@ -79,6 +79,10 @@ Everything else — Henderson lengths, 3×5 versus 3×9, canonical decomposition
 4. Overlay the X-11 composite gain from [[20-05-the-x11-iteration]] on the ideal notch filter. Where does the real filter over- or under-shoot?
 5. Confirm the phase of a symmetric filter is 0, and of a one-sided filter is not.
 
+> [!abstract] Derivation
+> - [[derivations#D11. Why a symmetric filter has zero phase, and an end filter does not|the zero-phase proof]]
+> - [[derivations#D7. Why differencing is a filter with zeros where the seasonal lives|the gain of $1-B^s$]]
+
 ## Links
 
 - Prev: [[30-04-pseudo-spectrum]] · Next: [[30-06-wiener-kolmogorov]]

@@ -55,6 +55,14 @@ The multiplicative model creates **satellite spikes** at $12 \pm 1$ — that is,
 
 Honest caveat: for real data these plots are often ambiguous, and reasonable people pick different models. That ambiguity is exactly why automatic identification (`automdl` in X-13, Hyndman–Khandakar in R) exists — and it is also why SEATS output can differ between analysts who both did nothing wrong.
 
+![[10-07-acf-pacf-grid.png]]
+
+*Drawn by [[figure-index#10-07-acf-pacf-grid.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+The identification rule, in one grid. Along the top an AR(1): the ACF decays geometrically while the PACF stops dead after lag 1. Along the bottom an MA(1), doing exactly the reverse. Both from 3000 simulated points, so the sampling noise is small and the pattern is unambiguous.
+
+**The rule:** whichever function *cuts off* names the order, and which function it is names the type. In real data with 100-odd points it is far messier than this, which is why [[10-13-model-selection]] leans on AICC rather than eyeballing.
+
 ## Numerically
 
 The identification table, generated rather than memorised.
@@ -98,6 +106,9 @@ round(sapply(c(72, 144, 500, 2000), function(n) 2 / sqrt(n)), 4)
 1. Simulate AR(2), MA(2) and ARMA(1,1) at n=300. Print ACF/PACF for each without labels, shuffle them, and identify them cold. Repeat at n=60 and notice how much harder it gets — that is the real-data regime.
 2. For log-differenced AirPassengers, name every lag whose ACF exceeds the band, and say which polynomial you think produced it.
 3. Why does a nonstationary series show $\phi_{11}\approx1$?
+
+> [!abstract] Derivation
+> - [[derivations#D2. The MA(1) autocorrelation, and why it cannot exceed one half|why an MA ACF cuts off]]
 
 ## Links
 

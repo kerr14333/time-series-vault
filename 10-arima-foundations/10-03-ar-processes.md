@@ -49,6 +49,12 @@ An AR(2) with complex roots produces a damped oscillation of period $2\pi/\arcco
 
 Play with this in the script — it is the most useful intuition in the note.
 
+![[10-03-ar-paths.png]]
+
+*Drawn by [[figure-index#10-03-ar-paths.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+The same model at three values of $\phi$, same random seed. As $\phi \to 1$ the series stops returning to its mean promptly and starts wandering: at 0.5 it crosses zero constantly, at 0.99 it drifts for hundreds of periods at a time. Nothing about the *equation* changes — only one number — but the character of the data changes completely. That wandering is what a unit root looks like from the outside.
+
 ## Numerically
 
 Watch the memory decay.

@@ -93,6 +93,9 @@ Neither dominates. SEATS's practical advantage is that fitting an ARIMA is routi
 3. Set $\sigma_\omega^2 = 0$ (fixed seasonality). What does $\Theta$ come back as? Relate to [[10-10-airline-model]].
 4. **The one that matters**: keep the simulated components, decompose the fitted reduced form with the tools of this module, and compare the recovered components to the truth you generated.
 
+> [!abstract] Derivation
+> - [[derivations#D4. The seasonal difference contains the trend difference|the AR-side split]]
+
 ## Links
 
 - Prev: [[40-00-seats-map]] · Next: [[40-02-admissible-decompositions]]

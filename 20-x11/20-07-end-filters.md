@@ -78,6 +78,9 @@ Musgrave derives his directly, under a simple assumed model. X-11-ARIMA and X-13
 3. Measure it: mean absolute revision between the concurrent estimate and the estimate 12 months later, across the whole series.
 4. Confirm the phase shift of an end filter is nonzero while the symmetric filter's is zero.
 
+> [!abstract] Derivation
+> - [[derivations#D11. Why a symmetric filter has zero phase, and an end filter does not|why dropping the future half creates phase shift]]
+
 ## Links
 
 - Prev: [[20-06-extreme-values]] · Next: [[20-08-x11-arima]]

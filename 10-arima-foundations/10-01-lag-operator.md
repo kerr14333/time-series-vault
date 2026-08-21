@@ -92,6 +92,9 @@ $B c = c$ for a constant $c$, so $(1-B)c = 0$. Differencing kills a constant. An
 2. Show $(1-B^{12}) = (1-B)(1 + B + B^2 + \cdots + B^{11})$. What does the second factor mean in words? (This factorisation is the seed of the whole trend/seasonal split — see [[10-06-differencing]].)
 3. Expand $1/(1 - 0.8B)$ to five terms. How much weight does an observation 5 periods ago get?
 
+> [!abstract] Derivation
+> - [[derivations#D1. Stationarity means roots outside the unit circle|why inverting the operator is the stationarity condition]]
+
 ## Links
 
 - Next: [[10-02-stationarity-and-roots]]

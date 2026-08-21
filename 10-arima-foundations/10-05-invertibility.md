@@ -64,6 +64,14 @@ Three independent diagnostics agree:
 
 Worth internalising, because the airline model is such a reliable default that it is easy to apply it without looking. `ldeaths` is the case where the default is wrong and says so clearly — if you check.
 
+![[10-05-invertibility.png]]
+
+*Drawn by [[figure-index#10-05-invertibility.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Left:** $\rho_1 = -\theta/(1+\theta^2)$ is symmetric under $\theta \mapsto 1/\theta$, so 0.5 and 2 land on exactly the same point. The autocorrelations cannot distinguish them, and neither can the likelihood. Note also the curve never leaves $[-0.5, 0.5]$ — that is the MA(1) correlation ceiling.
+
+**Right:** the tie-break. Writing the MA back as an infinite AR gives $\pi$-weights $\theta^j$. For $\theta = 0.5$ they vanish; for $\theta = 2$ they explode, which would mean the distant past matters more than the recent past. Log scale. Invertibility is the rule that picks the sane one.
+
 ## Numerically
 
 Two different MA(1) models can produce the *same* autocorrelations. That is the problem invertibility solves.
@@ -103,6 +111,9 @@ theta=2.0  2.0 4.00 8.000 16.000 32.000 64.000 128.000 256.000
 1. Compute the first 8 $\pi$-weights for $\theta = 0.5$ and for $\theta = 0.95$. Plot both.
 2. Simulate white noise, difference it, fit an MA(1). What $\theta$ comes back? Now fit `arima(x, c(0,1,1))` to plain white noise repeatedly — how often does it pin at the boundary?
 3. Argue in one sentence why "over-differenced" and "non-invertible" are the same statement.
+
+> [!abstract] Derivation
+> - [[derivations#D3. Why $\theta$ and $1/\theta$ are indistinguishable|the algebra of the non-identification]]
 
 ## Links
 

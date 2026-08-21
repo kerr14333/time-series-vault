@@ -71,6 +71,9 @@ In diagnostics ([[50-02-residual-seasonality]]) you examine the spectrum of the 
 3. Plot the spectrum of `log(AirPassengers)` after $\nabla\nabla_{12}$. Where are the peaks? Compare with the ACF of the same series from [[10-07-acf-and-pacf]] — the same facts in two languages.
 4. Compare the spectrum of the raw series with that of the seasonally adjusted series from Module 2. Did the seasonal peaks go?
 
+> [!abstract] Derivation
+> - [[derivations#D6. The spectral density, and the ARMA formula|from autocovariances to the ARMA ratio]]
+
 ## Links
 
 - Prev: [[30-01-frequency-domain-basics]] · Next: [[30-03-spectrum-of-an-arma]]

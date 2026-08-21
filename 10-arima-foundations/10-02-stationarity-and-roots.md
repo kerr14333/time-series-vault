@@ -64,6 +64,14 @@ Hold that thought until [[40-00-seats-map]]. It is the whole plot.
 
 $|\phi| > 1$ gives an explosive process — theoretically nonstationary too, but never used in this field. In practice "nonstationary" means unit roots, which is why differencing (not detrending by regression) is the standard fix.
 
+![[10-02-unit-circle.png]]
+
+*Drawn by [[figure-index#10-02-unit-circle.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Left:** the AR(1) root is $1/\phi$, so it walks *inward* as $\phi$ grows. At $\phi=0.5$ it sits at 2, comfortably outside; at $0.95$ it is at 1.053, hanging on; at $1.01$ it has crossed to 0.990 and the process is no longer stationary. The condition "all roots outside the unit circle" is that picture, nothing more.
+
+**Right:** an AR(2) with a complex pair, modulus 1.054. Complex roots come in conjugate pairs — mirror images across the real axis — and the *angle* sets the period of the cycle while the *modulus* sets how fast it dies. Just outside the circle means a long, slowly damping cycle.
+
 ## Numerically
 
 Roots, on the machine. The rule is *modulus greater than 1*, and it is worth watching a series cross the line.
@@ -103,6 +111,9 @@ poly_roots(c(1, -1.6, 0.9))   # 1 - 1.6B + 0.9B^2, a complex pair
 1. Is $\phi(B) = 1 - 1.2B + 0.5B^2$ stationary? Find the roots by hand ($z = \frac{1.2 \pm \sqrt{1.44 - 2}}{1}$… careful, do it properly) and check with `polyroot(c(1, -1.2, 0.5))`. Note the roots are complex — what does that imply about the ACF?
 2. What are the 12 roots of $1 - B^{12} = 0$? Where are they on the unit circle? Convert each to a frequency in cycles per year.
 3. Why can you *not* make a nonstationary series stationary by subtracting a fitted straight line, when the nonstationarity comes from a unit root?
+
+> [!abstract] Derivation
+> - [[derivations#D1. Stationarity means roots outside the unit circle|the geometric-series argument behind the root rule]]
 
 ## Links
 

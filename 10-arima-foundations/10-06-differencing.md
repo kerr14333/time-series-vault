@@ -75,6 +75,14 @@ Before differencing, decide on logs. If the seasonal swing grows with the level 
 
 X-13 automates this as the **log/level test** (AICC comparison between the two). In SEATS, working in logs means the components multiply: $Z = T \times S \times I$, and the printed seasonal factors are ratios around 1 rather than deviations around 0.
 
+![[10-06-differencing-ladder.png]]
+
+*Drawn by [[figure-index#10-06-differencing-ladder.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+The whole point of differencing in four panels. The raw series has trend *and* seasonal. $(1-B)$ removes the trend and leaves an obvious annual wave. $(1-B^{12})$ does the opposite — the wave goes, a drifting level remains. Only the product removes both, and the bottom panel is what actually gets modelled.
+
+Read bottom-up and it is also the argument for the airline model: two differences, so two MA terms, one at lag 1 and one at lag 12.
+
 ## Numerically
 
 Differencing is a choice with a cost. The numbers make both visible.
@@ -115,6 +123,10 @@ undifferenced      seasonal          both
 1. Take logs of AirPassengers, apply $\nabla$, then $\nabla_{12}$, and plot at each stage. At which stage does it start to look stationary?
 2. Compute the variance after each stage. What happens if you difference once more?
 3. Find the 12 roots of $1-B^{12}$ numerically and convert each to a period in months. Confirm you get 12, 6, 4, 3, 2.4 and 2 months.
+
+> [!abstract] Derivation
+> - [[derivations#D4. The seasonal difference contains the trend difference|the factorisation of $1-B^s$]]
+> - [[derivations#D5. A constant in a differenced model is a drift|why the constant is a slope]]
 
 ## Links
 

@@ -106,6 +106,27 @@ check_numbers <- function(verbose = TRUE) {
     stop("no cached output in ", AUDIT_DIR, "/ -- run run_all() first")
 
   blob <- unlist(lapply(outs, readLines, warn = FALSE))
+
+  # Inline snippet output counts as script output. Those blocks are executed by
+  # R/inline.R and verified by its --check, so a number a note quotes in prose
+  # is legitimately reproducible if a snippet in the vault prints it.
+  for (rel in note_files()) {
+    ln <- readLines(rel, warn = FALSE, encoding = "UTF-8")
+    runs <- grep("^<!--\\s*run\\s*-->\\s*$", ln)
+    ends <- grep("^<!--\\s*end\\s*-->\\s*$", ln)
+    for (s in runs) {
+      e <- ends[ends > s]
+      if (!length(e)) next
+      seg <- ln[s:e[1]]
+      tf <- grep("^```text\\s*$", seg)
+      cf <- grep("^```\\s*$", seg)
+      if (!length(tf)) next
+      cl <- cf[cf > tf[1]][1]
+      if (!is.na(cl) && cl > tf[1] + 1L)
+        blob <- c(blob, seg[(tf[1] + 1L):(cl - 1L)])
+    }
+  }
+
   out_nums <- suppressWarnings(as.numeric(extract_numbers(paste(blob, collapse = "\n"))))
   out_nums <- abs(out_nums[is.finite(out_nums)])
 

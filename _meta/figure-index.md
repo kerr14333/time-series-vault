@@ -7,27 +7,275 @@ tags: [meta, generated, appendix]
 
 **Generated** by `R/make-figure-index.R` — do not edit by hand. Every PNG in the vault comes from exactly one block of [[code-make-figures|`R/make-figures.R`]], between a `png_()` call and its `dev.off()`. Regenerate the images with `Rscript R/make-figures.R`, then this page with `Rscript R/make-figure-index.R`.
 
-17 figures, all produced by one script.
+25 figures, all produced by one script.
 
 | Figure | Appears in | Lines in `make-figures.R` |
 |---|---|---|
-| [[#20-01-gain-basics.png]] | [[20-01-moving-averages-as-filters]] | 15–26 |
-| [[#20-02-2x12-gain.png]] | [[20-02-the-12-term-ma]] | 29–39 |
-| [[#20-03-henderson.png]] | [[20-03-henderson-filters]] | 42–61 |
-| [[#20-04-seasonal-ma.png]] | [[20-04-seasonal-moving-averages]] | 64–84 |
-| [[#20-05-decomposition.png]] | [[20-05-the-x11-iteration]] | 88–95 |
-| [[#20-05-composite-gain.png]] | [[20-05-the-x11-iteration]] | 101–112 |
-| [[#20-06-extreme-values.png]] | [[20-06-extreme-values]] | 119–132 |
-| [[#20-07-end-filters.png]] | [[20-07-end-filters]] | 135–157 |
-| [[#30-01-harmonics.png]] | [[30-01-frequency-domain-basics]] | 164–176 |
-| [[#30-03-arma-spectra.png]] | [[30-03-spectrum-of-an-arma]] | 179–195 |
-| [[#30-04-pseudo-spectrum.png]] | [[30-04-pseudo-spectrum]] | 198–211 |
-| [[#30-05-differencing-gain.png]] | [[30-05-filters-in-the-frequency-domain]] | 214–222 |
-| [[#30-06-wk-gain.png]] | [[30-06-wiener-kolmogorov]] | 225–242 |
-| [[#40-04-spectrum-split.png]] | [[40-04-partial-fractions-in-b-and-f]] | 258–269 |
-| [[#40-06-seats-filters.png]] | [[40-06-wk-filters-for-the-airline-model]] | 272–290 |
-| [[#40-07-decomposition.png]] | [[40-07-implementing-seats-in-r]] | 293–303 |
-| [[#50-06-turning-points.png]] | [[50-06-turning-points]] | 323–335 |
+| [[#10-02-unit-circle.png]] | [[10-02-stationarity-and-roots]] | 18–38 |
+| [[#10-03-ar-paths.png]] | [[10-03-ar-processes]] | 41–50 |
+| [[#10-05-invertibility.png]] | [[10-05-invertibility]] | 53–70 |
+| [[#10-06-differencing-ladder.png]] | [[10-06-differencing]] | 73–85 |
+| [[#10-07-acf-pacf-grid.png]] | [[10-07-acf-and-pacf]] | 88–97 |
+| [[#10-09-seasonal-acf.png]] | [[10-09-seasonal-arima]] | 100–108 |
+| [[#10-14-forecast-fan.png]] | [[10-14-forecasting]] | 111–123 |
+| [[#10-12-likelihood-surface.png]] | [[10-12-estimation]] | 126–151 |
+| [[#20-01-gain-basics.png]] | [[20-01-moving-averages-as-filters]] | 154–165 |
+| [[#20-02-2x12-gain.png]] | [[20-02-the-12-term-ma]] | 168–178 |
+| [[#20-03-henderson.png]] | [[20-03-henderson-filters]] | 181–200 |
+| [[#20-04-seasonal-ma.png]] | [[20-04-seasonal-moving-averages]] | 203–223 |
+| [[#20-05-decomposition.png]] | [[20-05-the-x11-iteration]] | 227–234 |
+| [[#20-05-composite-gain.png]] | [[20-05-the-x11-iteration]] | 240–251 |
+| [[#20-06-extreme-values.png]] | [[20-06-extreme-values]] | 258–271 |
+| [[#20-07-end-filters.png]] | [[20-07-end-filters]] | 274–296 |
+| [[#30-01-harmonics.png]] | [[30-01-frequency-domain-basics]] | 303–315 |
+| [[#30-03-arma-spectra.png]] | [[30-03-spectrum-of-an-arma]] | 318–334 |
+| [[#30-04-pseudo-spectrum.png]] | [[30-04-pseudo-spectrum]] | 337–350 |
+| [[#30-05-differencing-gain.png]] | [[30-05-filters-in-the-frequency-domain]] | 353–361 |
+| [[#30-06-wk-gain.png]] | [[30-06-wiener-kolmogorov]] | 364–381 |
+| [[#40-04-spectrum-split.png]] | [[40-04-partial-fractions-in-b-and-f]] | 397–408 |
+| [[#40-06-seats-filters.png]] | [[40-06-wk-filters-for-the-airline-model]] | 411–429 |
+| [[#40-07-decomposition.png]] | [[40-07-implementing-seats-in-r]] | 432–442 |
+| [[#50-06-turning-points.png]] | [[50-06-turning-points]] | 462–474 |
+
+---
+
+## 10-02-unit-circle.png
+
+*10-02: roots and the unit circle*
+
+![[10-02-unit-circle.png]]
+
+Embedded in: [[10-02-stationarity-and-roots]]
+
+Drawn by `R/make-figures.R`, lines 18–38:
+
+```r
+png_("10-02-unit-circle.png")
+par(mfrow = c(1, 2))
+unit_circle <- function(main) {
+  th <- seq(0, 2 * pi, length.out = 400)
+  plot(cos(th), sin(th), type = "l", asp = 1, col = "grey55", lwd = 2,
+       xlim = c(-2.3, 2.3), ylim = c(-2.3, 2.3), xlab = "Re", ylab = "Im", main = main)
+  abline(h = 0, v = 0, col = "grey88")
+}
+unit_circle("AR(1): the root is 1/phi")
+phis <- c(0.5, 0.95, 1.01)
+for (i in seq_along(phis)) {
+  points(1 / phis[i], 0, pch = 19, col = colsM1[i], cex = 1.6)
+  text(1 / phis[i], 0.3, sprintf("phi=%.2f", phis[i]), col = colsM1[i], cex = 0.8)
+}
+legend("bottomleft", "inside the circle = NOT stationary", bty = "n", cex = 0.75)
+unit_circle("AR(2): a complex pair")
+rr <- polyroot(c(1, -1.6, 0.9))
+points(Re(rr), Im(rr), pch = 19, col = "firebrick", cex = 1.6)
+segments(0, 0, Re(rr[1]), Im(rr[1]), col = "firebrick", lty = 2)
+text(0, -1.9, "modulus 1.054, just outside: stationary but nearly not", cex = 0.75)
+dev.off()
+```
+
+---
+
+## 10-03-ar-paths.png
+
+*10-03: persistence you can see*
+
+![[10-03-ar-paths.png]]
+
+Embedded in: [[10-03-ar-processes]]
+
+Drawn by `R/make-figures.R`, lines 41–50:
+
+```r
+png_("10-03-ar-paths.png", h = 1250)
+par(mfrow = c(3, 1), mar = c(2.6, 4, 2.4, 1))
+set.seed(7)
+for (i in seq_along(c(0.5, 0.9, 0.99))) {
+  phi <- c(0.5, 0.9, 0.99)[i]
+  plot(arima.sim(list(ar = phi), n = 300), type = "l", col = colsM1[i], lwd = 1.5,
+       ylab = "", main = sprintf("AR(1), phi = %.2f", phi))
+  abline(h = 0, col = "grey70")
+}
+dev.off()
+```
+
+---
+
+## 10-05-invertibility.png
+
+*10-05: two models, one ACF*
+
+![[10-05-invertibility.png]]
+
+Embedded in: [[10-05-invertibility]]
+
+Drawn by `R/make-figures.R`, lines 53–70:
+
+```r
+png_("10-05-invertibility.png")
+par(mfrow = c(1, 2))
+rho1 <- function(th) -th / (1 + th^2)
+th <- seq(-3, 3, length.out = 400)
+plot(th, rho1(th), type = "l", lwd = 2, xlab = "theta", ylab = "rho(1)",
+     main = "theta and 1/theta give the SAME rho(1)")
+abline(h = 0, v = c(-1, 1), col = "grey80", lty = c(1, 2, 2))
+points(c(0.5, 2), rho1(c(0.5, 2)), pch = 19, col = "firebrick", cex = 1.4)
+text(0.5, rho1(0.5) + 0.06, "0.5", col = "firebrick", cex = 0.8)
+text(2, rho1(2) - 0.06, "2", col = "firebrick", cex = 0.8)
+j <- 1:10
+plot(j, 0.5^j, type = "b", pch = 19, lwd = 2, col = "steelblue", log = "y",
+     ylim = c(1e-3, 1e3), xlab = "lag j", ylab = "|pi weight|",
+     main = "pi weights: only one choice dies out")
+lines(j, 2^j, type = "b", pch = 19, lwd = 2, col = "firebrick")
+legend("left", c("theta = 0.5 (invertible)", "theta = 2 (not)"),
+       col = c("steelblue", "firebrick"), lwd = 2, bty = "n", cex = 0.8)
+dev.off()
+```
+
+---
+
+## 10-06-differencing-ladder.png
+
+*10-06: the differencing ladder*
+
+![[10-06-differencing-ladder.png]]
+
+Embedded in: [[10-06-differencing]]
+
+Drawn by `R/make-figures.R`, lines 73–85:
+
+```r
+png_("10-06-differencing-ladder.png", h = 1500)
+par(mfrow = c(4, 1), mar = c(2.6, 4.2, 2.4, 1))
+plot(lap, lwd = 1.6, ylab = "log", main = "log AirPassengers: trend AND seasonal")
+plot(diff(lap), col = "steelblue", lwd = 1.4, ylab = "",
+     main = "(1-B): trend gone, seasonal still there")
+abline(h = 0, col = "grey70")
+plot(diff(lap, 12), col = "darkgreen", lwd = 1.4, ylab = "",
+     main = "(1-B^12): seasonal gone, trend still there")
+abline(h = 0, col = "grey70")
+plot(diff(diff(lap, 12)), col = "firebrick", lwd = 1.4, ylab = "",
+     main = "(1-B)(1-B^12): both gone -- this is what gets modelled")
+abline(h = 0, col = "grey70")
+dev.off()
+```
+
+---
+
+## 10-07-acf-pacf-grid.png
+
+*10-07: the identification grid*
+
+![[10-07-acf-pacf-grid.png]]
+
+Embedded in: [[10-07-acf-and-pacf]]
+
+Drawn by `R/make-figures.R`, lines 88–97:
+
+```r
+png_("10-07-acf-pacf-grid.png", h = 1250)
+par(mfrow = c(2, 2), mar = c(4, 4.2, 3, 1))
+set.seed(3)
+ar1 <- as.numeric(arima.sim(list(ar = 0.8), n = 3000))
+ma1 <- as.numeric(arima.sim(list(ma = -0.8), n = 3000))
+acf(ar1,  lag.max = 20, main = "AR(1): ACF DECAYS")
+pacf(ar1, lag.max = 20, main = "AR(1): PACF CUTS OFF at lag 1")
+acf(ma1,  lag.max = 20, main = "MA(1): ACF CUTS OFF at lag 1")
+pacf(ma1, lag.max = 20, main = "MA(1): PACF DECAYS")
+dev.off()
+```
+
+---
+
+## 10-09-seasonal-acf.png
+
+*10-09: seasonality in the ACF*
+
+![[10-09-seasonal-acf.png]]
+
+Embedded in: [[10-09-seasonal-arima]]
+
+Drawn by `R/make-figures.R`, lines 100–108:
+
+```r
+png_("10-09-seasonal-acf.png")
+par(mfrow = c(1, 2), mar = c(4, 4.2, 3, 1))
+a1 <- acf(as.numeric(diff(lap)), lag.max = 40, plot = FALSE)
+plot(a1, main = "after (1-B): spikes at 12, 24, 36")
+abline(v = c(12, 24, 36), col = "firebrick", lty = 3)
+a2 <- acf(as.numeric(diff(diff(lap, 12))), lag.max = 40, plot = FALSE)
+plot(a2, main = "after (1-B)(1-B^12): only 1 and 12 survive")
+abline(v = c(1, 12), col = "firebrick", lty = 3)
+dev.off()
+```
+
+---
+
+## 10-14-forecast-fan.png
+
+*10-14: the forecast fan*
+
+![[10-14-forecast-fan.png]]
+
+Embedded in: [[10-14-forecasting]]
+
+Drawn by `R/make-figures.R`, lines 111–123:
+
+```r
+png_("10-14-forecast-fan.png")
+fitM1 <- arima(lap, order = c(0, 1, 1),
+               seasonal = list(order = c(0, 1, 1), period = 12))
+pM1 <- predict(fitM1, n.ahead = 24)
+hi <- exp(pM1$pred + 1.96 * pM1$se); lo <- exp(pM1$pred - 1.96 * pM1$se)
+ts.plot(exp(lap), lo, hi, exp(pM1$pred),
+        col = c("black", "grey65", "grey65", "firebrick"),
+        lty = c(1, 2, 2, 1), lwd = c(1.6, 1.2, 1.2, 2),
+        ylab = "passengers", main = "airline model, 24 months ahead (95% interval)")
+legend("topleft", c("observed", "forecast", "95% interval"),
+       col = c("black", "firebrick", "grey65"), lty = c(1, 1, 2), lwd = 2,
+       bty = "n", cex = 0.8)
+dev.off()
+```
+
+---
+
+## 10-12-likelihood-surface.png
+
+*10-12: the likelihood surface the optimiser climbs*
+
+![[10-12-likelihood-surface.png]]
+
+Embedded in: [[10-12-estimation]]
+
+Drawn by `R/make-figures.R`, lines 126–151:
+
+```r
+png_("10-12-likelihood-surface.png")
+par(mfrow = c(1, 2))
+ll_at <- function(ma1, sma1) {
+  f <- try(arima(lap, order = c(0, 1, 1),
+                 seasonal = list(order = c(0, 1, 1), period = 12),
+                 fixed = c(ma1, sma1), transform.pars = FALSE,
+                 method = "ML"), silent = TRUE)
+  if (inherits(f, "try-error")) NA_real_ else f$loglik
+}
+g1 <- seq(-0.85, 0.05, length.out = 30)     # R sign for theta
+g2 <- seq(-0.95, -0.05, length.out = 30)    # R sign for Theta
+Z  <- outer(g1, g2, Vectorize(ll_at))
+mle <- arima(lap, order = c(0, 1, 1),
+             seasonal = list(order = c(0, 1, 1), period = 12), method = "ML")
+contour(g1, g2, Z, nlevels = 28, xlab = "theta (R sign)", ylab = "Theta (R sign)",
+        main = "log-likelihood surface")
+points(coef(mle)[1], coef(mle)[2], pch = 19, col = "firebrick", cex = 1.6)
+text(coef(mle)[1], coef(mle)[2] + 0.06, "MLE", col = "firebrick", cex = 0.85)
+prof <- vapply(g2, function(s) ll_at(coef(mle)[1], s), numeric(1))
+plot(-g2, prof, type = "l", lwd = 2, col = "steelblue",
+     xlab = "Theta (Census sign)", ylab = "log-likelihood",
+     main = "profile through the MLE")
+abline(v = -coef(mle)[2], col = "firebrick", lty = 2)
+text(-coef(mle)[2], min(prof, na.rm = TRUE),
+     sprintf(" Theta = %.3f", -coef(mle)[2]), col = "firebrick", cex = 0.8, adj = 0)
+dev.off()
+```
 
 ---
 
@@ -39,7 +287,7 @@ tags: [meta, generated, appendix]
 
 Embedded in: [[20-01-moving-averages-as-filters]]
 
-Drawn by `R/make-figures.R`, lines 15–26:
+Drawn by `R/make-figures.R`, lines 154–165:
 
 ```r
 png_("20-01-gain-basics.png")
@@ -66,7 +314,7 @@ dev.off()
 
 Embedded in: [[20-02-the-12-term-ma]]
 
-Drawn by `R/make-figures.R`, lines 29–39:
+Drawn by `R/make-figures.R`, lines 168–178:
 
 ```r
 png_("20-02-2x12-gain.png")
@@ -92,7 +340,7 @@ dev.off()
 
 Embedded in: [[20-03-henderson-filters]]
 
-Drawn by `R/make-figures.R`, lines 42–61:
+Drawn by `R/make-figures.R`, lines 181–200:
 
 ```r
 png_("20-03-henderson.png")
@@ -127,7 +375,7 @@ dev.off()
 
 Embedded in: [[20-04-seasonal-moving-averages]]
 
-Drawn by `R/make-figures.R`, lines 64–84:
+Drawn by `R/make-figures.R`, lines 203–223:
 
 ```r
 png_("20-04-seasonal-ma.png")
@@ -163,7 +411,7 @@ dev.off()
 
 Embedded in: [[20-05-the-x11-iteration]]
 
-Drawn by `R/make-figures.R`, lines 88–95:
+Drawn by `R/make-figures.R`, lines 227–234:
 
 ```r
 png_("20-05-decomposition.png", h = 1400)
@@ -186,7 +434,7 @@ dev.off()
 
 Embedded in: [[20-05-the-x11-iteration]]
 
-Drawn by `R/make-figures.R`, lines 101–112:
+Drawn by `R/make-figures.R`, lines 240–251:
 
 ```r
 png_("20-05-composite-gain.png")
@@ -213,7 +461,7 @@ dev.off()
 
 Embedded in: [[20-06-extreme-values]]
 
-Drawn by `R/make-figures.R`, lines 119–132:
+Drawn by `R/make-figures.R`, lines 258–271:
 
 ```r
 png_("20-06-extreme-values.png")
@@ -242,7 +490,7 @@ dev.off()
 
 Embedded in: [[20-07-end-filters]]
 
-Drawn by `R/make-figures.R`, lines 135–157:
+Drawn by `R/make-figures.R`, lines 274–296:
 
 ```r
 png_("20-07-end-filters.png")
@@ -280,7 +528,7 @@ dev.off()
 
 Embedded in: [[30-01-frequency-domain-basics]]
 
-Drawn by `R/make-figures.R`, lines 164–176:
+Drawn by `R/make-figures.R`, lines 303–315:
 
 ```r
 png_("30-01-harmonics.png")
@@ -308,7 +556,7 @@ dev.off()
 
 Embedded in: [[30-03-spectrum-of-an-arma]]
 
-Drawn by `R/make-figures.R`, lines 179–195:
+Drawn by `R/make-figures.R`, lines 318–334:
 
 ```r
 png_("30-03-arma-spectra.png")
@@ -340,7 +588,7 @@ dev.off()
 
 Embedded in: [[30-04-pseudo-spectrum]]
 
-Drawn by `R/make-figures.R`, lines 198–211:
+Drawn by `R/make-figures.R`, lines 337–350:
 
 ```r
 png_("30-04-pseudo-spectrum.png")
@@ -369,7 +617,7 @@ dev.off()
 
 Embedded in: [[30-05-filters-in-the-frequency-domain]]
 
-Drawn by `R/make-figures.R`, lines 214–222:
+Drawn by `R/make-figures.R`, lines 353–361:
 
 ```r
 png_("30-05-differencing-gain.png")
@@ -393,7 +641,7 @@ dev.off()
 
 Embedded in: [[30-06-wiener-kolmogorov]]
 
-Drawn by `R/make-figures.R`, lines 225–242:
+Drawn by `R/make-figures.R`, lines 364–381:
 
 ```r
 png_("30-06-wk-gain.png")
@@ -426,7 +674,7 @@ dev.off()
 
 Embedded in: [[40-04-partial-fractions-in-b-and-f]]
 
-Drawn by `R/make-figures.R`, lines 258–269:
+Drawn by `R/make-figures.R`, lines 397–408:
 
 ```r
 png_("40-04-spectrum-split.png")
@@ -453,7 +701,7 @@ dev.off()
 
 Embedded in: [[40-06-wk-filters-for-the-airline-model]]
 
-Drawn by `R/make-figures.R`, lines 272–290:
+Drawn by `R/make-figures.R`, lines 411–429:
 
 ```r
 png_("40-06-seats-filters.png")
@@ -487,7 +735,7 @@ dev.off()
 
 Embedded in: [[40-07-implementing-seats-in-r]]
 
-Drawn by `R/make-figures.R`, lines 293–303:
+Drawn by `R/make-figures.R`, lines 432–442:
 
 ```r
 png_("40-07-decomposition.png", h = 1400)
@@ -513,7 +761,7 @@ dev.off()
 
 Embedded in: [[50-06-turning-points]]
 
-Drawn by `R/make-figures.R`, lines 323–335:
+Drawn by `R/make-figures.R`, lines 462–474:
 
 ```r
   png_("50-06-turning-points.png")

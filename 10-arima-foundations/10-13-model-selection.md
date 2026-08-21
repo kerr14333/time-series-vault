@@ -98,6 +98,9 @@ Ljung-Box Q = 26.45  df = 22  p = 0.233
 2. Run `Box.test()` with and without `fitdf=`. How different are the p-values?
 3. Look at the residual spectrum of a deliberately under-specified model (drop the seasonal MA) and find the seasonal peak.
 
+> [!abstract] Derivation
+> - [[derivations#D13. What the likelihood actually is|what AICC is comparing]]
+
 ## Links
 
 - Prev: [[10-12-estimation]] · Next: [[10-14-forecasting]]

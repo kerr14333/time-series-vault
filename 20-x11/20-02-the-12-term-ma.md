@@ -77,6 +77,9 @@ Hence the iteration: this MA gives a *preliminary* trend, good enough to compute
 2. Plot the gain. Confirm the zeros sit exactly at $k/12$ cycles per month for $k=1..6$, and find the side lobes.
 3. Apply it to a pure sine of period 12 plus a straight line. Confirm the sine vanishes and the line survives. Then try period 11 — what leaks through, and why should that worry you?
 
+> [!abstract] Derivation
+> - [[derivations#D12. Why a centred $2\times s$ moving average is needed for even $s$|why the endpoints get half weight]]
+
 ## Links
 
 - Prev: [[20-01-moving-averages-as-filters]] · Next: [[20-03-henderson-filters]]

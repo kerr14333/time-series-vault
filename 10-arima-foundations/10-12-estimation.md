@@ -21,6 +21,87 @@ You mostly do not need to implement this to do SEATS, but you need to know what 
 
 Seasonal MA parameters sit near 1 ($\Theta \approx 0.6\!-\!0.9$ is normal). Near the boundary the CSS approximation degrades and the estimate is biased toward the interior. Since $\Theta$ controls how much your seasonal factors revise ([[10-10-airline-model]]), a biased $\Theta$ means systematically wrong revision behaviour. Hence: exact ML.
 
+## What is actually being maximised
+
+"Exact maximum likelihood" sounds forbidding. The idea underneath is small: **the likelihood is built out of one-step-ahead forecast errors.**
+
+Factor the joint density of the sample by the chain rule — the density of the first point, times the density of the second given the first, and so on:
+
+$$L = p(z_1)\,p(z_2\mid z_1)\,p(z_3\mid z_2,z_1)\cdots$$
+
+Each conditional density is Gaussian, centred on the one-step forecast $\hat z_{t|t-1}$ with some variance $v_t$. Writing $e_t = z_t - \hat z_{t|t-1}$ for the one-step error,
+
+$$-2\log L = \sum_{t=1}^{n}\left[\log(2\pi v_t) + \frac{e_t^2}{v_t}\right]$$
+
+That is the **prediction-error decomposition**, and it is all the Kalman filter is for: given a candidate $(\theta,\Theta)$, walk through the series producing $\hat z_{t|t-1}$ and $v_t$ at each step, including the awkward opening ones where there is barely any history to forecast from. Feed the results into the sum. That number is what the optimiser is handed.
+
+So the loop is: *pick parameters → filter the series → get a number → adjust → repeat.*
+
+### The variance is free
+
+You might expect a three-parameter search over $(\theta, \Theta, \sigma_a^2)$. There is not, because $\sigma_a^2$ can be solved for exactly. Writing $v_t = \sigma_a^2 r_t$, where $r_t$ depends only on the ARIMA parameters,
+
+$$\hat\sigma_a^2 = \frac1n\sum_t \frac{e_t^2}{r_t}$$
+
+Substituting back leaves a function of $(\theta,\Theta)$ alone. This is called **concentrating** the likelihood, and it is why the airline model's search is over a two-dimensional surface — a surface small enough to simply draw:
+
+![[10-12-likelihood-surface.png]]
+
+*Drawn by [[figure-index#10-12-likelihood-surface.png|`make-figures.R`]] — code and every other figure in the [[figure-index|figure appendix]].*
+
+**Left:** the concentrated log-likelihood over the $(\theta,\Theta)$ plane, in R's sign convention. The optimiser starts somewhere and walks uphill; the red dot is where it stops. Contours that are closed and roughly elliptical around the peak are what a well-identified model looks like.
+
+**Right:** a slice through the peak along $\Theta$, back in Census signs. The curvature at the top is the whole story for inference — **a sharply curved peak means a small standard error, a flat one means a large one.** Standard errors are computed exactly this way, from the second derivatives (the Hessian) at the optimum.
+
+That also explains the failure modes below. A common AR/MA factor ([[10-08-arma-duality]]) turns the peak into a *ridge* — a long flat line of nearly equal likelihood — so the optimiser wanders along it, standard errors inflate, and the estimate jumps between vintages. Nothing is broken; the surface genuinely has no single best point.
+
+### Why CSS is not good enough here
+
+Conditional sum of squares sets the pre-sample shocks to zero and minimises $\sum\hat a_t^2$. In the decomposition above, that amounts to discarding the $\log v_t$ term and pretending every $v_t$ is equal — an approximation whose error is concentrated at the *start* of the series and fades as $n$ grows.
+
+Except when an MA root sits near the unit circle. Then the pre-sample contribution stays material at any sample length, and the two methods do not converge on the same answer. Seasonal MA parameters live near that boundary ($\Theta \approx 0.6$–$0.9$ is ordinary), so the approximation is weakest exactly where seasonal adjustment operates. Compare the two on the running example:
+
+<!-- run -->
+```r
+ml  <- arima(lap, order = c(0, 1, 1),
+             seasonal = list(order = c(0, 1, 1), period = 12), method = "ML")
+css <- arima(lap, order = c(0, 1, 1),
+             seasonal = list(order = c(0, 1, 1), period = 12), method = "CSS")
+round(rbind(ML = -coef(ml), CSS = -coef(css)), 4)     # Census signs
+```
+```text
+       ma1   sma1
+ML  0.4018 0.5569
+CSS 0.3772 0.5724
+```
+<!-- end -->
+
+The two disagree in both parameters, by a few hundredths. That is small — 144 points is a reasonable sample — but it is not nothing, and note it is *not* a simple shrinkage: here CSS puts $\theta$ lower and $\Theta$ higher than exact ML does. There is no direction to memorise. What matters is that the methods disagree at all, that the disagreement is worst near the invertibility boundary, and that one of the parameters involved is $\Theta$ — which governs how much the seasonal factors will revise ([[10-10-airline-model]]). Given the choice costs nothing, use exact ML.
+
+### Reading the fitted object
+
+Everything discussed above is available directly:
+
+<!-- run -->
+```r
+cat("log-likelihood        :", round(ml$loglik, 4), "\n")
+cat("sigma^2 (concentrated):", round(ml$sigma2, 7), "\n")
+cat("n used (after d+D)    :", ml$nobs, "of", length(lap), "\n")
+se <- sqrt(diag(ml$var.coef))          # from the Hessian at the optimum
+round(cbind(estimate = -coef(ml), se = se, t = -coef(ml) / se), 4)
+```
+```text
+log-likelihood        : 244.6995 
+sigma^2 (concentrated): 0.001348 
+n used (after d+D)    : 131 of 144 
+     estimate     se      t
+ma1    0.4018 0.0896 4.4825
+sma1   0.5569 0.0731 7.6190
+```
+<!-- end -->
+
+Note `nobs`: differencing costs $d + D \cdot s = 1 + 12 = 13$ observations, so the likelihood is computed on 131 points, not 144. That matters when comparing models with **different** differencing — the likelihoods are not on the same footing, which is one reason $d$ and $D$ are chosen before the AICC comparison rather than inside it ([[10-13-model-selection]]).
+
 ## Practical failure modes
 
 | Symptom | Likely cause |
@@ -84,6 +165,9 @@ n = 131   AIC = -483.4   AICC = -483.21
 1. Fit the airline model to `log(AirPassengers)` with `method="ML"` and `method="CSS"`. Compare $\Theta$. Which is closer to 1?
 2. Insert an artificial level shift into the series, refit, and watch the ARIMA parameters move. Then add the level shift as a regressor via `xreg=` and confirm they come back.
 3. Fit an over-parameterised model and inspect the standard errors.
+
+> [!abstract] Derivation
+> - [[derivations#D13. What the likelihood actually is|the prediction-error decomposition, and concentrating the variance]]
 
 ## Links
 

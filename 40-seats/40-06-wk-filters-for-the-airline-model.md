@@ -76,6 +76,10 @@ Whether the model-derived notch is *better* is an empirical question, and [[50-0
 5. Compute how many lags are needed for the weights to fall below $10^{-7}$, for $\Theta = 0.3$, $0.6$, $0.9$. Relate to the run time of your implementation.
 6. Confirm $\nu_S(\pi) = 1$ and explain why in one sentence.
 
+> [!abstract] Derivation
+> - [[derivations#D10. Why the WK filters have no poles|why the infinite peaks cancel]]
+> - [[derivations#D8. The Wiener–Kolmogorov filter|the filter itself]]
+
 ## Links
 
 - Prev: [[40-05-component-models]] · Next: [[40-07-implementing-seats-in-r]]
