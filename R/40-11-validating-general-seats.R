@@ -164,12 +164,66 @@ cat(sprintf("  without normalisation the offset is %+.6f in logs (%.2f%%)\n",
 cat(sprintf("  with it, %+.6f (%.4f%%)\n", mean(d10), 100 * (exp(mean(d10)) - 1)))
 cat("  nu_S(0) = 0, so the seasonal filter annihilates constants and the\n")
 cat("  theory cannot say whether one belongs to the trend or the seasonal.\n")
-cat("  X-13 normalises multiplicative factors to average 1 IN LEVELS, which\n")
-cat("  in logs is a mean near -var/2 rather than 0. _seats.R does this and\n")
-cat("  says so; _seats_general.R did not, and nothing caught it, because a\n")
-cat("  constant multiplicative offset is invisible in every plot in the\n")
-cat("  vault -- the trend still tracks the series, the factors still repeat.\n")
-cat("  It took comparing against X-13 on a series _seats.R cannot handle.\n")
+cat("  There are TWO conventions and they use DIFFERENT spans. Do not guess\n")
+cat("  them -- look through X-13's tables for the value that comes out\n")
+cat("  exactly 1.000000000, because an exact 1 is an imposed rule and\n")
+cat("  nothing else is:\n\n")
+n <- length(x); kk <- (n %/% 12) * 12
+for (tb in c("s10", "s13", "s14")) {
+  v <- tryCatch(as.numeric(series(m, tb)), error = function(e) NULL)
+  if (is.null(v)) next
+  cat(sprintf("    %-4s level mean: full span %.9f | first %d obs %.9f\n",
+              tb, mean(v), kk, mean(v[seq_len(kk)])))
+}
+cat("\n  seasonal: 1 over the first whole number of years (imp drops 6 months)\n")
+cat("  irregular: 1 over the FULL span\n")
+cat("  transitory: not normalised; the trend takes what is left over.\n")
+cat("  The asymmetry is not arbitrary. A partial final year holds some\n")
+cat("  months and not others, so averaging a SEASONAL factor over it weights\n")
+cat("  those months twice; the irregular has no periodic structure and loses\n")
+cat("  nothing, so there is no reason to discard six observations.\n")
+cat("  _seats.R had the first convention and not the second. Neither was\n")
+cat("  caught by anything, because a constant multiplicative offset is\n")
+cat("  invisible in every plot in the vault -- the trend still tracks the\n")
+cat("  series, the factors still repeat with the right shape and amplitude.\n")
+
+cat("\n  And one structural error underneath both. X-13's own tables satisfy\n")
+cat("  log y = s12 + s10 + s13 to 9e-15; three independently truncated\n")
+cat("  filters do not do that. X-13 computes one component by SUBTRACTION,\n")
+cat("  and it has to be the trend, the one carrying the level. Taking the\n")
+cat("  trend from its filter instead costs 0.001% on AirPassengers and gets\n")
+cat("  WORSE as max_lag grows -- 0.0009% at 250 lags, 0.0039% at 1200 --\n")
+cat("  because the trend filter has gain ONE at frequency zero and so\n")
+cat("  integrates the drift of an ever-longer forecast extension. The\n")
+cat("  seasonal and irregular filters have gain zero there and are immune.\n")
+cat("  'Longer is safer' is true for two of the three and false for the third.\n\n")
+ap  <- AirPassengers
+fap <- arima(log(ap), c(0,1,1), list(order = c(0,1,1), period = 12))
+thA <- unname(-coef(fap)["ma1"]); ThA <- unname(-coef(fap)["sma1"])
+mA  <- seas(ap, transform.function = "log", arima.model = "(0 1 1)(0 1 1)",
+            regression.aictest = NULL, outlier = NULL)
+yA  <- log(as.numeric(ap))
+xs10 <- log(as.numeric(series(mA, "s10")))
+xs12 <- log(as.numeric(series(mA, "s12")))
+cat(sprintf("  %8s  %-12s %-12s %s\n", "max_lag", "seasonal", "trend(filter)", "trend(residual)"))
+for (ml in c(250, 331, 500, 1200)) {
+  o <- seats_decompose(ap, thA, ThA, max_lag = ml, extend = ml + 12)
+  sA <- as.numeric(o$seasonal); iA <- as.numeric(o$irregular)
+  tf <- apply_sym_weights(
+          c(rev(as.numeric(predict(arima(rev(log(as.numeric(ap))), c(0,1,1),
+              list(order = c(0,1,1), period = 12)), n.ahead = ml + 12)$pred)),
+            yA,
+            as.numeric(predict(fap, n.ahead = ml + 12)$pred)),
+          filter_weights(o$filters$trend, o$freq, max_lag = ml))[
+          (ml + 13):(ml + 12 + length(yA))]
+  tf <- tf + (mean(as.numeric(o$trend)) - mean(tf))   # same level, compare shape+drift
+  cat(sprintf("  %8d  %-12s %-12s %s\n", ml,
+      sprintf("%.5f%%", mean(100*abs(exp(sA - xs10) - 1))),
+      sprintf("%.5f%%", mean(100*abs(exp(tf - xs12) - 1))),
+      sprintf("%.5f%%", mean(100*abs(exp(as.numeric(o$trend) - xs12) - 1)))))
+}
+cat("  The middle column is what the trend costs when it comes from its own\n")
+cat("  filter; the right-hand one is the residual. One diverges, one does not.\n")
 
 cat("\n=== 4. the additive case, which nothing used to exercise ===\n")
 nt <- vault_series()$temperature
@@ -209,13 +263,17 @@ cat("  path -- the default filter length was simply too short for a root\n")
 cat("  this persistent, and there is no warning when that happens.\n")
 
 cat("\n=== 5. what is left ===\n")
-cat(sprintf("  A residual constant of %.4f%% remains in the seasonal factors.\n",
+cat(sprintf("  The seasonal constant is down to %.6f%%, which is nothing.\n",
             100 * abs(exp(mean(d10)) - 1)))
-cat("  It is the normalisation window: X-13 does not average over exactly the\n")
-cat("  366 observations this code uses. Averaging over complete calendar\n")
-cat("  years only makes it worse (0.09%), so the convention is something\n")
-cat("  else again. The shape agreement of 1e-6 is the number that says the\n")
-cat("  filters are right; this last constant is bookkeeping.\n")
+cat("  What is left everywhere is 1e-6-ish and numerical: filter truncation,\n")
+cat("  our backcasts against X-13's, and the fact that arima() and X-13's\n")
+cat("  optimiser agree to about four decimals rather than exactly.\n")
+cat("\n  Worth keeping: numerical error and CONVENTION error live on different\n")
+cat("  scales, and the scale tells you which one you have. Truncation and\n")
+cat("  optimiser differences buy 1e-4 at the very most. Every disagreement\n")
+cat("  in this file that sat at 1e-2 or 1e-3 turned out to be a rule stated\n")
+cat("  somewhere in X-13's own output. At a percent, do not reach for a\n")
+cat("  longer filter -- go and find the number that comes out exactly 1.\n")
 cat("\n  max_lag used to be the open trap: nothing warned you when the filter\n")
 cat("  was too short, and the components just came out quietly wrong, as\n")
 cat("  section 4 shows. seats_decompose_general() now checks it. The decay\n")

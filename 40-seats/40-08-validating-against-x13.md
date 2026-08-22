@@ -57,25 +57,34 @@ Verified at $6\times10^{-15}$ on `AirPassengers`. Two uses:
 
 | Table | Interior mean | Max |
 |---|---|---|
-| `s10` | 0.000% | 0.000% |
-| `s11` | 0.001% | 0.001% |
-| `s12` | 0.012% | 0.012% |
-| `s13` | 0.010% | 0.011% |
+| `s10` | 0.000003% | 0.000012% |
+| `s11` | 0.000003% | 0.000012% |
+| `s12` | 0.000027% | 0.000114% |
+| `s13` | 0.000027% | 0.000116% |
+
+Those numbers used to be a thousand times larger — 0.001% on `s11`, 0.012% on `s12`. Two conventions were missing, and both were found by validating the *general* implementation in [[40-11-validating-general-seats]] on a series this one cannot handle. The airline model was too forgiving to show either.
 
 Note that the error is **not concentrated at the ends** — unlike the X-11 build in [[20-05-the-x11-iteration]], where the ends were much worse. Because both implementations extend with forecasts from the same model, both effectively apply the symmetric filter throughout, so the ends are no harder than the middle.
 
 That is itself a finding: the end-of-sample *revision* problem ([[20-07-end-filters]]) is about not yet having the data, not about the filter being unable to cope once you supply forecasts.
 
-## Where the residual 0.01% comes from
+## Where the residual comes from
 
-Not worth chasing, but worth accounting for:
+What is left is $3\times10^{-6}$%, about one part in thirty million, and it is numerical:
 
 - **Truncation.** 331 lags leaves weights of order $10^{-7}$ unused.
 - **The backcast.** I fit a second ARIMA to the reversed series; X-13 backcasts more carefully.
 - **Burman vs extension.** X-13 computes the exact finite-sample answer; the extension approaches it.
 - **Parameter estimates.** `arima()` and X-13's optimiser agree to about 4 decimals, not exactly.
 
-Any of these explains $10^{-4}$ relative error. None explains $10^{-2}$ — so if you see a percent, look for a convention error, not a numerical one.
+Each of those explains $10^{-6}$ or so, which is what remains.
+
+> [!important] What the size of a disagreement tells you
+> The rule that got me here: **numerical error and convention error live on different scales, and the scale tells you which one you have.**
+>
+> A percent is a convention. The 0.88% offset in [[40-07-implementing-seats-in-r]] was a missing normalisation; a further 0.01% was a *second* normalisation nobody had noticed. Both were exact rules stated somewhere in Census output, not noise. Truncation, backcasting and optimiser differences buy you $10^{-4}$ at the very most.
+>
+> So when a comparison sits at $10^{-2}$ or $10^{-3}$, do not reach for a longer filter. Go looking for a rule. That instinct is what took this note from 0.001% to 0.000003%, and it is more useful than either number.
 
 ## A general recipe
 
@@ -94,9 +103,9 @@ Measured on `AirPassengers`:
 | Comparison | Mean absolute difference |
 |---|---|
 | SEATS vs X-11 — a **method** difference | **0.760%** |
-| ours vs X-13 SEATS — an **implementation** difference | **0.001%** |
+| ours vs X-13 SEATS — an **implementation** difference | **0.000004%** |
 
-A factor of about **660**.
+Five orders of magnitude. The implementation difference is now down at the level of the forecast extension and the printed precision of X-13's own tables, so the ratio has stopped being a meaningful number — it says only that the two implementations agree and the two methods do not.
 
 > [!important] Perspective
 > Which method you publish is a real decision with real consequences for the numbers people read. Whether your code agrees with Census to four decimals or six is not.

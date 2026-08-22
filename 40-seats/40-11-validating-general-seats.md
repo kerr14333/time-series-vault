@@ -7,11 +7,11 @@ tags: [module-4]
 
 Code: [[code-40-11-validating-general-seats|`R/40-11-validating-general-seats.R`]]
 
-[[40-08-validating-against-x13]] checks `_seats.R` against the Census binary and gets 0.001% on the airline model. That result says nothing about [[40-10-general-seats]], because the thing the general code does — decide which component each AR root belongs to — is exactly the thing the airline model never exercises. Every root in an airline model is a unit root sitting on a frequency the split already knows about.
+[[40-08-validating-against-x13]] checks `_seats.R` against the Census binary on the airline model. That result says nothing about [[40-10-general-seats]], because the thing the general code does — decide which component each AR root belongs to — is exactly the thing the airline model never exercises. Every root in an airline model is a unit root sitting on a frequency the split already knows about.
 
 So the general code went into the vault validated for *internal* consistency only: the decomposition identity held exactly, the partial-fraction residual was $10^{-13}$, and it independently reproduced 40-02's finding that `cpi` is inadmissible. All true, all reassuring, and none of it able to catch a wrong classification rule — because a wrong rule produces a perfectly self-consistent decomposition of the wrong thing.
 
-It caught nothing. There were five errors: three in the classification rule, one in the normalisation, and one in the arithmetic underneath all of them. The last two are the ones worth remembering — one was invisible in every plot, and the other decided a component by coin flip.
+It caught nothing. There were **seven** errors: three in the classification rule, one in the arithmetic underneath it, two normalisation conventions, and one structural. Not one of them broke the identity, and not one showed up in a plot. Together they were worth a factor of a thousand — the airline implementation in [[40-08-validating-against-x13]] inherited two of the fixes and went from 0.001% to 0.000003%.
 
 ## What X-13 will tell you, if you ask it properly
 
@@ -85,13 +85,13 @@ source("R/40-11-validating-general-seats.R")
 
   The 24-month row is the one that used to disagree, and it is worth
   knowing why it stopped. The test is a STRICT inequality against an
-... [84 more lines]
+... [122 more lines]
 ```
 <!-- end -->
 
 Eight of eight positions agree, and the rule is sharp at 24 months: 30 months is trend, 22 months is transitory, and the only thing that changes across that line is the root's angle.
 
-## Error 5: the angle was noisier than the boundary
+## Error 4: the angle was noisier than the boundary
 
 The 24-month row did **not** agree at first, and the reason is worth more than the fix.
 
@@ -124,14 +124,14 @@ With the classification fixed, `imp` under $(2,1,0)(0,1,1)$ — a model `_seats.
 
 | Table | Component | Interior mean | Max | Ends |
 |---|---|---|---|---|
-| `s10` | seasonal factors | 0.0112% | 0.0112% | 0.0114% |
-| `s11` | adjusted series | 0.0112% | 0.0112% | 0.0114% |
-| `s12` | trend | 0.0054% | 0.0054% | 0.0054% |
+| `s10` | seasonal factors | 0.0000% | 0.0000% | 0.0002% |
+| `s11` | adjusted series | 0.0000% | 0.0000% | 0.0002% |
+| `s12` | trend | 0.0000% | 0.0000% | 0.0000% |
 | `s14` | transitory | 0.0000% | 0.0000% | 0.0001% |
 
 The transitory component — the one piece of this that has no counterpart in the airline machinery — agrees to $10^{-6}$.
 
-## Error 4: a constant nobody would have seen
+## Error 5: a constant nobody would have seen
 
 The first run of that comparison came back 1.28% out on every component. In logs the difference was $+0.012691$ with a spread of $1.9\times10^{-7}$: **the shape was already right and the level was wrong**.
 
@@ -142,7 +142,46 @@ $\nu_S(0) = 0$, so the seasonal filter annihilates constants, and the theory gen
 >
 > It took comparing against X-13 **on a series `_seats.R` cannot handle**. The general code was the only route to that series, so nothing else in the vault could have found this.
 
-What remains is a residual constant of 0.0112%, which is the normalisation *window*: X-13 is not averaging over exactly the 366 observations this code uses. Restricting to complete calendar years makes it worse (0.09%), so the convention is something else again. The 1e-6 shape agreement is the number that says the filters are right; the last constant is bookkeeping.
+Getting that far left 0.0112% — still a constant, a hundred times smaller. It looked like bookkeeping and was worth chasing anyway, because a residue that is *constant* is never noise.
+
+## Error 6: two normalisations, over two different spans
+
+There is not one convention. There are two, and they use different windows.
+
+The way to find them is not to guess: it is to look through X-13's own tables for the value that comes out **exactly** 1.000000000, because an exact 1 is an imposed rule and nothing else is. On `imp`, which runs July 1983 to December 2013 and so is *not* a whole number of years:
+
+| Table | Level mean, full span | Level mean, first $\lfloor n/12 \rfloor \times 12$ |
+|---|---|---|
+| `s10` seasonal | 1.000112054 | **1.000000000** |
+| `s13` irregular | **1.000000000** | 0.999984698 |
+| `s14` transitory | 1.000282561 | 1.000251353 |
+
+So: the **seasonal** averages 1 over the first whole number of years, dropping the leftover months at the end; the **irregular** averages 1 over the **full** span; the **transitory** is not normalised at all; and the trend takes both constants.
+
+The asymmetry is not arbitrary once you see it. A partial final year holds some months and not others, so averaging a *seasonal* factor over it weights those months twice and drags the constant with them. The irregular has no periodic structure, so a partial year costs it nothing and there is no reason to throw six observations away. Nobody would guess that pair, and no amount of staring at the algebra would produce it.
+
+## Error 7: the trend is a residual, not a filter output
+
+That still left the trend out, and it did something strange: **it got worse as the filter got longer.**
+
+Here is the effect isolated, on `AirPassengers`, with the constants already correct so only the shape is being compared:
+
+| `max_lag` | seasonal | trend from its filter | trend as a residual |
+|---|---|---|---|
+| 250 | 0.00007% | 0.00005% | 0.00005% |
+| 331 | 0.00000% | 0.00007% | 0.00003% |
+| 500 | 0.00000% | 0.00010% | 0.00003% |
+| 1200 | 0.00001% | 0.00024% | 0.00003% |
+
+The seasonal converges, as truncation error should. The filtered trend **diverges** — five times worse at 1200 lags than at 250 — while the residual sits flat.
+
+The reason is the same $\nu(0)$ that runs through this whole note. The seasonal and irregular filters have gain **zero** at frequency zero, so they are blind to the level and immune to whatever the forecast extension does. The trend filter has gain **one** there, so the longer the filter, the deeper it reaches into an ever-lengthening ARIMA forecast, and the more of that forecast's drift it integrates. *Longer is safer* is true for two of the three components and false for the third.
+
+The real tell was in X-13's output all along: its own tables satisfy $\log y = s_{12} + s_{10} + s_{13}$ to $9\times10^{-15}$. Three independently truncated filters do not do that — ours miss by $10^{-5}$. X-13 computes one component by **subtraction**, and it has to be the trend, because the trend is the one carrying the level.
+
+Taking it as a residual instead: **0.00003%**, flat in filter length like everything else.
+
+Before the two normalisations were also fixed, this same effect showed up an order of magnitude larger, because the filtered trend was carrying a wrong constant on top of the drift. That is what made it visible at all — and it is the reason the errors in this note had to be found in the order they were.
 
 ## The additive case
 
@@ -172,11 +211,14 @@ The decomposition then agrees, but only once the filter is long enough:
 - [[40-10-general-seats]]'s showcase example — a 40-month cycle isolated into the transitory component — was wrong, and its "why this matters" argument was backwards. X-13 puts a 40-month cycle in the trend.
 - Its **honest negative result** — no catalogue series produces a transitory component — was an artifact of the missing modulus gate. `cpi` and `ukgas` both produce one.
 - The repeated-root precision loss described there was real and entirely avoidable: finding roots factor by factor instead of expanding first takes the airline trend polynomial from $2\times10^{-8}$ to **exactly zero**.
+- `_seats.R` — the validated, airline-only implementation that half this vault depends on — inherited errors 6 and 7. It was missing the irregular normalisation entirely and was taking its trend from the filter. [[40-08-validating-against-x13]] went from 0.001% to **0.000003%**, and its "where the residual comes from" section had to be rewritten because the residual it was accounting for no longer existed.
 
 > [!important] The general lesson, which is not about SEATS
-> Five errors, and the internal checks caught none of them, because internal checks answer "is this code consistent with itself". All five were consistent with themselves; the normalisation constant was consistent with itself *and* invisible in every graphic.
+> Seven errors, and the internal checks caught none of them, because internal checks answer "is this code consistent with itself". All seven were consistent with themselves. Two of them were also invisible in every graphic in this vault, because a constant offset on a multiplicative factor does not change the shape of anything.
 >
-> An implementation is validated against an independent one or it is not validated. "It reproduces the special case" is necessary and nowhere near sufficient, since the special case is precisely where the general machinery does nothing.
+> An implementation is validated against an independent one or it is not validated. "It reproduces the special case" is necessary and nowhere near sufficient, since the special case is precisely where the general machinery does nothing — and worse, the special case here was itself wrong in two ways that only the general code could expose.
+>
+> The other transferable habit: **numerical error and convention error live on different scales.** Truncation, backcasting and optimiser differences buy you $10^{-4}$. Anything at $10^{-2}$ or $10^{-3}$ is a rule you have not matched, and it is written down somewhere in the other program's output. Look for the number that comes out exactly 1.
 
 ## Exercises
 
@@ -194,6 +236,10 @@ The decomposition then agrees, but only once the filter is long enough:
 10. The parsing in `x13_ar_split()` depends on X-13's output format. Write the check that would tell you it had silently stopped working.
 11. Fit `nottem` as $(1,0,0)(1,1,1)$ and classify its roots. How many of the twelve roots of $(1 - \Phi B^{12})$ end up in the seasonal component, and why is the answer surprising?
 12. Decompose `nottem` additively at `max_lag` 150 and 400 and plot both trends. Could you tell which one is wrong without the reference?
+13. Print the level mean of `s10`, `s13` and `s14` for `imp` over the full span and over the first 360 observations. Which entries are exactly 1, and what does each one tell you?
+14. Why does the seasonal normalisation drop the leftover months and the irregular one keep them? Answer from what the two components *are*, not from the code.
+15. Take the trend from its filter rather than as a residual and plot the error against `max_lag` from 200 to 1200. Explain the shape, then say which component is immune and why.
+16. `_seats.R` was validated against X-13 and still had two of these errors for weeks. What property of `AirPassengers` hid them?
 
 ## Going further
 

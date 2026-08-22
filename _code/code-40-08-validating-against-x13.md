@@ -37,7 +37,7 @@ mine <- list(s10 = exp(ours$seasonal), s11 = exp(ours$sa),
 cmp <- function(a, b, lab) {
   a <- as.numeric(a); b <- as.numeric(b); n <- length(a); int <- 25:(n - 24)
   pd <- 100 * abs(a - b) / abs(b)
-  cat(sprintf("  %-4s interior mean %.4f%%  max %.4f%%  |  ends max %.4f%%\n",
+  cat(sprintf("  %-4s interior mean %.6f%%  max %.6f%%  |  ends max %.6f%%\n",
               lab, mean(pd[int]), max(pd[int]), max(pd[-int])))
 }
 cat("=== ours vs the real X-13 SEATS ===\n")
@@ -95,8 +95,11 @@ cat("=== EXERCISE 5: which is bigger, method or implementation? ===\n")
 seats_vs_x11 <- 100*mean(abs(as.numeric(tab$s11) - as.numeric(d11))/as.numeric(d11))
 impl_err     <- 100*mean(abs(as.numeric(mine$s11) - as.numeric(tab$s11))/as.numeric(tab$s11))
 cat(sprintf("  SEATS vs X-11 (method difference)      : %.3f%%\n", seats_vs_x11))
-cat(sprintf("  ours vs X-13 SEATS (implementation)    : %.4f%%\n", impl_err))
-cat(sprintf("  ratio                                  : %.0fx\n", seats_vs_x11/impl_err))
+cat(sprintf("  ours vs X-13 SEATS (implementation)    : %.6f%%\n", impl_err))
+cat("  The implementation difference is now at the level of the forecast\n")
+cat("  extension and the printed precision of X-13's own tables, so the ratio\n")
+cat("  of the two is no longer a meaningful number. It says only that the two\n")
+cat("  implementations agree and the two METHODS do not.\n")
 cat("\nThe choice of METHOD matters far more than implementation precision.\n")
 cat("Which of the two adjustments you publish is a real decision; whether your\n")
 cat("code agrees with Census to 4 or 6 decimals is not.\n")

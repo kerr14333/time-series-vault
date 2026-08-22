@@ -37,7 +37,7 @@ Three things in that table are worth pausing on.
 
 The last row is what is new. The airline model cannot produce it — all its AR roots are unit roots at frequency 0 or at the seasonal frequencies — but a general model can, and then you have a **fourth component**.
 
-`R/_seats_general.R` implements this, along with an $N$-way partial fraction, an $N$-component canonical adjustment, and the corresponding filters. `_seats.R` is untouched: it is validated to 0.001% and half the vault depends on it.
+`R/_seats_general.R` implements this, along with an $N$-way partial fraction, an $N$-component canonical adjustment, and the corresponding filters. `_seats.R` is left alone as far as the algebra goes: it is validated against the Census binary and half the vault depends on it. (It did later inherit two normalisation fixes found through this file — see [[40-11-validating-general-seats]].)
 
 ## First, does it reproduce the special case?
 
@@ -84,7 +84,7 @@ for (k in c("trend", "seasonal"))
 cat(sprintf("partial-fraction residual %.2e   admissible %s\n", g$residual, g$admissible))
 ```
 ```text
-trend     max |general - _seats.R| = 0.00001279
+trend     max |general - _seats.R| = 0.00000003
 seasonal  max |general - _seats.R| = 0.00000007
 partial-fraction residual 7.63e-14   admissible TRUE
 ```
@@ -158,7 +158,7 @@ source("R/40-10-general-seats.R")
   a boundary. That is not hypothetical: see 40-11.
 
 === 2. full decomposition vs the validated airline implementation ===
-  trend     max |general - _seats.R| = 0.00001279
+  trend     max |general - _seats.R| = 0.00000003
   seasonal  max |general - _seats.R| = 0.00000007
   partial-fraction residual 7.63e-14   admissible TRUE
 

@@ -19,7 +19,7 @@ where $\nu_S$ is a **two-sided infinite** filter — it wants data stretching in
 
 You do not have infinite data. You have 144 months. So what do you do?
 
-Our `seats_decompose()` takes the obvious route: chop the filter off once the weights get small, extend the series with ARIMA forecasts so the chopped filter has something to chew on, and accept the tiny error. It works, and it validates against the Census binary to 0.001%. But look at the cost:
+Our `seats_decompose()` takes the obvious route: chop the filter off once the weights get small, extend the series with ARIMA forecasts so the chopped filter has something to chew on, and accept the tiny error. It works, and it validates against the Census binary to about one part in thirty million. But look at the cost:
 
 > [!warning] The brute-force route is expensive
 > For the airline model with $\Theta = 0.557$, the weights do not fall below $10^{-7}$ until lag **331** — that is **27.6 years** of filter, applied to a series only 12 years long ([[30-07-finite-samples]]). You must forecast 27 years in each direction and hope.

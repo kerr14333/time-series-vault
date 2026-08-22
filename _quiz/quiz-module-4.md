@@ -113,4 +113,8 @@ Which options must be pinned when comparing against X-13? ::: `transform.functio
 
 What does the identity $\log z = \log(s11) + \log(s10)$ tell you? ::: Which series was actually decomposed. If it holds against the raw data, no preadjustment happened; if not, regARIMA removed something first. That is how you audit a black box.
 
-Method difference vs implementation precision ::: On AirPassengers, SEATS vs X-11 differ by 0.76% while our implementation differs from X-13's by 0.001% — a factor of ~660. **Which method you publish matters far more than decimal-place agreement.**
+Method difference vs implementation precision ::: On AirPassengers, SEATS vs X-11 differ by 0.76% while our implementation differs from X-13's by 0.000004% — five orders of magnitude. **Which method you publish matters far more than decimal-place agreement.**
+
+What does the SIZE of a disagreement tell you? ::: Which kind of error it is. Truncation, backcasting and optimiser differences buy you $10^{-4}$ at most. A percent — or a tenth of one — is a **convention** you have not matched: an exact rule stated somewhere in the output, not noise. At $10^{-2}$ do not reach for a longer filter; go looking for a rule.
+
+The two normalisations, and their spans ::: The **seasonal** factors average 1 in levels over the first $\lfloor n/s\rfloor \times s$ observations; the **irregular** averages 1 over the **full** span; the transitory is not normalised; the trend takes what is left. Different spans because a partial final year holds some months and not others, which biases a *seasonal* mean and not an irregular one.

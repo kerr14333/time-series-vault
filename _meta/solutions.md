@@ -1187,9 +1187,9 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 **5.** The offset is $+0.012691$ in logs, 1.28% in levels. Plotted against X-13's you will not see it: two curves 1% apart on a seasonal factor that swings from 0.56 to 1.80 are visually identical. That is the whole point of the error — it is invisible in exactly the check a reader would apply.
 
-**6.** Mean $-0.000112$, standard deviation $1.9\times10^{-7}$. A difference that is constant to six decimal places is a **convention**, not an implementation error. Splitting a comparison into level and shape is the fastest diagnostic there is.
+**6.** Before the fix: mean $+0.012691$, standard deviation $1.9\times10^{-7}$. A difference that is constant to six decimal places is a **convention**, not an implementation error, and splitting a comparison into level and shape is the fastest diagnostic there is. After it, the mean is zero and only the $1.9\times10^{-7}$ remains.
 
-**7.** Because the residual 0.011% is not a filter error at all — it is the normalisation constant, and normalisation moves a constant between the **seasonal and the trend only**. The transitory component is never shifted, so what is left in its comparison is pure filter agreement, and that is $10^{-6}$. The same $10^{-6}$ is present in the seasonal too: it is the standard deviation of the log difference, sitting underneath a constant a hundred times larger.
+**7.** Because the transitory is **not normalised** — only the seasonal and the irregular are, and the trend absorbs both constants. So the transitory comparison shows pure filter agreement from the start, which is $10^{-6}$; the seasonal showed the same $10^{-6}$ all along, sitting underneath a constant a hundred times larger. That is the point of looking at the standard deviation separately from the mean.
 
 **8.** The model choice moves the seasonal factors far more than the implementation does — the same relationship 40-08 found between SEATS and X-11. Which model you fit is a real decision; whether your code agrees with Census to 4 or 6 decimals is not.
 
@@ -1200,6 +1200,14 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **11.** **None of them.** $\Phi$ is $-0.2966$, and a negative seasonal AR coefficient puts the roots of $(1 - \Phi B^{12})$ at *odd* multiples of $15°$ — so there is no root at frequency zero and none at any multiple of $30°$. All twelve go to the transitory, along with the AR(1). The surprise is that the operator which looks most seasonal contributes nothing at all to the seasonal component, and that this depends entirely on the sign of $\Phi$: at $\Phi = +0.8$ the same operator gives eleven seasonal roots and one trend root.
 
 **12.** No. Both trends are smooth, both track the series, both have a plausible annual shape — and at `max_lag = 150` the trend is a full degree Fahrenheit out. Truncation error in a Wiener–Kolmogorov filter looks like a slightly different smoothing choice, not like a bug, which is why it needs a convergence check rather than an eyeball.
+
+**13.** `s10` is exactly 1 over the **first 360**, `s13` is exactly 1 over the **full 366**, `s14` is not 1 over either. An exact 1.000000000 is an imposed rule and nothing else is, so those three lines say: the seasonal is normalised over whole years, the irregular over everything, and the transitory not at all. Reading the invariants out of the other program's output is far quicker than guessing conventions and testing them one at a time.
+
+**14.** Because a seasonal factor is *periodic* and an irregular is not. `imp`'s partial final year holds July to December only, so averaging the seasonal over it counts those six months twice and drags the constant toward whatever they happen to be — the mean is then contaminated by *which* months are left over. The irregular has no month-of-year structure for a partial year to bias, so truncating the span would just discard six observations for nothing.
+
+**15.** The error *grows*: about 0.0009% at 250 lags, 0.0039% at 1200. The trend filter has gain **one** at frequency zero, so it responds to the level, and a longer filter reaches further into an ever-longer ARIMA forecast whose drift it then integrates. The seasonal and irregular filters have gain **zero** at frequency zero, are blind to the level, and converge normally. The fix is structural rather than numerical: X-13's tables satisfy the identity to $9\times10^{-15}$, so it takes one component by subtraction, and it must be the trend.
+
+**16.** Its length is a multiple of 12, so the seasonal's whole-year window and the full span are the same thing and error 6 could not appear. And the irregular normalisation was worth only 0.01% there, which sat comfortably inside what the note was already writing off as "truncation and optimiser differences". A validated special case is worth exactly as much as the cases it exercises.
 
 **Going further.**
 

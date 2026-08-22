@@ -21,7 +21,8 @@ Code: [[code-_seats|`R/_seats.R`]] (the engine) and `R/40-07-implementing-seats-
  7. WK filters: nu_T = (A - m_T D_T) D_S / N, etc.
  8. invert to weights; extend the series with forecasts and backcasts;
     apply the symmetric filters; keep the original span
- 9. normalise the constant between trend and seasonal
+ 9. normalise TWO constants -- seasonal and irregular -- and take the
+    trend as the residual
 ```
 
 Nine steps. Steps 1–7 are algebra on a handful of short vectors; step 8 is one convolution; step 9 is a convention. There is no hidden difficulty — which is worth saying, because SEATS has a reputation for being impenetrable and it is not.
@@ -32,12 +33,14 @@ Run on `AirPassengers` with $\theta = 0.4018$, $\Theta = 0.5569$, and compare ag
 
 | X-13 table | Meaning | Max difference |
 |---|---|---|
-| `s10` | seasonal factors | **0.000%** |
-| `s11` | seasonally adjusted | **0.001%** |
-| `s12` | trend | **0.012%** |
-| `s13` | irregular | **0.010%** |
+| `s10` | seasonal factors | **0.000012%** |
+| `s11` | seasonally adjusted | **0.000012%** |
+| `s12` | trend | **0.000114%** |
+| `s13` | irregular | **0.000116%** |
 
-A from-scratch R implementation reproducing forty-year-old Fortran to within a hundredth of a percent. If you can get here, you understand SEATS.
+A from-scratch R implementation reproducing forty-year-old Fortran to about one part in thirty million. If you can get here, you understand SEATS.
+
+Those figures were a thousand times worse until two normalisation conventions turned up — see [[40-11-validating-general-seats]]. The nine steps below are the algebra; the conventions are the part the algebra does not tell you.
 
 ![[40-07-decomposition.png]]
 
@@ -86,6 +89,8 @@ resulting discrepancy      0.88% in s10, s11 and s12 alike
 
 The tell is that `s10`, `s11` and `s12` are *all* off by the same amount while `s13` is exact. A constant, not an error.
 
+And there is a **second** normalisation, which took far longer to find: the irregular is normalised too, over a different span, and the trend is a residual rather than a filter output. Missing those was worth another 0.01% here — small enough to look like truncation and be written off. [[40-11-validating-general-seats]] has both.
+
 ### 4. Sign conventions
 
 The algebra manipulates $\theta(B)\theta(F)$ directly, so a flipped MA sign gives component spectra that are wrong but still look plausible. Convert once, at the boundary, and never guess ([[10-11-sign-conventions]]).
@@ -103,7 +108,7 @@ Run all of these; each caught a real bug during development:
 | $T + S + I$ | $= \log z$ exactly | anything in step 8 |
 | component minima | $\ge 0$ | inadmissibility |
 
-The reconstruction identity $T+S+I=\log z$ is the single best end-to-end test: it is sensitive to every step and needs no reference implementation.
+The reconstruction identity $T+S+I=\log z$ is the cheapest end-to-end test and it is **not** sufficient. It is sensitive to every step *inside* step 8 and blind to every convention in step 9, because a normalisation moves a constant between components without losing any. It held exactly through two missing normalisations and a wrong root-classification rule — see [[40-11-validating-general-seats]].
 
 ## What this build does not do
 
@@ -123,12 +128,14 @@ Decompose, then check the identity that must hold by construction:
 
 <!-- run -->
 ```r
-d <- seats_decompose(lap, 0.4018, 0.5569)
+# seats_decompose() takes the RAW series and logs it internally -- passing
+# `lap` would log it twice and the identity below would come out at 4.57.
+d <- seats_decompose(AirPassengers, 0.4018, 0.5569)
 recon <- as.numeric(d$trend) + as.numeric(d$seasonal) + as.numeric(d$irregular)
 cat("max |log z - (T + S + I)| =", format(max(abs(as.numeric(lap) - recon))), "\n")
 ```
 ```text
-max |log z - (T + S + I)| = 4.571512 
+max |log z - (T + S + I)| = 8.881784e-16 
 ```
 <!-- end -->
 
@@ -142,7 +149,7 @@ cat("mean of log seasonal  :", round(mean(as.numeric(d$seasonal)), 6),
 ```
 ```text
 mean of exp(seasonal) : 1 
-mean of log seasonal  : -0.00026  (not zero -- that is the convention)
+mean of log seasonal  : -0.008243  (not zero -- that is the convention)
 ```
 <!-- end -->
 

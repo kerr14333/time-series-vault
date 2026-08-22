@@ -378,14 +378,39 @@ seats_decompose_general <- function(x, ar = numeric(0), ma = numeric(0),
   # by a pure constant: on `imp` that was 1.28%, with the SHAPE already correct
   # to 1e-6. A constant offset is the cheapest kind of disagreement to miss,
   # because it never shows up in a plot.
+  # TWO factors are normalised, over TWO DIFFERENT SPANS, and the trend takes
+  # both constants. Read out of X-13's own output by looking for the value that
+  # is exactly 1.000000000 in each table:
+  #
+  #   s10 (seasonal)   level mean 1 over the first floor(n/s)*s observations
+  #   s13 (irregular)  level mean 1 over the FULL span
+  #   s14 (transitory) not normalised at all
+  #
+  # The asymmetry is not arbitrary. A partial final year holds some months and
+  # not others, so averaging the SEASONAL over it weights those months twice
+  # and drags the constant with it; the irregular has no periodic structure, so
+  # a partial year costs it nothing and there is no reason to throw data away.
+  # Nobody would guess this pair. On `imp` (n = 366, so six months are dropped
+  # from the seasonal average) getting it right takes the seasonal factors from
+  # 0.0112% to 0.0000% against X-13.
+  # The irregular is a filter output like the others, and the TREND is the
+  # residual -- see the note in _seats.R. Three or four independently truncated
+  # filters do not sum to the series (ours miss by 1e-5); X-13's tables satisfy
+  # the identity to 9e-15, so it subtracts, and the trend is the component that
+  # has to absorb it because it is the one carrying the level.
+  irr_w <- filter_weights(nu$irregular, wgrid, max_lag = max_lag)
+  irr <- apply_sym_weights(ext, irr_w)[(extend + 1):(extend + length(y))]
   if (normalize && logs) {
-    shift <- log(mean(exp(as.numeric(out$seasonal))))
-    out$seasonal <- out$seasonal - shift
-    out$trend    <- out$trend + shift
+    k <- (length(y) %/% s) * s
+    if (k < s) k <- length(y)
+    sh_s <- log(mean(exp(as.numeric(out$seasonal)[seq_len(k)])))
+    sh_i <- log(mean(exp(irr)))
+    out$seasonal <- out$seasonal - sh_s
+    irr          <- irr - sh_i
   }
-
-  out$irregular <- ts(y - as.numeric(out$trend) - as.numeric(out$seasonal) -
-                        as.numeric(out$transitory), start = start(x), frequency = s)
+  out$irregular <- ts(irr, start = start(x), frequency = s)
+  out$trend <- ts(y - as.numeric(out$seasonal) - as.numeric(out$transitory) - irr,
+                  start = start(x), frequency = s)
   out$table <- sp$table
   out$admissible <- cn$admissible
   out$residual <- pf$residual

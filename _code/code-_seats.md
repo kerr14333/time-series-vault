@@ -196,15 +196,48 @@ seats_decompose <- function(x, theta, Theta, s = 12, logs = TRUE,
   # X-13 normalises MULTIPLICATIVE factors to average 1 in LEVELS. In logs that
   # forces a mean of about -var/2, NOT 0 -- which is exactly the constant offset
   # you see if you skip this step (0.88% on AirPassengers). Match it.
+  #
+  # TWO factors are normalised, over TWO DIFFERENT SPANS, and the trend takes
+  # both constants:
+  #
+  #   the SEASONAL  averages 1 over the first floor(n/s)*s observations
+  #   the IRREGULAR averages 1 over the FULL span
+  #
+  # A partial final year holds some months and not others, so averaging the
+  # seasonal over it weights those months twice; the irregular has no periodic
+  # structure and loses nothing to a partial year. Both were read out of X-13's
+  # own tables by looking for the value that is exactly 1.000000000.
+  #
+  # This file only ever sees series whose length is a multiple of s, so the
+  # seasonal half changes nothing here. The IRREGULAR half was missing
+  # altogether and was worth 0.01% on AirPassengers.
   if (normalize && logs) {
-    shift <- log(mean(exp(out$seasonal)))
-    out$seasonal <- out$seasonal - shift
-    out$trend    <- out$trend + shift
+    k <- (length(out$seasonal) %/% s) * s
+    if (k < s) k <- length(out$seasonal)
+    sh_s <- log(mean(exp(out$seasonal[seq_len(k)])))
+    sh_i <- log(mean(exp(out$irregular)))
+    out$seasonal  <- out$seasonal - sh_s
+    out$irregular <- out$irregular - sh_i
   }
+
+  # THE TREND IS A RESIDUAL, not a filter output. X-13's own tables satisfy
+  # log y = s12 + s10 + s13 to 9e-15, which is not something three independently
+  # truncated filters do -- ours miss by 1e-5. So X-13 computes one component by
+  # subtraction, and it has to be the trend, since the trend is the one carrying
+  # the level.
+  #
+  # Taking it from the filter instead costs 0.0011% on AirPassengers and, worse,
+  # gets WORSE as max_lag grows: 0.0009% at 250 lags, 0.0017% at 500, 0.0039% at
+  # 1200. The seasonal and irregular filters have gain zero at frequency zero
+  # and are immune; the trend filter has gain one there, so it integrates the
+  # drift of an ever-longer forecast extension. "Longer is safer" is true for
+  # two of the three components and false for this one. As a residual it is
+  # 0.00003% and improves monotonically, like everything else.
+  out$trend <- as.numeric(y) - out$seasonal - out$irregular
 
   mk <- function(v) ts(v, start = start(x), frequency = s)
   list(trend = mk(out$trend), seasonal = mk(out$seasonal), irregular = mk(out$irregular),
-       sa = mk(out$trend + out$irregular),
+       sa = mk(as.numeric(y) - out$seasonal),
        weights = wt, filters = nu, freq = w, canon = cn, pf = pf, logs = logs)
 }
 ```
