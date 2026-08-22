@@ -58,16 +58,18 @@ cat(sprintf("difference from the hard-coded split: trend %.2e  seasonal %.2e\n",
 trend    : 1 - 2B + B^2 
 seasonal : 1 + B + B^2 + B^3 + B^4 + B^5 + B^6 + B^7 + B^8 + B^9 + B^10 + B^11 
 transitory roots: 0 
-difference from the hard-coded split: trend 2.62e-14  seasonal 9.84e-14
+difference from the hard-coded split: trend 0.00e+00  seasonal 7.55e-15
 ```
 <!-- end -->
 
 Thirteen roots, sorted correctly with no human input: two at frequency zero, eleven at the six seasonal frequencies, none left over. The seasonal polynomial matches exactly.
 
-> [!warning] The repeated root, and how not to pay for it
+> [!warning] Never expand the polynomial before finding its roots
 > $(1-B)^2$ has a **double** root at $B=1$, and `polyroot` cannot return it as one root. It returns a cluster of two, about $10^{-7}$ apart, with small imaginary parts of opposite sign — root-finding at a repeated root loses roughly half the available precision, $\sqrt{\varepsilon}$ rather than $\varepsilon$.
 >
-> Rebuilding the quadratic factor from the **mean** of the conjugate pair cancels that error instead of propagating it. Using either member alone leaves $2\times10^{-8}$ in the trend polynomial; averaging brings it to $3\times10^{-14}$. **Generality has a numerical price and this is where it is paid** — but most of the bill is avoidable, and it took comparing against X-13 to notice it was being paid at all.
+> So the roots are never taken from the expanded polynomial. Every factor's roots are either analytic or come from a small polynomial: $(1-B)^d$ is $d$ roots at exactly 1, $(1-B^s)^D$ is the $s$-th roots of unity from $\cos$ and $\sin$, $\Phi(B^s)$ is a degree-$P$ polynomial in $u = B^s$ followed by $s$-th roots, and only $\phi(B)$ needs `polyroot` at all.
+>
+> Expanding first costs $2\times10^{-8}$ in the trend polynomial, which is merely untidy. What it also costs is $10^{-12}$ in the root **angles**, and that is not untidy at all: the classification tests are strict inequalities against exact boundaries, and roots land on those boundaries routinely. [[40-11-validating-general-seats]] has the case where it decided 2.6 °F of `nottem`'s trend by coin flip.
 
 Running the whole decomposition rather than just the split:
 
@@ -84,7 +86,7 @@ cat(sprintf("partial-fraction residual %.2e   admissible %s\n", g$residual, g$ad
 ```text
 trend     max |general - _seats.R| = 0.00001279
 seasonal  max |general - _seats.R| = 0.00000007
-partial-fraction residual 6.84e-14   admissible TRUE
+partial-fraction residual 7.63e-14   admissible TRUE
 ```
 <!-- end -->
 
@@ -143,27 +145,27 @@ source("R/40-10-general-seats.R")
   trend    : 1 - 2B + B^2 
   seasonal : 1 + B + B^2 + B^3 + B^4 + B^5 + B^6 + B^7 + B^8 + B^9 + B^10 + B^11 
   transitory: none (correct -- an airline model has no cyclical roots)
-  max difference from the hard-coded split: trend 2.62e-14  seasonal 9.84e-14
-  (1-B)^2 has a DOUBLE root at B = 1, and polyroot cannot return it as
-  one root: it returns a cluster of two, about 1e-7 apart, with small
-  imaginary parts of opposite sign. Rebuilding the factor from the MEAN
-  of the conjugate pair cancels that error instead of propagating it,
-  which is why the gap here is 1e-14 rather than the 1e-8 you get from
-  using either member alone. Generality has a numerical price, and this
-  is how you avoid paying it.
+  max difference from the hard-coded split: trend 0.00e+00  seasonal 7.55e-15
+  Exactly zero on the trend, and that is not luck. polyroot((1-B)^2 S(B))
+  returns the double root at B = 1 as a cluster of two roots 1e-7 apart
+  -- root-finding at a repeated root loses half the available precision.
+  So the roots are never taken from the expanded polynomial. Each factor
+  is handled where its roots are known: (1-B)^d is d roots at exactly 1,
+  (1-B^s)^D is the s-th roots of unity from cos and sin, Phi(B^s) is a
+  small polynomial in u = B^s, and only phi(B) needs polyroot at all.
+  Expanding first cost 1e-8 here and, worse, 1e-12 in the ROOT ANGLES,
+  which decides classification by coin flip when a root sits exactly on
+  a boundary. That is not hypothetical: see 40-11.
 
 === 2. full decomposition vs the validated airline implementation ===
   trend     max |general - _seats.R| = 0.00001279
   seasonal  max |general - _seats.R| = 0.00000007
-  partial-fraction residual 6.84e-14   admissible TRUE
+  partial-fraction residual 7.63e-14   admissible TRUE
 
 === 3. two cycles, two different answers ===
   period 40 months, 1/|B| = 0.952,  9.00 deg  ->  trend      (X-13: trend)
   period 20 months, 1/|B| = 0.952, 18.00 deg  ->  transitory (X-13: transitory)
-  period  9 months, 1/|B| = 0.667, 40.00 deg  ->  transitory (X-13: transitory)
-
-  The 40-month cycle joins the TREND, and that is correct: X-13 sends
-... [41 more lines]
+... [52 more lines]
 ```
 <!-- end -->
 
@@ -178,9 +180,11 @@ The lesson is the one that keeps recurring in this vault: a negative result from
 ## A detail that is easy to get wrong
 
 > [!tip] $(1 - \Phi B^{12})$ is not a purely seasonal operator
-> Its twelve roots are spread around the circle at the seasonal frequencies **and at frequency zero**. That zero-frequency root belongs to the **trend**.
+> With $\Phi > 0$ its twelve roots sit at the seasonal frequencies **and at frequency zero**, and that zero-frequency root belongs to the **trend**. X-13 confirms it: fit $(0,1,1)(1,0,1)$ with $\Phi = 0.8$ and its printed trend polynomial is $(1-B)(1 - 0.9816B)$, where $0.9816 = 0.8^{1/12}$ is exactly that root.
 >
-> Sorting by frequency gets this right without being told. Sorting by *which factor a root came from* — the intuitive approach — would put all twelve in the seasonal and quietly move a trend root into your seasonal component.
+> With $\Phi < 0$ it is stranger still. The roots move to the *odd* multiples of $180/s$, so **none** of them is at frequency zero and none is at a seasonal frequency: all twelve go to the transitory component, and the operator that looks most seasonal contributes nothing whatever to the seasonal. `nottem` fitted as $(1,0,0)(1,1,1)$ is that case — see [[40-11-validating-general-seats]].
+>
+> Sorting by frequency and modulus gets both right without being told. Sorting by *which factor a root came from* — the intuitive approach — would put all twelve in the seasonal, which is wrong for either sign of $\Phi$.
 
 <!-- run -->
 ```r
@@ -207,7 +211,7 @@ Being explicit, so nothing here is oversold:
 
 *Solutions: [[solutions#40-10-general-seats|worked answers]] in the solutions appendix.*
 
-1. Confirm the general split reproduces the airline split, and measure the difference. Explain why it is not zero.
+1. Confirm the general split reproduces the airline split, and measure the difference. The trend is exactly zero and the seasonal is not — explain both.
 2. Construct AR(2) roots at a 6-month period instead of 40. Where do they get classified, and is that right?
 3. Vary `epsphi` from 1 to 15 degrees on a model whose roots sit near a seasonal frequency. At what point does the classification flip, and which value matches X-13?
 4. Take `unemp`'s fitted model and check every root's classification by hand against the table.

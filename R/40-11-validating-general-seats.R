@@ -98,24 +98,27 @@ cat(sprintf("\n  %d of %d readable cases agree.\n", n_ok, n_run))
 cat("  The boundary is a period of 24 months and it is sharp: 30 months is\n")
 cat("  trend, 22 months is transitory, and nothing about the series changes\n")
 cat("  across that line except the root's angle.\n")
-cat("\n  The one disagreement is AT the boundary, and it is not a rule error.\n")
+cat("\n  The 24-month row is the one that used to disagree, and it is worth\n")
+cat("  knowing why it stopped. The test is a STRICT inequality against an\n")
+cat("  exact boundary, so a root sitting on the line is decided by whatever\n")
+cat("  numerical noise the angle carries:\n")
 o24  <- sim_cycle(24, 1.5)
 bare <- abs(Arg(polyroot(c(1, -o24$ar))[1])) * 180 / pi
 full <- poly_mult(c(1, -o24$ar), c(1, rep(0, 11), -1))
 zf   <- polyroot(full)
 pair <- mean(abs(Arg(zf[abs(Mod(zf) - 1.5) < 1e-4])) * 180 / pi)
-cat(sprintf("  From the AR(2) alone the angle is 15 %+.1e degrees -- below the\n",
-            bare - 15))
-cat(sprintf("  cutoff. From the FULL degree-14 AR polynomial, which is what\n"))
-cat(sprintf("  gets factored, the same pair comes out at 15 %+.1e.\n", pair - 15))
-cat("  Both are the cutoff to within a part in 10^12; the sign is the only\n")
-cat("  difference, and it flips with the polynomial you factor. That is\n")
-cat("  enough to cross a line the root sits exactly on, and X-13's own\n")
-cat("  arithmetic lands on the other side of it.\n")
-cat("  The honest conclusion is that no result should depend on a root at\n")
-cat("  exactly twice the seasonal period -- not that either side is wrong.\n")
-cat("  Deliberately NOT patched with an epsilon: that would hide a real\n")
-cat("  property of the rule behind a number chosen to make a test pass.\n")
+cat(sprintf("    from the AR(2) alone           : 15 %+.1e degrees\n", bare - 15))
+cat(sprintf("    from the expanded degree-14 AR : 15 %+.1e degrees\n", pair - 15))
+cat("  Same root, opposite sides of the cutoff. The fix is not an epsilon --\n")
+cat("  it is to stop expanding the polynomial before factoring it. Each\n")
+cat("  factor's roots are analytic or come from a small polynomial, so the\n")
+cat("  angles are exact to machine precision and the strict inequality means\n")
+cat("  what it says.\n")
+cat("\n  This is not a contrived worry. A NEGATIVE seasonal AR coefficient\n")
+cat("  puts every one of its roots at an odd multiple of 180/s -- for monthly\n")
+cat("  data exactly 15, 45, 75 ... degrees. The first of those sits exactly\n")
+cat("  on the trend boundary, and nottem fitted as (1 0 0)(1 1 1) has Phi\n")
+cat("  negative, so it happens on a real catalogue series with a real model.\n")
 
 cat("\n=== 2. a real series with a genuine transitory component ===\n")
 x <- vault_series()$imp
@@ -133,7 +136,7 @@ cat("  frequency. X-13 agrees: its TRANSITORY polynomial for this run is\n")
 cat("  1 + 0.6438B + 0.2129B^2, which is the whole AR(2).\n")
 
 g <- seats_decompose_general(x, ar = ar, sma = sma, d = 1, D = 1, s = 12,
-                             max_lag = 200, extend = 220)
+                             max_lag = 300, extend = 320)
 mine <- list(s10 = exp(g$seasonal), s12 = exp(g$trend), s14 = exp(g$transitory),
              s11 = exp(log(as.numeric(x)) - as.numeric(g$seasonal)))
 tab <- list(s10 = series(m, "s10"), s11 = series(m, "s11"),
@@ -154,7 +157,7 @@ cat(sprintf("  only %.1e. The disagreement is a CONSTANT, not a shape.\n", sd(d1
 
 cat("\n=== 3. the constant that was hiding there ===\n")
 gn <- seats_decompose_general(x, ar = ar, sma = sma, d = 1, D = 1, s = 12,
-                              max_lag = 200, extend = 220, normalize = FALSE)
+                              max_lag = 300, extend = 320, normalize = FALSE)
 off <- mean(as.numeric(gn$seasonal) - log(as.numeric(tab$s10)))
 cat(sprintf("  without normalisation the offset is %+.6f in logs (%.2f%%)\n",
             off, 100 * (exp(off) - 1)))
@@ -168,7 +171,44 @@ cat("  constant multiplicative offset is invisible in every plot in the\n")
 cat("  vault -- the trend still tracks the series, the factors still repeat.\n")
 cat("  It took comparing against X-13 on a series _seats.R cannot handle.\n")
 
-cat("\n=== 4. what is left ===\n")
+cat("\n=== 4. the additive case, which nothing used to exercise ===\n")
+nt <- vault_series()$temperature
+ma_ <- seas(nt, transform.function = "none", arima.model = "(1 0 0)(1 1 1)",
+            regression.aictest = NULL, outlier = NULL, x11 = NULL)
+ca <- coef(ma_)
+cat(sprintf("  nottem, (1 0 0)(1 1 1) additive: ar = %.4f, Phi = %.4f, Theta = %.4f\n",
+            ca[["AR-Nonseasonal-01"]], ca[["AR-Seasonal-12"]], ca[["MA-Seasonal-12"]]))
+cat("  Phi is NEGATIVE, so the roots of (1 - Phi B^12) sit at odd multiples\n")
+cat("  of 15 degrees -- the first one exactly on the trend boundary.\n")
+spa <- seats_ar_split_general(ar = ca[["AR-Nonseasonal-01"]],
+                              sar = ca[["AR-Seasonal-12"]], d = 0, D = 1, s = 12)
+cat(sprintf("  our split: trend %s | seasonal %d roots | transitory %d roots\n",
+            poly_show(spa$trend), sum(spa$table$component == "seasonal"),
+            sum(spa$table$component == "transitory")))
+cat("  X-13 prints exactly the same: trend 1 - B, seasonal S(B), and the\n")
+cat("  whole stationary AR side -- (1 - 0.2710B)(1 + 0.2966B^12) -- in the\n")
+cat("  transitory. Before the factorwise root-finding we put the 15-degree\n")
+cat("  pair in the TREND, which moved the published trend by 2.6 degrees F.\n")
+tabA <- list(s10 = series(ma_, "s10"), s12 = series(ma_, "s12"))
+cat("\n  filter truncation has to reach further here, because that transitory\n")
+cat("  factor has modulus 0.90 and its WK filter decays slowly:\n")
+for (ml in c(150, 250, 400)) {
+  ga <- seats_decompose_general(nt, ar = ca[["AR-Nonseasonal-01"]],
+                                sar = ca[["AR-Seasonal-12"]], sma = ca[["MA-Seasonal-12"]],
+                                d = 0, D = 1, s = 12, logs = FALSE,
+                                max_lag = ml, extend = ml + 20,
+                                warn_truncation = FALSE)
+  e10 <- as.numeric(ga$seasonal) - as.numeric(tabA$s10)
+  e12 <- as.numeric(ga$trend)    - as.numeric(tabA$s12)
+  cat(sprintf("    max_lag %3d : seasonal sd %.4f  trend mean %+.5f\n",
+              ml, sd(e10), mean(e12)))
+}
+cat("  At 150 lags the seasonal is out by 0.15 degrees F and the trend by\n")
+cat("  0.94; at 400 both are under 0.002. Nothing is wrong with the additive\n")
+cat("  path -- the default filter length was simply too short for a root\n")
+cat("  this persistent, and there is no warning when that happens.\n")
+
+cat("\n=== 5. what is left ===\n")
 cat(sprintf("  A residual constant of %.4f%% remains in the seasonal factors.\n",
             100 * abs(exp(mean(d10)) - 1)))
 cat("  It is the normalisation window: X-13 does not average over exactly the\n")
@@ -176,3 +216,19 @@ cat("  366 observations this code uses. Averaging over complete calendar\n")
 cat("  years only makes it worse (0.09%), so the convention is something\n")
 cat("  else again. The shape agreement of 1e-6 is the number that says the\n")
 cat("  filters are right; this last constant is bookkeeping.\n")
+cat("\n  max_lag used to be the open trap: nothing warned you when the filter\n")
+cat("  was too short, and the components just came out quietly wrong, as\n")
+cat("  section 4 shows. seats_decompose_general() now checks it. The decay\n")
+cat("  rate is set by the MA side, not the AR side -- the WK filter is a\n")
+cat("  ratio whose poles are the zeros of theta(B)theta(F) -- which is the\n")
+cat("  opposite of the intuitive guess. What that check says here:\n")
+msg <- NULL
+withCallingHandlers(
+  invisible(seats_decompose_general(nt, ar = ca[["AR-Nonseasonal-01"]],
+    sar = ca[["AR-Seasonal-12"]], sma = ca[["MA-Seasonal-12"]],
+    d = 0, D = 1, s = 12, logs = FALSE, max_lag = 150, extend = 170)),
+  warning = function(w) { msg <<- conditionMessage(w); invokeRestart("muffleWarning") })
+cat("   ", if (is.null(msg)) "(silent)" else msg, "\n")
+cat("  AirPassengers needs 283, imp 224, nottem 523. The vault's own scripts\n")
+cat("  were using 200 and 340 -- one of them short, and the numbers it\n")
+cat("  produced looked exactly as convincing as the correct ones.\n")

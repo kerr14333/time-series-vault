@@ -11,7 +11,7 @@ Code: [[code-40-11-validating-general-seats|`R/40-11-validating-general-seats.R`
 
 So the general code went into the vault validated for *internal* consistency only: the decomposition identity held exactly, the partial-fraction residual was $10^{-13}$, and it independently reproduced 40-02's finding that `cpi` is inadmissible. All true, all reassuring, and none of it able to catch a wrong classification rule — because a wrong rule produces a perfectly self-consistent decomposition of the wrong thing.
 
-It caught nothing. There were four errors: three in the classification rule and one in the normalisation, and the fourth is the one worth remembering, because it was invisible in every plot.
+It caught nothing. There were five errors: three in the classification rule, one in the normalisation, and one in the arithmetic underneath all of them. The last two are the ones worth remembering — one was invisible in every plot, and the other decided a component by coin flip.
 
 ## What X-13 will tell you, if you ask it properly
 
@@ -32,7 +32,7 @@ PHIC( 2)  0.2129
 That is `imp` fitted as $(2,1,0)(0,1,1)$. The trend got $(1-B)^2$ and nothing else; the whole AR(2) went to the **transitory** component. Reading that printout is how the rest of this note gets its answers — parsing a program's output is inelegant, but the alternative is asserting the rule from the source code and never testing it, which is how the errors below got in.
 
 > [!tip] Ask the program, not the manual
-> The rule is also in the Census Fortran (`sigsub.f`), and reading it there is how the constants below were found. But source code tells you what the program is *supposed* to do. The printout tells you what it did. When those disagree — and on the boundary case below they effectively do — the printout wins.
+> The rule is also in the Census Fortran (`sigsub.f`), and reading it there is how the constants below were found. But source code tells you what the program is *supposed* to do; the printout tells you what it did. Reading `sigsub.f` gives you `rmod` and `epsphi`. It does not tell you that a root can sit exactly on a boundary and that your own arithmetic will decide which side — that only shows up when you compare the two outputs.
 
 ## Error 1: modulus was never tested
 
@@ -73,25 +73,50 @@ source("R/40-11-validating-general-seats.R")
       40    0.667    9.00  trend       trend       OK
       40    0.833    9.00  trend       trend       OK
       30    0.667   12.00  trend       trend       OK
-      24    0.667   15.00  trend       transitory  <-- MISMATCH
+      24    0.667   15.00  trend       trend       OK
       22    0.667   16.36  transitory  transitory  OK
       20    0.667   18.00  transitory  transitory  OK
        9    0.667   40.00  transitory  transitory  OK
 
-  7 of 8 readable cases agree.
+  8 of 8 readable cases agree.
   The boundary is a period of 24 months and it is sharp: 30 months is
   trend, 22 months is transitory, and nothing about the series changes
   across that line except the root's angle.
 
-  The one disagreement is AT the boundary, and it is not a rule error.
-  From the AR(2) alone the angle is 15 -1.8e-14 degrees -- below the
-... [48 more lines]
+  The 24-month row is the one that used to disagree, and it is worth
+  knowing why it stopped. The test is a STRICT inequality against an
+... [84 more lines]
 ```
 <!-- end -->
 
-Seven of eight positions agree. The rule is sharp at 24 months: 30 months is trend, 22 months is transitory, and the only thing that changes across that line is the root's angle.
+Eight of eight positions agree, and the rule is sharp at 24 months: 30 months is trend, 22 months is transitory, and the only thing that changes across that line is the root's angle.
 
-The eighth is *at* the boundary — a cycle of exactly 24 months, sitting exactly on the $15°$ cutoff. Both programs compute the angle to within a part in $10^{12}$ and round to opposite sides of a strict inequality. It is left in the output as a mismatch rather than patched with an epsilon: an epsilon chosen to make a test pass would hide a real property of the rule, which is that it has a discontinuity and a root can sit on it.
+## Error 5: the angle was noisier than the boundary
+
+The 24-month row did **not** agree at first, and the reason is worth more than the fix.
+
+The classification tests are strict inequalities against exact boundaries — $15°$, a multiple of $30°$. Roots land exactly on those boundaries, and then the answer is decided by whatever noise the computed angle carries. The same 24-month root comes out on opposite sides depending on which polynomial you factor:
+
+| Computed from | Angle |
+|---|---|
+| the AR(2) alone | $15° - 1.8\times10^{-14}$ |
+| the expanded degree-14 AR polynomial | $15° + 7.1\times10^{-13}$ |
+
+The obvious implementation builds $\phi(B)\Phi(B^s)(1-B)^d(1-B^s)^D$ and calls `polyroot` once. That is where the $10^{-12}$ comes from, and it is not a rounding curiosity — it is a coin flip deciding which component a root belongs to.
+
+The fix is not an epsilon. It is to **never expand the polynomial**, because every factor's roots are already known or cheap:
+
+| Factor | Roots |
+|---|---|
+| $(1-B)^d$ | $d$ roots at exactly 1 |
+| $(1-B^s)^D$ | $D$ copies of the $s$-th roots of unity, from $\cos$ and $\sin$ |
+| $\Phi(B^s)$ | roots of a degree-$P$ polynomial in $u = B^s$, then $s$-th roots of each |
+| $\phi(B)$ | `polyroot` on degree $p$ — the only place it is needed |
+
+Angles then come out exact to machine precision and the strict inequality means what it says. As a side effect the repeated-root problem disappears: the airline trend polynomial now matches the hard-coded split to **exactly zero**.
+
+> [!important] This is not a contrived worry
+> A **negative** seasonal AR coefficient puts every root of $(1 - \Phi B^s)$ at an *odd* multiple of $180/s$ — for monthly data exactly $15°, 45°, 75° \dots$ The first of those sits exactly on the trend boundary. It is not a construction: `nottem` fitted as $(1,0,0)(1,1,1)$ has $\Phi = -0.2966$, and getting that one root wrong moved the published trend by **2.6 °F**.
 
 ## The decomposition itself
 
@@ -99,16 +124,16 @@ With the classification fixed, `imp` under $(2,1,0)(0,1,1)$ — a model `_seats.
 
 | Table | Component | Interior mean | Max | Ends |
 |---|---|---|---|---|
-| `s10` | seasonal factors | 0.0112% | 0.0115% | 0.0115% |
-| `s11` | adjusted series | 0.0112% | 0.0115% | 0.0115% |
-| `s12` | trend | 0.0054% | 0.0055% | 0.0056% |
-| `s14` | transitory | 0.0000% | 0.0001% | 0.0001% |
+| `s10` | seasonal factors | 0.0112% | 0.0112% | 0.0114% |
+| `s11` | adjusted series | 0.0112% | 0.0112% | 0.0114% |
+| `s12` | trend | 0.0054% | 0.0054% | 0.0054% |
+| `s14` | transitory | 0.0000% | 0.0000% | 0.0001% |
 
 The transitory component — the one piece of this that has no counterpart in the airline machinery — agrees to $10^{-6}$.
 
 ## Error 4: a constant nobody would have seen
 
-The first run of that comparison came back 1.28% out on every component. In logs the difference was $+0.012688$ with a spread of $9.8\times10^{-7}$: **the shape was already right and the level was wrong**.
+The first run of that comparison came back 1.28% out on every component. In logs the difference was $+0.012691$ with a spread of $1.9\times10^{-7}$: **the shape was already right and the level was wrong**.
 
 $\nu_S(0) = 0$, so the seasonal filter annihilates constants, and the theory genuinely cannot say whether a given constant belongs to the trend or to the seasonal. Some convention has to fix it. X-13 normalises multiplicative factors to average 1 **in levels**, which in logs means a mean near $-\sigma^2/2$, not 0. `_seats.R` does this and documents it. `_seats_general.R` did not.
 
@@ -119,14 +144,37 @@ $\nu_S(0) = 0$, so the seasonal filter annihilates constants, and the theory gen
 
 What remains is a residual constant of 0.0112%, which is the normalisation *window*: X-13 is not averaging over exactly the 366 observations this code uses. Restricting to complete calendar years makes it worse (0.09%), so the convention is something else again. The 1e-6 shape agreement is the number that says the filters are right; the last constant is bookkeeping.
 
+## The additive case
+
+Everything above logs the series first. The additive path was the one remaining piece of `_seats_general.R` that nothing in the vault exercised — and it is where error 5 actually bites, because `nottem` fitted as $(1,0,0)(1,1,1)$ has a negative $\Phi$.
+
+With factorwise root-finding, our split matches X-13's exactly: trend $= (1-B)$, seasonal $= S(B)$, and the **entire stationary AR side** — $(1 - 0.2710B)(1 + 0.2966B^{12})$ — in the transitory. Note what that means: with $\Phi$ negative, $(1 - \Phi B^{12})$ has no root at frequency zero and none at a seasonal frequency, so not one of its twelve roots is seasonal. The operator that looks most seasonal contributes nothing to the seasonal component.
+
+The decomposition then agrees, but only once the filter is long enough:
+
+| `max_lag` | seasonal, sd of error | trend, mean error |
+|---|---|---|
+| 150 | 0.1534 °F | −0.937 °F |
+| 250 | 0.0119 °F | −0.067 °F |
+| 400 | 0.0005 °F | −0.001 °F |
+
+> [!warning] Nothing used to warn you that the filter was too short
+> The components come back looking entirely reasonable — right shape, right period, plausible trend — and at 150 lags they are out by a tenth of a degree in the seasonal and a full degree in the trend. No error, no `NA`, no diagnostic. The vault's own scripts were running `imp` at `max_lag = 200` when it needs 224.
+>
+> `seats_decompose_general()` now checks it, and the check is worth stating because the intuitive version is wrong. The decay rate is **not** set by the AR side. The Wiener–Kolmogorov filter is a *ratio* whose poles are the zeros of $\theta(B)\theta(F)$, so the weights fall off like $m^{\text{lag}}$ with $m$ the largest inverse-root modulus of the **MA** polynomial. For `nottem`, $\Theta = 0.7282$ gives $m = 0.7282^{1/12} = 0.974$ and a required $\log(10^{-6})/\log m \approx 523$ lags.
+>
+> `AirPassengers` needs 283, `imp` 224, `nottem` 523. Asking the AR side instead would have said 136 for `nottem` and looked fine.
+>
+> `max_lag` now **defaults** from the model rather than being a fixed number, which is what `_seats.R` has done via `seats_max_lag()` since the day it was written. That is the second time the general implementation turned out to be missing something the special case already knew — the first was the normalisation. It was built by generalising the algebra and not the hard-won details, and both gaps survived every internal check.
+
 ## What this changed elsewhere
 
 - [[40-10-general-seats]]'s showcase example — a 40-month cycle isolated into the transitory component — was wrong, and its "why this matters" argument was backwards. X-13 puts a 40-month cycle in the trend.
 - Its **honest negative result** — no catalogue series produces a transitory component — was an artifact of the missing modulus gate. `cpi` and `ukgas` both produce one.
-- The repeated-root precision loss described there was real but avoidable: rebuilding a conjugate pair's quadratic factor from the *mean* of the pair rather than either member takes the airline trend polynomial from $2\times10^{-8}$ to $3\times10^{-14}$.
+- The repeated-root precision loss described there was real and entirely avoidable: finding roots factor by factor instead of expanding first takes the airline trend polynomial from $2\times10^{-8}$ to **exactly zero**.
 
 > [!important] The general lesson, which is not about SEATS
-> Four errors, and the internal checks caught none of them, because internal checks answer "is this code consistent with itself". Three of the four were consistent with themselves. The fourth — the constant — was consistent with itself *and* invisible in every graphic.
+> Five errors, and the internal checks caught none of them, because internal checks answer "is this code consistent with itself". All five were consistent with themselves; the normalisation constant was consistent with itself *and* invisible in every graphic.
 >
 > An implementation is validated against an independent one or it is not validated. "It reproduces the special case" is necessary and nowhere near sufficient, since the special case is precisely where the general machinery does nothing.
 
@@ -134,7 +182,7 @@ What remains is a residual constant of 0.0112%, which is the normalisation *wind
 
 *Solutions: [[solutions#40-11-validating-general-seats|worked answers]] in the solutions appendix.*
 
-1. Run the classification comparison. Which position disagrees, and why is it not a rule error?
+1. Run the classification comparison. All eight positions agree — which one would disagree if the roots were taken from the expanded polynomial, and why?
 2. Set `rmod = 0` and re-classify `imp`. Which component gains the AR(2), and what does it do to the seasonal factors?
 3. Set `epsphi = 15` and confirm you reproduce the original bug.
 4. Take the 40-month cycle and find the modulus at which it stops being trend. Is it `rmod` exactly?
@@ -144,13 +192,15 @@ What remains is a residual constant of 0.0112%, which is the normalisation *wind
 8. `imp` fitted as an airline model has no AR(2) at all. Decompose it both ways and compare the seasonal factors — how much does the model choice move them, against how much the implementation does?
 9. Find a second real series whose fitted model produces a transitory component, and validate it the same way.
 10. The parsing in `x13_ar_split()` depends on X-13's output format. Write the check that would tell you it had silently stopped working.
+11. Fit `nottem` as $(1,0,0)(1,1,1)$ and classify its roots. How many of the twelve roots of $(1 - \Phi B^{12})$ end up in the seasonal component, and why is the answer surprising?
+12. Decompose `nottem` additively at `max_lag` 150 and 400 and plot both trends. Could you tell which one is wrong without the reference?
 
 ## Going further
 
 *Harder, and different in kind: predict before you run, break things on purpose, and move the idea to a series it was not built on.*
 
 1. **Predict first.** Before running anything, say where a pair at 26 months with inverse modulus 0.6 goes. Then check.
-2. **Break it.** Remove the conjugate-pair averaging from `poly_from_roots()` and measure how far the airline trend polynomial drifts.
+2. **Break it.** Take the roots from `polyroot()` on the expanded AR polynomial instead of factor by factor, and re-run the classification comparison. Which row flips, and by how many degrees?
 3. **Transfer.** The normalisation bug was invisible because every check was self-referential. Name another place in this vault where that risk exists, and say what independent comparison would close it.
 
 ## Practice set

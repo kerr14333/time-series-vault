@@ -15,13 +15,16 @@ cat("  seasonal :", poly_show(sp$seasonal), "\n")
 cat("  transitory: none (correct -- an airline model has no cyclical roots)\n")
 cat(sprintf("  max difference from the hard-coded split: trend %.2e  seasonal %.2e\n",
             max(abs(sp$trend - old$trend)), max(abs(sp$seasonal - old$seasonal))))
-cat("  (1-B)^2 has a DOUBLE root at B = 1, and polyroot cannot return it as\n")
-cat("  one root: it returns a cluster of two, about 1e-7 apart, with small\n")
-cat("  imaginary parts of opposite sign. Rebuilding the factor from the MEAN\n")
-cat("  of the conjugate pair cancels that error instead of propagating it,\n")
-cat("  which is why the gap here is 1e-14 rather than the 1e-8 you get from\n")
-cat("  using either member alone. Generality has a numerical price, and this\n")
-cat("  is how you avoid paying it.\n")
+cat("  Exactly zero on the trend, and that is not luck. polyroot((1-B)^2 S(B))\n")
+cat("  returns the double root at B = 1 as a cluster of two roots 1e-7 apart\n")
+cat("  -- root-finding at a repeated root loses half the available precision.\n")
+cat("  So the roots are never taken from the expanded polynomial. Each factor\n")
+cat("  is handled where its roots are known: (1-B)^d is d roots at exactly 1,\n")
+cat("  (1-B^s)^D is the s-th roots of unity from cos and sin, Phi(B^s) is a\n")
+cat("  small polynomial in u = B^s, and only phi(B) needs polyroot at all.\n")
+cat("  Expanding first cost 1e-8 here and, worse, 1e-12 in the ROOT ANGLES,\n")
+cat("  which decides classification by coin flip when a root sits exactly on\n")
+cat("  a boundary. That is not hypothetical: see 40-11.\n")
 
 cat("\n=== 2. full decomposition vs the validated airline implementation ===\n")
 g <- seats_decompose_general(AirPassengers, ma = 0.4018, sma = 0.5569,
@@ -81,7 +84,7 @@ for (cs in cases) {
   sma <- if (Q) -as.numeric(co[p+q+P + 1:Q]) else numeric(0)
   d <- tryCatch(seats_decompose_general(cs$x, ar, ma, sar, sma,
                                         d = cs$o[2], D = cs$s[2], s = s,
-                                        max_lag = 200, extend = 220),
+                                        max_lag = 700, extend = 720),
                 error = function(e) NULL)
   if (is.null(d)) { cat(sprintf("  %-8s decomposition failed\n", cs$nm)); next }
   nb <- table(d$table$component)
@@ -114,3 +117,11 @@ cat("  One of them sits at frequency ZERO and belongs to the TREND, not the\n")
 cat("  seasonal -- (1 - Phi B^12) is not a purely seasonal operator. Sorting\n")
 cat("  by frequency gets this right automatically; sorting by which factor a\n")
 cat("  root came from would not.\n")
+cat("  X-13 agrees: fit (0 1 1)(1 0 1) with Phi = 0.8 and its printed trend\n")
+cat("  polynomial is (1-B)(1 - 0.9816B), where 0.9816 = 0.8^(1/12) is that\n")
+cat("  very root, while the seasonal gets the other eleven.\n")
+cat("  The SIGN of Phi decides everything here. With Phi NEGATIVE the roots\n")
+cat("  land at ODD multiples of 15 degrees, so none is at frequency zero and\n")
+cat("  none is at a seasonal frequency: all twelve go to the transitory, and\n")
+cat("  the operator that looks most seasonal contributes nothing at all to\n")
+cat("  the seasonal component. See 40-11 for that case on nottem.\n")

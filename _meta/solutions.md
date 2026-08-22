@@ -1140,7 +1140,7 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **P6.** Because it is exact rather than approximate. A tolerance is a knob, and a badly set knob produces a *constant offset* that correlates 0.999 with the truth and is uniformly wrong ([[30-07-finite-samples]]).
 ## 40-10-general-seats
 
-**1.** Both match to about $10^{-13}$. It is not zero because $(1-B)^2$ has a **double root** at $B=1$, and `polyroot` returns it as a cluster of two roots about $10^{-7}$ apart with imaginary parts of opposite sign — root-finding at a repeated root loses roughly half the available precision, $\sqrt{\varepsilon}$ rather than $\varepsilon$. Rebuilding the quadratic factor from the **mean** of the conjugate pair cancels most of that: using either member alone leaves $2\times10^{-8}$ in the trend.
+**1.** The trend matches **exactly**; the seasonal to about $10^{-14}$. Exactness is not luck: $(1-B)^2$ has a double root at $B=1$, and `polyroot` on the expanded polynomial returns it as a cluster of two roots $10^{-7}$ apart — root-finding at a repeated root loses roughly half the available precision, $\sqrt{\varepsilon}$ rather than $\varepsilon$. So the roots are never taken from the expanded polynomial: $(1-B)^d$ contributes $d$ roots at exactly 1, $(1-B^s)^D$ the $s$-th roots of unity from $\cos$ and $\sin$, and only $\phi(B)$ needs `polyroot`. The seasonal's residual $10^{-14}$ is ordinary floating-point in the trigonometry.
 
 **2.** A 6-month period is exactly the second seasonal frequency ($k=2$), so with a modulus above `rmod` the pair is **seasonal** — correctly. Both gates bite here: at $1/|z| = 0.83$ it is seasonal, and at $1/|z| = 0.33$ the same root at the same frequency becomes **transitory**. A root at period 6.5 is $2.3°$ away and falls outside `epsphi`, so it is transitory too.
 
@@ -1177,7 +1177,7 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 ## 40-11-validating-general-seats
 
-**1.** The 24-month cycle. It sits exactly on the $15°$ trend cutoff, and the two programs compute that angle to within a part in $10^{12}$ and round to opposite sides of a strict inequality. It is a tie on a discontinuity, not a disagreement about the rule — which is why it is left in the output rather than patched with an epsilon.
+**1.** The 24-month cycle. It sits exactly on the $15°$ trend cutoff, and the test is a strict inequality, so the answer is decided by whatever noise the computed angle carries. From the AR(2) alone the angle is $15° - 1.8\times10^{-14}$; from the expanded degree-14 AR polynomial the same root comes out at $15° + 7.1\times10^{-13}$. Factoring each factor separately, where the roots are analytic or come from a small polynomial, removes the noise and the strict inequality then means what it says.
 
 **2.** Nothing moves: `epsphi = 2` still keeps the pair out of the seasonal, because $134°$ is $14°$ off. You need `rmod = 0` **and** `epsphi = 15` together before the AR(2) is called seasonal, and then the seasonal factors carry a transient that halves every two and a half months.
 
@@ -1185,9 +1185,9 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 **4.** No. The 40-month cycle stays in the trend all the way down to `rmod`, and below it goes transitory — but the test is `> rmod` for the trend and $\ge$ for the seasonal, so at exactly $1/|z| = 0.5$ the pair is transitory. The asymmetry is X-13's, not a typo.
 
-**5.** The offset is $+0.012688$ in logs, 1.28% in levels. Plotted against X-13's you will not see it: two curves 1% apart on a seasonal factor that swings from 0.56 to 1.80 are visually identical. That is the whole point of the error — it is invisible in exactly the check a reader would apply.
+**5.** The offset is $+0.012691$ in logs, 1.28% in levels. Plotted against X-13's you will not see it: two curves 1% apart on a seasonal factor that swings from 0.56 to 1.80 are visually identical. That is the whole point of the error — it is invisible in exactly the check a reader would apply.
 
-**6.** Mean $-0.000112$, standard deviation $9.8\times10^{-7}$. A difference that is constant to six decimal places is a **convention**, not an implementation error. Splitting a comparison into level and shape is the fastest diagnostic there is.
+**6.** Mean $-0.000112$, standard deviation $1.9\times10^{-7}$. A difference that is constant to six decimal places is a **convention**, not an implementation error. Splitting a comparison into level and shape is the fastest diagnostic there is.
 
 **7.** Because the residual 0.011% is not a filter error at all — it is the normalisation constant, and normalisation moves a constant between the **seasonal and the trend only**. The transitory component is never shifted, so what is left in its comparison is pure filter agreement, and that is $10^{-6}$. The same $10^{-6}$ is present in the seasonal too: it is the standard deviation of the log difference, sitting underneath a constant a hundred times larger.
 
@@ -1197,11 +1197,15 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 **10.** Make the absence of a parse an error rather than a silent `NULL`. `x13_ar_split()` returns `NULL` both when X-13 rejects the model and when the format changes, and a comparison loop that treats `NULL` as "skip" will report zero mismatches out of zero cases and look like a pass. The check is to assert that a known case — the airline model, whose factorization you can write down — still parses to $(1-B)^2$ and $S(B)$.
 
+**11.** **None of them.** $\Phi$ is $-0.2966$, and a negative seasonal AR coefficient puts the roots of $(1 - \Phi B^{12})$ at *odd* multiples of $15°$ — so there is no root at frequency zero and none at any multiple of $30°$. All twelve go to the transitory, along with the AR(1). The surprise is that the operator which looks most seasonal contributes nothing at all to the seasonal component, and that this depends entirely on the sign of $\Phi$: at $\Phi = +0.8$ the same operator gives eleven seasonal roots and one trend root.
+
+**12.** No. Both trends are smooth, both track the series, both have a plausible annual shape — and at `max_lag = 150` the trend is a full degree Fahrenheit out. Truncation error in a Wiener–Kolmogorov filter looks like a slightly different smoothing choice, not like a bug, which is why it needs a convergence check rather than an eyeball.
+
 **Going further.**
 
 **GF1.** 26 months is $13.8°$, inside the $15°$ window, and $0.6$ clears `rmod`. **Trend.** The near miss is instructive: 22 months at the same modulus is transitory.
 
-**GF2.** Using either member of the split double root instead of the mean takes the airline trend polynomial from about $10^{-14}$ to $2\times10^{-8}$ — six orders of magnitude, from one line of arithmetic.
+**GF2.** The 24-month row flips from trend to transitory, on an angle difference of about $7\times10^{-13}$ degrees. That is the whole margin: a discrepancy twelve orders of magnitude below anything you would call meaningful, changing which component a root belongs to and moving `nottem`'s trend by 2.6 °F.
 
 **GF3.** Anywhere a result is checked only against something derived the same way. The Burman implementation in [[40-09-burman-algorithm]] was originally "verified" with an identity that used the same intermediate on both sides, which is no test at all; it was closed by checking against an independently written cosine-polynomial multiply. The current open one is the general decomposition in the **additive** case, which nothing in the vault exercises.
 

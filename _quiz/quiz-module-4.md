@@ -95,6 +95,10 @@ Trap: what does truncating the filter too early look like? ::: A **constant leve
 
 Trap: what if the extension is shorter than the filter? ::: The convolution has no valid range and you get all `NA`, or silent `NA`s near the ends. Assert `extend >= max_lag`.
 
+How long does the filter itself have to be? ::: Long enough that the weights have decayed, and the decay rate comes from the **MA** side, not the AR side — the WK filter is a ratio whose poles are the zeros of $\theta(B)\theta(F)$. Weights fall like $m^{\text{lag}}$ with $m$ the largest inverse-root modulus of $\theta$. `AirPassengers` needs about 283 lags, `nottem` 523. Asking the AR side instead gives 136 for `nottem` and is confidently wrong.
+
+Trap: what does a filter that is too short look like? ::: **Nothing.** Right shape, right period, plausible trend, no `NA`, no error — and a full degree Fahrenheit out. Truncation error reads as a slightly different smoothing choice, which is why it needs a convergence check rather than an eyeball.
+
 Trap: why is the trend/seasonal constant a convention? ::: $\nu_S(0)=0$, so the seasonal filter annihilates constants — the theory cannot say which component a constant belongs to. X-13 makes multiplicative factors average 1 in **levels**, forcing a log-mean of $-\sigma^2/2$. Skipping it costs 0.88%.
 
 Is $T + S + I = \log z$ a good end-to-end test? ::: It is **necessary and badly insufficient**. It is cheap, needs no reference implementation, and catches a filtering or bookkeeping blunder immediately. But it held exactly while the general implementation had a wrong root-classification rule *and* a missing normalisation — because both errors move quantities *between* components without losing any. A self-consistent decomposition of the wrong thing passes every internal test there is. See [[40-11-validating-general-seats]].

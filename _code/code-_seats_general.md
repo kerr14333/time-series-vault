@@ -118,7 +118,39 @@ seats_ar_split_general <- function(ar = numeric(0), sar = numeric(0),
   if (is.null(rmod_seasonal))
     rmod_seasonal <- if (D >= 1 || length(sar)) rmod else 0.9
 
-  z   <- polyroot(full)
+  # ROOTS FACTOR BY FACTOR, never from the expanded polynomial.
+  #
+  # polyroot(full) is the obvious thing and it is wrong in a way that matters.
+  # The classification tests are strict inequalities against exact boundaries
+  # -- 15 degrees, a multiple of 30 -- and roots land ON those boundaries all
+  # the time. A negative seasonal AR coefficient puts every one of its roots at
+  # an odd multiple of 180/s, which for monthly data is exactly 15, 45, 75 ...
+  # Factoring a degree-14 polynomial costs about 1e-12 in the angle, which is
+  # small until the true answer is exactly on the line, and then it decides the
+  # component by coin flip. On `nottem` fitted as (1 0 0)(1 1 1) that coin flip
+  # moves 2.6 degrees Fahrenheit between the trend and the transitory.
+  #
+  # Every factor here has roots that are either analytic or come from a small
+  # polynomial, so there is no reason to expand first:
+  #   (1-B)^d      -> d roots at exactly 1
+  #   (1-B^s)^D    -> D copies of the s-th roots of unity, from cos and sin
+  #   Phi(B^s)     -> roots of a degree-P polynomial in u = B^s, then s-th roots
+  #   phi(B)       -> polyroot on degree p
+  # This also removes the repeated-root problem entirely for the differencing
+  # factors, which used to cost 1e-8 in the trend polynomial.
+  sth_roots <- function(u) {
+    m <- Mod(u)^(1 / s); th <- Arg(u)
+    complex(modulus = m, argument = (th + 2 * pi * (0:(s - 1))) / s)
+  }
+  z <- complex(0)
+  if (length(ar)) z <- c(z, polyroot(c(1, -ar)))
+  if (length(sar)) {
+    # 1 - sar1 u - sar2 u^2 - ... in u = B^s
+    for (u in polyroot(c(1, -sar))) z <- c(z, sth_roots(u))
+  }
+  if (d) z <- c(z, rep(complex(real = 1, imaginary = 0), d))
+  if (D) for (i in seq_len(D)) z <- c(z, sth_roots(complex(real = 1, imaginary = 0)))
+
   zi  <- 1 / z                           # X-13 works with the inverse roots
   mod <- Mod(zi)                         # <= 1 for a stationary root
   w   <- abs(Arg(z))                     # frequency, radians
@@ -251,12 +283,42 @@ seats_filters_general <- function(cn, w) {
   nu
 }
 
+# ---- how long does the filter have to be? ----------------------------------
+# _seats.R has had seats_max_lag() since it was written, and this file did not
+# inherit it -- the same omission as the normalisation. The general version was
+# built by generalising the algebra and not the hard-won details, and both gaps
+# survived every internal check.
+#
+# The rate is set by the MA side, NOT the AR side. The WK filter is a ratio
+# whose poles are the zeros of theta(B)theta(F), so the weights fall off like
+# m^lag with m the largest inverse-root modulus of the total MA polynomial.
+# Asking the AR side instead gives 136 lags for nottem, where the answer is 523.
+seats_ma_poly <- function(ma = numeric(0), sma = numeric(0), s = 12) {
+  p <- c(1)
+  if (length(ma))  p <- poly_mult(p, c(1, -ma))
+  if (length(sma))
+    p <- poly_mult(p, c(1, unlist(lapply(seq_along(sma),
+                                         function(i) c(rep(0, s - 1), -sma[i])))))
+  p
+}
+
+seats_max_lag_general <- function(ma = numeric(0), sma = numeric(0), s = 12,
+                                  tol = 1e-7, cap = 2000) {
+  p <- seats_ma_poly(ma, sma, s)
+  if (length(p) <= 1L) return(5 * s)
+  m <- max(1 / Mod(polyroot(p)))
+  if (m >= 1 - 1e-12) return(cap)            # non-invertible: no useful bound
+  min(max(ceiling(log(tol) / log(m)), 5 * s), cap)
+}
+
 # ---- the whole thing -------------------------------------------------------
 seats_decompose_general <- function(x, ar = numeric(0), ma = numeric(0),
                                     sar = numeric(0), sma = numeric(0),
                                     d = 1, D = 1, s = 12, logs = TRUE,
-                                    max_lag = 400, extend = 420, ngrid = 8000,
-                                    normalize = TRUE, verbose = FALSE) {
+                                    max_lag = seats_max_lag_general(ma, sma, s),
+                                    extend = max_lag + s, ngrid = 8000,
+                                    normalize = TRUE, warn_truncation = TRUE,
+                                    verbose = FALSE) {
   stopifnot(extend >= max_lag)
   y <- as.numeric(x); if (logs) y <- log(y)
 
@@ -266,6 +328,25 @@ seats_decompose_general <- function(x, ar = numeric(0), ma = numeric(0),
   if (length(sma)) {
     sq <- c(1, unlist(lapply(seq_along(sma), function(i) c(rep(0, s - 1), -sma[i]))))
     mafull <- poly_mult(mafull, sq)
+  }
+
+  # IS max_lag LONG ENOUGH? Nothing else asks. The WK filter is a ratio whose
+  # poles are the zeros of theta(B)theta(F), so its weights decay like m^lag
+  # with m the largest inverse-root modulus of the MA side -- NOT the AR side,
+  # which is the intuitive guess and the wrong one. Truncating too early does
+  # not error or produce NA: the components come back smooth, plausible and
+  # quietly wrong. On nottem at max_lag = 150 the trend is a full degree
+  # Fahrenheit out and looks fine. See 40-11.
+  if (warn_truncation && length(mafull) > 1L) {
+    m_ma <- max(1 / Mod(polyroot(mafull)))
+    if (m_ma < 1 - 1e-12) {
+      need <- ceiling(log(1e-6) / log(m_ma))
+      if (max_lag < need)
+        warning(sprintf(paste("max_lag = %d is short for this model: the MA side has an",
+                              "inverse-root modulus of %.4f, so the filter weights are",
+                              "still %.1e at that lag. Use max_lag >= %d."),
+                        max_lag, m_ma, m_ma^max_lag, need), call. = FALSE)
+    }
   }
 
   sp <- seats_ar_split_general(ar, sar, d, D, s)
