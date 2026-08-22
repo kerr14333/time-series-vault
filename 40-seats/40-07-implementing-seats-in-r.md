@@ -109,7 +109,7 @@ The reconstruction identity $T+S+I=\log z$ is the single best end-to-end test: i
 
 Be clear about the scope of what you have:
 
-- **Airline model only.** A general implementation must handle arbitrary $(p,d,q)(P,D,Q)$, assign stationary AR roots to trend/seasonal/transitory by frequency, and produce a fourth **transitory** component. The structure generalises; the bookkeeping grows.
+- **Airline model only.** A general implementation must handle arbitrary $(p,d,q)(P,D,Q)$, assign stationary AR roots to trend/seasonal/transitory by **frequency and modulus**, and produce a fourth **transitory** component. The structure generalises; the bookkeeping grows. [[40-10-general-seats]] does it, and [[40-11-validating-general-seats]] is what it took to get the assignment rule right.
 - **No regARIMA preadjustment** — no trading day, holidays or outliers. In practice those are removed first and added back after.
 - **No mean/drift handling.** For $d=D=1$ there is no constant, so `AirPassengers` sidesteps it. A model with a mean requires care: SEATS keeps it *in* the series it decomposes and folds the drift into the **trend**.
 - **Forecast extension, not Burman's algorithm.** Same answer, more compute.

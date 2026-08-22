@@ -13,7 +13,7 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | Script | What it does | Lines | Concept note |
 |---|---|---|---|
 | [[code-_seats\|`_seats.R`]] | The SEATS canonical decomposition, from scratch. | 195 | — |
-| [[code-_seats_general\|`_seats_general.R`]] | SEATS for an arbitrary (p,d,q)(P,D,Q)_s model. | 234 | — |
+| [[code-_seats_general\|`_seats_general.R`]] | SEATS for an arbitrary (p,d,q)(P,D,Q)_s model. | 312 | — |
 | [[code-_series\|`_series.R`]] | The standard test series for this vault. | 53 | — |
 | [[code-_setup\|`_setup.R`]] | Shared helpers. source() this at the top of every script. | 61 | — |
 | [[code-_spectral\|`_spectral.R`]] | Frequency-domain helpers. source() after _setup.R. | 64 | — |
@@ -59,7 +59,8 @@ Every script in `R/`, mirrored here so it is readable inside Obsidian with synta
 | [[code-40-07-implementing-seats-in-r\|`40-07-implementing-seats-in-r.R`]] | The build, walked through, plus the traps that produce plausible output. | 103 | [[40-07-implementing-seats-in-r]] |
 | [[code-40-08-validating-against-x13\|`40-08-validating-against-x13.R`]] | Prove it against the Census Bureau binary. | 88 | [[40-08-validating-against-x13]] |
 | [[code-40-09-burman-algorithm\|`40-09-burman-algorithm.R`]] | Burman's algorithm, built from scratch. | 174 | [[40-09-burman-algorithm]] |
-| [[code-40-10-general-seats\|`40-10-general-seats.R`]] | SEATS for an arbitrary (p,d,q)(P,D,Q), with a transitory component. | 92 | [[40-10-general-seats]] |
+| [[code-40-10-general-seats\|`40-10-general-seats.R`]] | SEATS for an arbitrary (p,d,q)(P,D,Q), with a transitory component. | 116 | [[40-10-general-seats]] |
+| [[code-40-11-validating-general-seats\|`40-11-validating-general-seats.R`]] | Validate the GENERAL SEATS code against X-13, on models that are | 178 | [[40-11-validating-general-seats]] |
 | [[code-50-01-is-there-seasonality\|`50-01-is-there-seasonality.R`]] | Should this series be adjusted at all? | 68 | [[50-01-is-there-seasonality]] |
 | [[code-50-02-residual-seasonality\|`50-02-residual-seasonality.R`]] | Did any seasonality survive? | 57 | [[50-02-residual-seasonality]] |
 | [[code-50-03-m-and-q-statistics\|`50-03-m-and-q-statistics.R`]] | The M and Q statistics, and their limits. | 58 | [[50-03-m-and-q-statistics]] |

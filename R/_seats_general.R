@@ -23,23 +23,30 @@ source("R/_setup.R"); source("R/_spectral.R"); source("R/_seats.R")
 # ---- rebuilding a polynomial from a subset of its roots --------------------
 # For a polynomial in B with root z, the factor is (1 - B/z). Conjugate pairs
 # must be kept together or the coefficients come out complex.
+# Pairing is done by NEAREST conjugate, not by a distance threshold. A fixed
+# threshold looks safe and is not: polyroot splits a repeated root into a
+# cluster whose members sit ~1e-7 apart, which is far outside any tolerance
+# tight enough to be meaningful, and the function then declares a perfectly
+# real polynomial complex. A real polynomial's complex roots must pair up, so
+# matching each to its closest available conjugate needs no tolerance at all.
 poly_from_roots <- function(z) {
   p <- 1
   used <- rep(FALSE, length(z))
   for (i in seq_along(z)) {
     if (used[i]) next
+    used[i] <- TRUE
     if (abs(Im(z[i])) < 1e-9) {                    # real root
       p <- poly_mult(p, c(1, -1 / Re(z[i])))
-      used[i] <- TRUE
-    } else {                                        # find its conjugate
-      j <- which(!used & abs(Conj(z) - z[i]) < 1e-7 & seq_along(z) != i)
-      if (!length(j)) stop("unpaired complex root -- polynomial is not real")
-      j <- j[1]
-      # (1 - B/z)(1 - B/zbar) = 1 - 2Re(1/z) B + |1/z|^2 B^2
-      inv <- 1 / z[i]
-      p <- poly_mult(p, c(1, -2 * Re(inv), Mod(inv)^2))
-      used[i] <- TRUE; used[j] <- TRUE
+      next
     }
+    cand <- which(!used)
+    if (!length(cand)) stop("unpaired complex root -- polynomial is not real")
+    j <- cand[which.min(abs(Conj(z[cand]) - z[i]))]
+    used[j] <- TRUE
+    # (1 - B/z)(1 - B/zbar) = 1 - 2Re(1/z) B + |1/z|^2 B^2, using the mean of
+    # the pair so a split repeated root does not bias the factor.
+    inv <- (1 / z[i] + Conj(1 / z[j])) / 2
+    p <- poly_mult(p, c(1, -2 * Re(inv), Mod(inv)^2))
   }
   Re(p)
 }
@@ -47,15 +54,39 @@ poly_from_roots <- function(z) {
 # ---- the classification itself ---------------------------------------------
 # Returns the three AR polynomials plus a table of what went where, because
 # the table is the part a reader needs to check.
-# tol_trend is deliberately TIGHT. A first version used half the gap between
-# seasonal frequencies for every class, which meant any cycle longer than 24
-# months was called "trend" -- so the transitory component essentially never
-# fired, defeating the point of the exercise. TRAMO-SEATS assigns only roots
-# at frequency zero (real positive roots) to the trend; a complex pair at a
-# three-year cycle is transitory, and belongs there.
+#
+# The rule below is X-13's own, read out of sigsub.f and then verified against
+# the printed AR factorization for seven different root positions. Two things
+# in it are not obvious, and an earlier version of this file got both wrong:
+#
+#   * MODULUS MATTERS, not just frequency. A root is only allowed into the
+#     trend or the seasonal if the modulus of the INVERSE root is at least
+#     rmod (default 0.5). A root far inside the unit circle dies out in a few
+#     months; calling it "seasonal" because it happens to sit near 2 pi k / s
+#     puts a three-month transient into the seasonal factors. X-13 sends it to
+#     the transitory component instead.
+#
+#   * A COMPLEX PAIR WITHIN 15 DEGREES OF ZERO IS TREND. The window is
+#     360 / (2 s) degrees, so for monthly data any cycle of 24 months or
+#     longer joins the trend. That is deliberate: the component is the
+#     TREND-CYCLE, and a business cycle belongs in it. An earlier version of
+#     this file called that a bug and narrowed the window to frequency zero,
+#     on the strength of an unchecked claim about TRAMO-SEATS. It disagreed
+#     with X-13 at every low-frequency root. Verified here: 6, 9, 12 and 15
+#     degrees go to the trend; 16.4 and 18 degrees go to the transitory.
+#
+# The seasonal window is TIGHT -- epsphi is 2 degrees, not half the 30-degree
+# gap between seasonal frequencies. Seasonal unit roots sit exactly on those
+# frequencies, so nothing is lost, and a wide window swallows cycles that are
+# merely nearby.
+#
+# rmod_seasonal is the one piece not verified directly: X-13 raises the
+# modulus bar to 0.9 for the seasonal when the model has no seasonal unit
+# roots to anchor it (sigsub.f, RmodS). Reproduced here from D and sar.
 seats_ar_split_general <- function(ar = numeric(0), sar = numeric(0),
                                    d = 0, D = 0, s = 12,
-                                   tol_trend = 1e-3, tol_frac = 0.5) {
+                                   rmod = 0.5, epsphi = 2,
+                                   rmod_seasonal = NULL) {
   # full AR side: phi(B) Phi(B^s) (1-B)^d (1-B^s)^D
   full <- c(1)
   if (length(ar))  full <- poly_mult(full, c(1, -ar))
@@ -70,24 +101,55 @@ seats_ar_split_general <- function(ar = numeric(0), sar = numeric(0),
     return(list(trend = 1, seasonal = 1, transitory = 1, full = full,
                 table = data.frame()))
 
-  z <- polyroot(full)
-  w <- abs(Arg(z))                       # frequency of each root, radians
-  seas_w <- 2 * pi * (1:(s %/% 2)) / s   # the seasonal frequencies
-  tol <- tol_frac * (2 * pi / s)         # half the gap between them, by default
+  if (is.null(rmod_seasonal))
+    rmod_seasonal <- if (D >= 1 || length(sar)) rmod else 0.9
+
+  z   <- polyroot(full)
+  zi  <- 1 / z                           # X-13 works with the inverse roots
+  mod <- Mod(zi)                         # <= 1 for a stationary root
+  w   <- abs(Arg(z))                     # frequency, radians
+  deg <- w * 180 / pi
+  k       <- 360 / s                     # gap between seasonal frequencies, degrees
+  seas_dg <- k * (1:(s %/% 2))
+
+  # Classify CONJUGATE PAIRS, not individual roots. Right on a boundary -- a
+  # cycle of exactly 24 months sits exactly on the 15 degree line -- the two
+  # members of a pair land either side of the test and the component
+  # polynomial comes out complex. Pair first, decide once, label both.
+  used <- rep(FALSE, length(z))
+  grp <- list()
+  for (i in seq_along(z)) {
+    if (used[i]) next
+    used[i] <- TRUE
+    if (abs(Im(zi[i])) < 1e-9) { grp[[length(grp) + 1L]] <- i; next }
+    cand <- which(!used)
+    if (!length(cand)) stop("unpaired complex root -- AR polynomial is not real")
+    j <- cand[which.min(abs(Conj(z[cand]) - z[i]))]
+    used[j] <- TRUE
+    grp[[length(grp) + 1L]] <- c(i, j)
+  }
 
   lab <- character(length(z))
-  for (i in seq_along(z)) {
-    if (w[i] < tol_trend) {
-      lab[i] <- "trend"
-    } else if (min(abs(w[i] - seas_w)) < tol) {
-      lab[i] <- "seasonal"
+  for (g in grp) {
+    m <- mean(mod[g]); a <- mean(deg[g])
+    lab[g] <- if (length(g) == 1L) {
+      if (Re(zi[g]) > 0) {                             # frequency 0
+        if (m >= rmod) "trend" else "transitory"
+      } else {                                         # frequency pi
+        if (m >= rmod_seasonal) "seasonal" else "transitory"
+      }
+    } else if (m > rmod && a < k / 2) {                # cycle of >= 2s periods
+      "trend"
+    } else if (m >= rmod_seasonal && min(abs(a - seas_dg)) < epsphi) {
+      "seasonal"
     } else {
-      lab[i] <- "transitory"
+      "transitory"
     }
   }
 
   tab <- data.frame(
     modulus = round(Mod(z), 4),
+    inv_mod = round(mod, 4),
     freq_rad = round(w, 4),
     period = ifelse(w < 1e-8, Inf, round(2 * pi / pmax(w, 1e-12), 2)),
     component = lab, stringsAsFactors = FALSE)
@@ -180,7 +242,7 @@ seats_decompose_general <- function(x, ar = numeric(0), ma = numeric(0),
                                     sar = numeric(0), sma = numeric(0),
                                     d = 1, D = 1, s = 12, logs = TRUE,
                                     max_lag = 400, extend = 420, ngrid = 8000,
-                                    verbose = FALSE) {
+                                    normalize = TRUE, verbose = FALSE) {
   stopifnot(extend >= max_lag)
   y <- as.numeric(x); if (logs) y <- log(y)
 
@@ -225,6 +287,22 @@ seats_decompose_general <- function(x, ar = numeric(0), ma = numeric(0),
   }
   for (nm in setdiff(c("trend", "seasonal", "transitory"), keep))
     out[[nm]] <- ts(rep(0, length(y)), start = start(x), frequency = s)
+
+  # NORMALISATION -- the same convention _seats.R uses, and it was missing here
+  # until the decomposition was compared against X-13 on a non-airline model.
+  # nu_S(0) = 0, so the seasonal filter annihilates any constant and the theory
+  # cannot say whether that constant belongs to the trend or the seasonal.
+  # X-13 normalises multiplicative factors to average 1 in LEVELS, which in
+  # logs is a mean of about -var/2, not 0. Skip it and every component is off
+  # by a pure constant: on `imp` that was 1.28%, with the SHAPE already correct
+  # to 1e-6. A constant offset is the cheapest kind of disagreement to miss,
+  # because it never shows up in a plot.
+  if (normalize && logs) {
+    shift <- log(mean(exp(as.numeric(out$seasonal))))
+    out$seasonal <- out$seasonal - shift
+    out$trend    <- out$trend + shift
+  }
+
   out$irregular <- ts(y - as.numeric(out$trend) - as.numeric(out$seasonal) -
                         as.numeric(out$transitory), start = start(x), frequency = s)
   out$table <- sp$table

@@ -29,33 +29,51 @@ cat("  seasonal :", poly_show(sp$seasonal), "\n")
 cat("  transitory: none (correct -- an airline model has no cyclical roots)\n")
 cat(sprintf("  max difference from the hard-coded split: trend %.2e  seasonal %.2e\n",
             max(abs(sp$trend - old$trend)), max(abs(sp$seasonal - old$seasonal))))
-cat("  The trend gap is 2e-8, not 0, and that is worth understanding: (1-B)^2\n")
-cat("  has a DOUBLE root at B = 1, and root-finding at a repeated root loses\n")
-cat("  about half the available precision. Generality has a numerical price.\n")
+cat("  (1-B)^2 has a DOUBLE root at B = 1, and polyroot cannot return it as\n")
+cat("  one root: it returns a cluster of two, about 1e-7 apart, with small\n")
+cat("  imaginary parts of opposite sign. Rebuilding the factor from the MEAN\n")
+cat("  of the conjugate pair cancels that error instead of propagating it,\n")
+cat("  which is why the gap here is 1e-14 rather than the 1e-8 you get from\n")
+cat("  using either member alone. Generality has a numerical price, and this\n")
+cat("  is how you avoid paying it.\n")
 
 cat("\n=== 2. full decomposition vs the validated airline implementation ===\n")
 g <- seats_decompose_general(AirPassengers, ma = 0.4018, sma = 0.5569,
                              d = 1, D = 1, s = 12, max_lag = 340, extend = 360)
-r <- seats_decompose(AirPassengers, 0.4018, 0.5569, normalize = FALSE)
+r <- seats_decompose(AirPassengers, 0.4018, 0.5569)
 for (k in c("trend", "seasonal"))
   cat(sprintf("  %-9s max |general - _seats.R| = %.8f\n",
               k, max(abs(as.numeric(g[[k]]) - as.numeric(r[[k]])))))
 cat(sprintf("  partial-fraction residual %.2e   admissible %s\n",
             g$residual, g$admissible))
 
-# ---- 3. the fourth component, on a model that actually has one ------------
-cat("\n=== 3. a TRANSITORY component: the thing the airline model cannot have ===\n")
-per <- 40; rmod <- 1.05; wc <- 2 * pi / per
-a1 <- 2 * cos(wc) / rmod; a2 <- -1 / rmod^2
-cat(sprintf("  AR(2) with complex roots at period %d months, modulus %.2f\n", per, rmod))
-spT <- seats_ar_split_general(ar = c(a1, a2), d = 1, D = 1, s = 12)
-print(head(spT$table[order(spT$table$freq_rad), ], 5), row.names = FALSE)
-cat("  ...\n")
-cat("  trend      :", poly_show(spT$trend), "\n")
-cat("  transitory :", poly_show(spT$transitory), "\n")
-cat("  The cyclical pair went to TRANSITORY. _seats.R would have folded it\n")
-cat("  into the trend, putting a three-year business cycle inside a series\n")
-cat("  people read as 'the underlying level'.\n")
+# ---- 3. where a cyclical pair actually goes -------------------------------
+cat("\n=== 3. two cycles, two different answers ===\n")
+show_cycle <- function(per, rB, want) {
+  wc <- 2 * pi / per
+  sp <- seats_ar_split_general(ar = c(2 * cos(wc) / rB, -1 / rB^2), d = 1, D = 1, s = 12)
+  row <- sp$table[abs(sp$table$modulus - rB) < 1e-6, ][1, ]
+  cat(sprintf("  period %2d months, 1/|B| = %.3f, %5.2f deg  ->  %-10s (X-13: %s)\n",
+              per, row$inv_mod, 360 / per, row$component, want))
+  invisible(sp)
+}
+spT <- show_cycle(40, 1.05, "trend")
+show_cycle(20, 1.05, "transitory")
+show_cycle( 9, 1.50, "transitory")
+cat("\n  The 40-month cycle joins the TREND, and that is correct: X-13 sends\n")
+cat("  any complex pair within 360/(2s) = 15 degrees of frequency zero -- a\n")
+cat("  cycle of 24 months or longer -- to the trend. The component is the\n")
+cat("  TREND-CYCLE. A business cycle belongs in it by construction, and the\n")
+cat("  boundary is a period of two years, not a matter of taste.\n")
+cat("  Verified against X-13's printed AR factorization at 6, 9, 12, 15 (all\n")
+cat("  trend) and 16.4, 18, 40 degrees (all transitory) -- see 40-11.\n")
+cat("\n  trend polynomial for the 40-month case:", poly_show(spT$trend), "\n")
+spC <- seats_ar_split_general(ar = c(2 * cos(2*pi/9) / 1.5, -1 / 1.5^2),
+                              d = 1, D = 1, s = 12)
+cat("  transitory polynomial for the 9-month case:", poly_show(spC$transitory), "\n")
+cat("  A 9-month cycle is too fast for the trend and not a seasonal\n")
+cat("  frequency, so it becomes the fourth component: the code says 'this\n")
+cat("  movement is real and persistent, and it is not the trend'.\n")
 
 # ---- 4. real series: which get a non-airline model? ----------------------
 cat("\n=== 4. the catalogue, with models fitted properly ===\n")
@@ -91,9 +109,15 @@ cat("\n  Two things to notice.\n")
 cat("  (a) cpi comes back INADMISSIBLE -- independently reproducing the result\n")
 cat("      40-02 found by a completely different route. Two implementations\n")
 cat("      agreeing on an awkward case is worth more than either alone.\n")
-cat("  (b) NO real catalogue series produces a transitory component. Every AR\n")
-cat("      root landed at frequency zero or at a seasonal frequency. The\n")
-cat("      fourth component is real and demonstrable, and it is also rare.\n")
+cat("  (b) cpi and ukgas DO produce a transitory component, and unemp does\n")
+cat("      not. An earlier version of this script reported no transitory\n")
+cat("      component on any real series -- that was an artifact of a wrong\n")
+cat("      classification rule, which had no modulus test and a 15-degree\n")
+cat("      seasonal window, so short-lived roots were swept into the seasonal.\n")
+cat("      X-13 requires the inverse-root modulus to reach 0.5 before a root\n")
+cat("      may join the trend or the seasonal, and puts the seasonal window\n")
+cat("      at 2 degrees. Under the correct rule the fourth component is\n")
+cat("      uncommon but not rare. See 40-11 for the validation.\n")
 
 # ---- 5. the seasonal AR contributes a TREND root -------------------------
 cat("\n=== 5. a detail that is easy to get wrong ===\n")

@@ -97,7 +97,13 @@ Trap: what if the extension is shorter than the filter? ::: The convolution has 
 
 Trap: why is the trend/seasonal constant a convention? ::: $\nu_S(0)=0$, so the seasonal filter annihilates constants — the theory cannot say which component a constant belongs to. X-13 makes multiplicative factors average 1 in **levels**, forcing a log-mean of $-\sigma^2/2$. Skipping it costs 0.88%.
 
-The single best end-to-end test of an implementation ::: $T + S + I = \log z$ exactly. It is sensitive to every step and needs no reference implementation.
+Is $T + S + I = \log z$ a good end-to-end test? ::: It is **necessary and badly insufficient**. It is cheap, needs no reference implementation, and catches a filtering or bookkeeping blunder immediately. But it held exactly while the general implementation had a wrong root-classification rule *and* a missing normalisation — because both errors move quantities *between* components without losing any. A self-consistent decomposition of the wrong thing passes every internal test there is. See [[40-11-validating-general-seats]].
+
+What can an internal consistency check never catch? ::: Anything that is consistent. A wrong AR split still sums to the series; a missing normalisation still sums to the series. Only comparison against an **independent** implementation catches those, and it must be on a case where your code does something the reference case does not — reproducing the airline model tests nothing about general root sorting.
+
+How does X-13 assign an AR root to a component? ::: By frequency **and** modulus. The inverse-root modulus must reach `rmod` $=0.5$ before a root may enter the trend or the seasonal at all; then a complex pair within $360/2s$ ($15°$ monthly) of zero is trend, within `epsphi` $=2°$ of a multiple of $360/s$ is seasonal, and everything else is **transitory**.
+
+Where does a 40-month business cycle go? ::: The **trend**. Any cycle of 24 months or longer is inside the $15°$ window — that is what makes the component the trend-*cycle*. The transitory component is for movement too fast to be trend and not at a seasonal frequency, or for roots too far inside the unit circle to be either.
 
 Which options must be pinned when comparing against X-13? ::: `transform.function` (or it may run additive while you run multiplicative), `arima.model`, `regression.aictest`, `outlier`. When a comparison fails by a lot, suspect the harness before the algorithm.
 

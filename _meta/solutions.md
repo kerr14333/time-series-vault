@@ -1140,19 +1140,21 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 **P6.** Because it is exact rather than approximate. A tolerance is a knob, and a badly set knob produces a *constant offset* that correlates 0.999 with the truth and is uniformly wrong ([[30-07-finite-samples]]).
 ## 40-10-general-seats
 
-**1.** The seasonal polynomial matches to $2\times10^{-14}$; the trend to only $2\times10^{-8}$. Not a bug: $(1-B)^2$ has a **double root** at $B=1$, and root-finding at a repeated root loses about half the available precision — you get $\sqrt{\varepsilon}$ rather than $\varepsilon$. The hard-coded split knows the answer algebraically; the general one has to find it numerically and cannot match that.
+**1.** Both match to about $10^{-13}$. It is not zero because $(1-B)^2$ has a **double root** at $B=1$, and `polyroot` returns it as a cluster of two roots about $10^{-7}$ apart with imaginary parts of opposite sign — root-finding at a repeated root loses roughly half the available precision, $\sqrt{\varepsilon}$ rather than $\varepsilon$. Rebuilding the quadratic factor from the **mean** of the conjugate pair cancels most of that: using either member alone leaves $2\times10^{-8}$ in the trend.
 
-**2.** A 6-month period is exactly the second seasonal frequency ($k=2$), so those roots are classified **seasonal** — correctly. This is the case where the tolerance matters: a root at period 6.5 would fall outside `tol_frac` and become transitory instead.
+**2.** A 6-month period is exactly the second seasonal frequency ($k=2$), so with a modulus above `rmod` the pair is **seasonal** — correctly. Both gates bite here: at $1/|z| = 0.83$ it is seasonal, and at $1/|z| = 0.33$ the same root at the same frequency becomes **transitory**. A root at period 6.5 is $2.3°$ away and falls outside `epsphi`, so it is transitory too.
 
-**3.** With `tol_frac` small, a root slightly off a seasonal frequency is called transitory; widen it and the same root becomes seasonal. There is no natural cutoff — this is a **modelling choice**, and the honest response is to look at the classification table rather than trusting a default.
+**3.** A root slightly off a seasonal frequency is transitory at small `epsphi` and seasonal at large. X-13's value is **2 degrees**, tight enough that only a root essentially *on* a seasonal frequency qualifies. That is the right default, because seasonal unit roots sit exactly there — a wide window buys nothing and captures cycles that merely happen to be nearby.
 
 **4.** For `unemp` with $(1,1,1)(0,1,1)$: 12 seasonal roots and 2 trend. Note the AR(1) coefficient is $-0.50$, giving a real **negative** root, whose frequency is $\pi$ — the Nyquist frequency, which for even $s$ *is* a seasonal frequency. So it is correctly seasonal, and if you had classified by "stationary AR goes to the trend" you would have got it wrong.
 
 **5.** Yes. The partial fraction is solved as a least-squares system with one numerator block per denominator, so additional components just add blocks. Residuals stay around $10^{-12}$.
 
-**6.** `sunspots` has an 11-year cycle at about $1/132$ cycles per month — far from zero and far from any $k/12$ — so with a model that captures it, it lands in the **transitory** component. It is the clearest real example, and note it is also a series with *no seasonality at all* ([[50-01-is-there-seasonality]]).
+**6.** It lands in the **trend**, and predicting from the period is how you know before running it: an 11-year cycle is 132 months, or $2.7°$, well inside the $15°$ trend window. Far from any $k/12$, yes — but that only rules out the seasonal. This is the case that used to be quoted in this vault as the clearest transitory example, and it is not one. (`sunspots` is also a series with *no seasonality at all* — [[50-01-is-there-seasonality]].)
 
-**7.** Most of it. The trend gap between the general and hard-coded routes is $1.3\times10^{-5}$, while the hard-coded route matches X-13 to $3\times10^{-6}$ — so the general implementation's error is roughly four times the total error of the special-case one, and it enters at the root-finding step.
+**7.** Most of it. The trend gap between the general and hard-coded routes is $1.3\times10^{-5}$, while the hard-coded route matches X-13 to $3\times10^{-6}$ — so the general implementation's error is a few times the total error of the special-case one, and it enters at the root-finding step. This is the gap that *remains* after the conjugate-pair averaging.
+
+**8.** It still goes to **transitory**. `rmod` is not the only gate: at $134°$ the pair is $14°$ from the nearest seasonal frequency, which `epsphi = 2` already rules out. Removing both gates is what makes it seasonal — and then the seasonal factors carry a transient that decays by half every two and a half months, subtracted from the same month of every future year.
 
 ---
 
@@ -1161,17 +1163,61 @@ Notation is Census/Box–Jenkins throughout: $\theta(B) = 1 - \theta_1 B - \cdot
 
 **GF1.** **Not all seasonal.** Eleven go to the seasonal and **one to the trend** — the root at frequency zero. $(1-\Phi B^{12})$ is not a purely seasonal operator, and sorting by which factor a root came from would get this wrong.
 
-**GF2.** It goes to the **trend**, and you have silently published a three-year business cycle inside a series people read as 'the underlying level'. This was my own first bug, and it is invisible unless you look at the classification table.
+**GF2.** Nothing changes — which is the interesting part. `imp`'s pair has inverse modulus $0.4614$, so the **modulus gate alone** keeps it out of the seasonal even with a $15°$ window; and setting `rmod = 0` alone does not move it either, because $134°$ is $14°$ from a seasonal frequency. Only removing **both** gates makes it seasonal, which is exactly what the original buggy rule did. Two independent tests, either one sufficient here.
 
-**GF3.** Both land in transitory, and the $N$-way partial fraction handles the extra denominator without modification — that is what makes it $N$-way rather than four-way.
+**GF3.** Both land in transitory **provided both cycles are shorter than 24 months** — try 20 and 9 months, which gives 4 transitory roots, 11 seasonal and 2 trend. Make one of them 40 months and it joins the trend instead. The $N$-way partial fraction handles the extra denominator without modification, which is what makes it $N$-way rather than four-way.
 
 **Practice set.**
 
-**P1.** `unemp` and `ukgas` give trend=2 with the rest seasonal; `cpi` gives trend=2, seasonal=13. No transitory on any real catalogue series.
+**P1.** `unemp` gives trend=2, seasonal=12 and no transitory; `cpi` gives trend=2, seasonal=11, **transitory=2**; `ukgas` gives trend=2, seasonal=3, **transitory=1**. Two of the three do produce a fourth component.
 
 **P2.** Eleven seasonal and **one trend** — the root at frequency zero. $(1-\Phi B^{12})$ is not a purely seasonal operator.
 
 **P3.** **Seasonal**, at $2\pi/12$ — the annual cycle, period 12.
+
+## 40-11-validating-general-seats
+
+**1.** The 24-month cycle. It sits exactly on the $15°$ trend cutoff, and the two programs compute that angle to within a part in $10^{12}$ and round to opposite sides of a strict inequality. It is a tie on a discontinuity, not a disagreement about the rule — which is why it is left in the output rather than patched with an epsilon.
+
+**2.** Nothing moves: `epsphi = 2` still keeps the pair out of the seasonal, because $134°$ is $14°$ off. You need `rmod = 0` **and** `epsphi = 15` together before the AR(2) is called seasonal, and then the seasonal factors carry a transient that halves every two and a half months.
+
+**3.** Same answer from the other side — `epsphi = 15` alone leaves it transitory, because the modulus gate stops it. The original bug needed both defects at once, which is a useful thing to know about it: either gate alone would have caught it.
+
+**4.** No. The 40-month cycle stays in the trend all the way down to `rmod`, and below it goes transitory — but the test is `> rmod` for the trend and $\ge$ for the seasonal, so at exactly $1/|z| = 0.5$ the pair is transitory. The asymmetry is X-13's, not a typo.
+
+**5.** The offset is $+0.012688$ in logs, 1.28% in levels. Plotted against X-13's you will not see it: two curves 1% apart on a seasonal factor that swings from 0.56 to 1.80 are visually identical. That is the whole point of the error — it is invisible in exactly the check a reader would apply.
+
+**6.** Mean $-0.000112$, standard deviation $9.8\times10^{-7}$. A difference that is constant to six decimal places is a **convention**, not an implementation error. Splitting a comparison into level and shape is the fastest diagnostic there is.
+
+**7.** Because the residual 0.011% is not a filter error at all — it is the normalisation constant, and normalisation moves a constant between the **seasonal and the trend only**. The transitory component is never shifted, so what is left in its comparison is pure filter agreement, and that is $10^{-6}$. The same $10^{-6}$ is present in the seasonal too: it is the standard deviation of the log difference, sitting underneath a constant a hundred times larger.
+
+**8.** The model choice moves the seasonal factors far more than the implementation does — the same relationship 40-08 found between SEATS and X-11. Which model you fit is a real decision; whether your code agrees with Census to 4 or 6 decimals is not.
+
+**9.** Any series whose fitted model has a stationary AR root that is either short-cycled or low-modulus. `cpi` at $(2,1,2)(1,0,1)$ and `ukgas` at $(1,1,1)(0,1,1)$ both qualify — and `ukgas`'s transitory component is not small, at $\mathrm{sd} = 0.0106$ in logs.
+
+**10.** Make the absence of a parse an error rather than a silent `NULL`. `x13_ar_split()` returns `NULL` both when X-13 rejects the model and when the format changes, and a comparison loop that treats `NULL` as "skip" will report zero mismatches out of zero cases and look like a pass. The check is to assert that a known case — the airline model, whose factorization you can write down — still parses to $(1-B)^2$ and $S(B)$.
+
+**Going further.**
+
+**GF1.** 26 months is $13.8°$, inside the $15°$ window, and $0.6$ clears `rmod`. **Trend.** The near miss is instructive: 22 months at the same modulus is transitory.
+
+**GF2.** Using either member of the split double root instead of the mean takes the airline trend polynomial from about $10^{-14}$ to $2\times10^{-8}$ — six orders of magnitude, from one line of arithmetic.
+
+**GF3.** Anywhere a result is checked only against something derived the same way. The Burman implementation in [[40-09-burman-algorithm]] was originally "verified" with an identity that used the same intermediate on both sides, which is no test at all; it was closed by checking against an independently written cosine-polynomial multiply. The current open one is the general decomposition in the **additive** case, which nothing in the vault exercises.
+
+**Practice set.**
+
+**P1.** `rmod` $= 0.5$ gates whether a root is persistent enough to join the trend or the seasonal at all; `epsphi` $= 2°$ gates how close to a seasonal frequency a root must be; and $360/2s = 15°$ is the half-width of the trend window around frequency zero.
+
+**P2.** **Transitory.** $60°$ is a seasonal frequency, but $0.48$ is below `rmod`, so the modulus gate rules it out.
+
+**P3.** The shape is right and the level is wrong — a normalisation convention, not a filter error.
+
+**P4.** There is **no transitory component**: the polynomial is empty, so every AR root went to the trend or the seasonal. That is the normal case, and it is what the airline model always gives.
+
+**P5.** No. A uniform 1% error on one series is a *systematic* disagreement, which is the kind most likely to be a convention you have not matched — and conventions apply to every series, so the nine that agree are evidence that something specific to the tenth is triggering it. Find it before shipping.
+
+**P6.** Almost nothing. The airline case is precisely where the general machinery does nothing: every root is a unit root at a frequency the split already knows. Reproducing it establishes that the code does not crash and that the plumbing is connected. It cannot test the classification, which is the only part that is new.
 # Module 5 — Diagnostics and practice
 
 ## 50-01-is-there-seasonality
